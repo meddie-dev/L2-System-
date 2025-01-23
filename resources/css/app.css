@@ -4738,6 +4738,15 @@ textarea.form-control-lg {
   color: #101214;
 }
 
+.alert-custom-position {
+  position: fixed; 
+  top: 20px; 
+  right: 20px; 
+  z-index: 1050; 
+  width: 400px; 
+}
+
+
 @keyframes progress-bar-stripes {
   0% {
     background-position-x: 1rem;

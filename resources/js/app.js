@@ -27,3 +27,15 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple);
     }
 });
+
+// Auto hide alert
+document.addEventListener("DOMContentLoaded", function() {
+    var alertElement = document.getElementById('autoHideAlert');
+    if (alertElement) {
+        // Set timeout to auto-hide after 3 seconds (3000ms)
+        setTimeout(function () {
+            var alertInstance = new bootstrap.Alert(alertElement);
+            alertInstance.close();
+        }, 3000); // 3000ms = 3 seconds
+    }
+});

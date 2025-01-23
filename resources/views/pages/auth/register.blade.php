@@ -1,5 +1,5 @@
 <x-layout.authTemplate>
-  <div class="container">
+  <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-lg-7">
         <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
@@ -68,16 +68,6 @@
                   <strong>{{ $message }}</strong>
                 </span>
                 @enderror
-              </div>
-
-              <div class="form-floating mb-3">
-                <select class="form-select p-3" id="role" name="role" required>
-                  <option value="" selected>Select Role</option>
-                  <option value="admin">Admin</option>
-                  <option value="supplier">Supplier</option>
-                  <option value="distributor">Distributor</option>
-                  <option value="customer">Customer</option>
-                </select>
               </div>
 
               <div class="row mb-3">

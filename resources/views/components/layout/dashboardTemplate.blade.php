@@ -20,29 +20,45 @@
 
 </head>
 
-<body class="tw-bg-primary">
-  <div id="layoutAuthentication">
-    <div id="layoutAuthentication_content">
-      @if (session('error'))
-      <div class="alert alert-danger alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<body class="tw-bg-gray-100 tw-p-8 ">
+
+  <div class="sb-nav-fixed">
+    @include('components.partials.navbar')
+
+    <div id="layoutSidenav">
+      <div id="layoutSidenav_nav">
+        @include('components.partials.sidebar')
       </div>
-      @endif
-      <main>
-        {{ $slot }}
-      </main>
-    </div>
-    <div id="layoutAuthentication_footer">
-      @include('components.partials.footer')
+
+      <div id="layoutSidenav_content">
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
+          {{ session('success') }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        <main class="container-fluid px-4">
+          <!-- Page Content goes here -->
+          {{ $slot }}
+        </main>
+
+        @include('components.partials.footer')
+      </div>
+
+      <!-- Scroll Top -->
+      <a href="#" id="scroll-top" class="scroll-top tw-flex tw-items-center tw-justify-center"><i class="fas fa-arrow-up tw-text-white"></i></a>
+
+      <!-- Preloader -->
+      <div id="preloader"></div>
+
     </div>
   </div>
+
   <!-- Template Library -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
