@@ -198,7 +198,7 @@
     <div class="sb-sidenav-footer">
       <div class="small">Logged in as:</div>
       @auth
-      {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+      {{ Auth::user()->firstName }} {{ Auth::user()->lastName }} ({{ Auth::user()->hasRole('Super Admin') ? 'Super Admin' : (Auth::user()->hasRole('Admin') ? 'Admin' : 'Staff') }})
       @endauth
     </div>
   </nav>

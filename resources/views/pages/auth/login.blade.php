@@ -56,7 +56,7 @@
                 <label class="form-check-label" for="inputRememberPassword">Keep me signed in</label>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                <a class="small | tw-text-blue-700">Forgot Password?</a>
+                <a href="{{route('password.request')}}" class="small | tw-text-blue-700">Forgot Password?</a>
                 <button type="submit" class="btn btn-primary">Login</button>
               </div>
             </form>

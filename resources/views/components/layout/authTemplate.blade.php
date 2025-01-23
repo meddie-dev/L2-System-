@@ -23,6 +23,12 @@
 <body class="tw-bg-primary">
   <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
+      @if (session('success'))
+      <div class="alert alert-success alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      @endif
       @if (session('error'))
       <div class="alert alert-danger alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
         {{ session('error') }}
