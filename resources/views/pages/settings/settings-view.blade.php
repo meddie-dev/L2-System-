@@ -97,13 +97,26 @@
 
         <!-- Two-Factor Authentication Section -->
         <div>
-          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">Two-Factor Authentication</h3>
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">
+            Two-Factor Authentication 
+            @if(Auth::user()->two_factor_enabled==true)
+                <i class="fa-regular fa-circle-check tw-text-green-500"></i>
+            @else
+                <span class="tw-text-black">(Required)</span>
+            @endif
+          </h3>
           <p class="tw-text-gray-600 tw-text-sm">Add an extra layer of security to your account by enabling two-factor authentication.</p>
-          <div class="tw-mt-4 tw-flex tw-justify-end">
-            <button type="submit" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-text-sm tw-font-medium tw-rounded-md tw-shadow-sm hover:tw-bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500 tw-focus:ring-offset-2">
-              Enable Two-Factor Authentication
+          <form method="POST" 
+                action="{{ route(Auth::user()->two_factor_enabled==true ? 'two-factor.disable' : 'two-factor.send') }}" class="tw-mt-4 tw-flex tw-justify-end">
+            @csrf
+            <button type="submit" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 @if(Auth::user()->two_factor_enabled==true) tw-bg-red-600 @else tw-bg-blue-600 @endif tw-text-white tw-text-sm tw-font-medium tw-rounded-md tw-shadow-sm hover:tw-bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500 tw-focus:ring-offset-2">
+              @if(Auth::user()->two_factor_enabled==true)
+                Turn Off
+              @else
+                Enable
+              @endif Two-Factor Authentication
             </button>
-          </div>
+          </form>
         </div>
       </div>
 

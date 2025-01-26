@@ -3,18 +3,28 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TwoFactorCodeNotification;
 use Spatie\Permission\Traits\HasRoles;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
     use HasRoles;
+
+    /**
+     * Show the login form.
+     */
     public function index()
     {
         return view('pages.auth.login');
     }
 
+    /**
+     * Handle the login attempt.
+     */
     public function login(Request $request)
     {
         // Validate the login request
@@ -26,10 +36,17 @@ class LoginController extends Controller
 
         // Attempt to login the user
         if (Auth::attempt($request->only('email', 'password'), $request->remember)) {
-            // Redirect based on role
-            if (Auth::user()->hasRole('Super Admin')) {
+            $user = Auth::user();
+
+            // Check if the user has 2FA enabled (0 = false, 1 = true)
+            if ($user->two_factor_enabled == 1) {
+                $this->sendTwoFactorCode($user);
+                return redirect()->route('two-factor.show');
+            }
+
+            if ($user->hasRole('Super Admin')) {
                 return redirect()->route('superadmin.dashboard');
-            } elseif (Auth::user()->hasRole('Admin')) {
+            } elseif ($user->hasRole('Admin')) {
                 return redirect()->route('admin.dashboard');
             } else {
                 return redirect()->route('staff.dashboard');
@@ -39,6 +56,23 @@ class LoginController extends Controller
         return back()->withErrors(['email' => 'Invalid credentials.']);
     }
 
+    /**
+     * Send the 2FA code to the user's email.
+     */
+    private function sendTwoFactorCode($user)
+    {
+        $code = Str::random(6);
+
+        $user->two_factor_code = $code;
+        $user->two_factor_expires_at = Carbon::now()->addMinutes(10); // Code valid for 10 minutes
+        $user->save();
+
+        $user->notify(new TwoFactorCodeNotification($code));
+    }
+
+     /**
+     * Handle the logout process.
+     */
     public function destroy()
     {
         Auth::logout();

@@ -189,10 +189,6 @@
           <div class="sb-nav-link-icon"><i class="fa-regular fa-building"></i></i></div>
           <!-- DS Global Holdings Inc. --> ( Client Website )
         </a>
-        <a class="nav-link" href="/settings">
-          <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-          Profile
-        </a>
       </div>
     </div>
     <div class="sb-sidenav-footer">
