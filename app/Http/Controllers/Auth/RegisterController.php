@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewNotification;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -46,6 +47,9 @@ class RegisterController extends Controller
             $user->assignRole('Staff');
         }
         
+        // Notify the user
+        $user->notify(new NewNotification('Welcome to ' . config('app.name') . '! You have been successfully registered as a ' . $user->roles->first()->name . '.'));
+
         // Log the user in
         Auth::login($user);
 

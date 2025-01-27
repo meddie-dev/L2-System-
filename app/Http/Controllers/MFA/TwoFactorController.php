@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Notifications\TwoFactorCodeNotification;
+use App\Notifications\NewNotification;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -88,6 +89,8 @@ class TwoFactorController extends Controller
             $user->two_factor_enabled = true;
             $user->save();
 
+            $user->notify(new NewNotification('Two-factor authentication Code has been verified successfully.'));
+
             $route = match (true) {
                 Auth::user()->hasRole('Super Admin') => 'superadmin.dashboard',
                 Auth::user()->hasRole('Admin') => 'admin.dashboard',
@@ -105,14 +108,16 @@ class TwoFactorController extends Controller
      * Turn off 2FA for the user.
      */
     public function disable(Request $request)
-   {
-       $user = Auth::user();
+    {
+        $user = Auth::user();
 
-       $user->two_factor_code = null;
-       $user->two_factor_expires_at = null;
-       $user->two_factor_enabled = false;
-       $user->save();
+        $user->two_factor_code = null;
+        $user->two_factor_expires_at = null;
+        $user->two_factor_enabled = false;
+        $user->save();
 
-       return redirect()->route('settings')->with('success', 'Two-factor authentication has been disabled. This session is now unauthenticated.');
-   }
+        $user->notify(new NewNotification('Two-factor authentication has been successfully disabled for your account. We recommend that you enable two-factor authentication again to enhance the security of your account.'));
+
+        return redirect()->route('settings.index')->with('success', 'Two-factor authentication has been disabled. This session is now unauthenticated.');
+    }
 }

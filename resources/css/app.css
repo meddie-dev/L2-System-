@@ -11244,7 +11244,94 @@ body {
   border-radius: 0.375rem !important;
 }
 
+/* Custom scrollbar for WebKit browsers */
+::-webkit-scrollbar {
+  width: 5px;
+}
 
+::-webkit-scrollbar-track {
+  background: #212529;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/*  Chart Design */
+.chart-container {
+  padding: 20px; 
+  background-color: #f9f9f9; 
+  border-radius: 8px; 
+}
+
+/* Scroll Top Button */
+.scroll-top {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background-color: #212529;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.scroll-top i {
+  font-size: 24px;
+  color: #ffffff;
+  line-height: 0;
+}
+
+.scroll-top:hover {
+  background-color: color-mix(in srgb, #212529, transparent 20%);
+  color: #ffffff;
+}
+
+.scroll-top.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Pre-loader */
+
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  overflow: hidden;
+  background: var(--background-color);
+  transition: all 0.6s ease-out;
+}
+
+#preloader:before {
+  content: "";
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 6px solid #ffffff;
+  border-color: #232529 transparent #232529 transparent ;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: animate-preloader 1.5s linear infinite;
+}
+
+@keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 @tailwind base;
 @tailwind components;

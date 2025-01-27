@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
@@ -8,6 +9,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\MFA\TwoFactorController;
+use Illuminate\Notifications\DatabaseNotification;
+
+
 
 
 /*-------------------------------------------------------------- 
@@ -78,6 +82,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('two-factor/resend-code', [TwoFactorController::class, 'resendCode'])->name('two-factor.resend');
     Route::post('two-factor/disable', [TwoFactorController::class, 'disable'])->name('two-factor.disable');
 });
+
+Route::get('/notifications/{notification}', function (DatabaseNotification $notification) {
+    $notification->markAsRead();
+
+    return redirect()->route(
+        (Auth::user()->hasRole('Super Admin')) ? 'superadmin.dashboard' : ((Auth::user()->hasRole('Admin')) ? 'admin.dashboard' : 'staff.dashboard')
+    );
+})->name('notifications.show');
+
 
 /*--------------------------------------------------------------
 # Settings Route

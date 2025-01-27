@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Laravel</title>
+  <title>Logistics II</title>
+
+  <!-- Favicon -->
+  <link href="/img/favicon.ico" rel="icon">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,6 +17,8 @@
 
   <!-- Template Library -->
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
   <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])

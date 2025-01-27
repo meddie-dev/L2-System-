@@ -1,6 +1,6 @@
 <footer class="py-4 bg-light mt-auto tw-w-full">
-  <div class="container-fluid px-4 ">
-    <div class="d-flex align-items-center justify-content-between small">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between small | max-sm:tw-flex-col">
       <div class="text-muted">Copyright &copy; Logistics II 2024</div>
       <div>
         <a href="{{ route('privacy-policy') }}" target="_blank" rel="noopener noreferrer">Privacy Policy</a>

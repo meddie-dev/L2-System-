@@ -1,9 +1,9 @@
 <x-layout.dashboardTemplate>
-  <div class="container-fluid px-4 tw-my-10">
-    <nav class="tw-flex tw-mb-5 max-sm:justify-center" aria-label="Breadcrumb">
-      <ol class="tw-inline-flex tw-items-center tw-space-x-1 md:tw-space-x-2 rtl:tw-space-x-reverse">
+  <div class="container-fluid tw-my-5 | tw-px-4 max-sm:tw-px-0 ">
+    <nav class="tw-flex | max-sm:justify-center" aria-label="Breadcrumb">
+      <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
         <x-partials.breadcrumb href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
-          <div class="sb-nav-link-icon tw-pr-2"><i class="fa-solid fa-table-columns"></i></div>
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
           Dashboard
         </x-partials.breadcrumb>
 
@@ -13,17 +13,17 @@
       </ol>
     </nav>
 
-    <div class="tw-max-w-7xl tw-mx-auto tw-py-6 tw-space-y-6">
+    <div class="tw-max-w-9xl tw-mx-auto tw-mt-3 tw-mb-6 tw-space-y-6">
 
       <!-- Profile Section -->
-      <div class="tw-bg-gray-200 tw-text-black tw-shadow sm:tw-rounded-lg tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold">Account Settings</h2>
+      <div class="tw-bg-gray-200 tw-text-black tw-shadow | sm:tw-rounded-lg tw-p-6">
+        <h2 class="tw-text-xl tw-font-semibold | max-sm:tw-text-[16px]">Account Settings</h2>
         <p class="tw-text-sm">Manage your profile details and personal information.</p>
       </div>
 
       <!-- Update Profile Form -->
       <div class="tw-bg-white tw-shadow sm:tw-rounded-lg tw-p-6">
-        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">Update Profile</h3>
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 | max-sm:tw-text-[16px]">Update Profile</h3>
         <form action="{{ route('settings.update') }}" method="POST" class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 tw-mt-4">
           @csrf
           <!-- First Name -->
@@ -65,14 +65,14 @@
 
       <!-- Security Section -->
       <div class="tw-bg-gray-300 tw-text-black tw-shadow sm:tw-rounded-lg tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold">Security Settings</h2>
+        <h2 class="tw-text-xl tw-font-semibold | max-sm:tw-text-[16px]">Security Settings</h2>
         <p class="tw-text-sm">Manage your account security settings and add new password.</p>
       </div>
 
       <div class="tw-bg-white tw-shadow sm:tw-rounded-lg tw-p-6">
         <!-- Change Password Section -->
-        <div>
-          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">Change Password</h3>
+        <div class=" | max-sm:tw-mb-4">
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 | max-sm:tw-text-[16px]">Change Password</h3>
           <p class="tw-text-gray-600 tw-text-sm">Reset your password by entering your registered email. You'll receive a secure link to set a new password. Check spam if not received.</p>
           <form method="POST" action="{{ route('password.email') }}" class="tw-grid tw-grid-cols-1 tw-gap-6 tw-mt-4">
             @csrf
@@ -97,7 +97,7 @@
 
         <!-- Two-Factor Authentication Section -->
         <div>
-          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 | max-sm:tw-text-[16px]">
             Two-Factor Authentication 
             @if(Auth::user()->two_factor_enabled==true)
                 <i class="fa-regular fa-circle-check tw-text-green-500"></i>
@@ -122,7 +122,7 @@
 
       <!-- Deletion Section -->
       <div class="tw-bg-white tw-shadow sm:tw-rounded-lg tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold tw-text-gray-900">Account Deletion</h2>
+        <h2 class="tw-text-xl tw-font-semibold tw-text-gray-900 | max-sm:tw-text-[16px]">Account Deletion</h2>
         <p class="tw-text-gray-600 tw-text-sm tw-mb-4">
           Manage your account deletion. Please note that deleting your account will remove all your data from our system and it's irreversible.
         </p>

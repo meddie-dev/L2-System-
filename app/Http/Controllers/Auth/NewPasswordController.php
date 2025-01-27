@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Notifications\NewNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
+
 
 class NewPasswordController extends Controller
 {
@@ -54,6 +56,9 @@ class NewPasswordController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($password),
                 ])->save();
+                
+                $user->notify(new NewNotification('Your password has been changed successfully.'));
+                
             }
         );
 
