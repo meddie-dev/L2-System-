@@ -1,14 +1,26 @@
-<x-layout.authTemplate>
-  <div class="container mt-5">
+<x-layout.portal.portalAuthTemplate>
+  <div class="container tw-mt-16 tw-max-w-[85%] | max-sm:tw-mt-5 ">
     <div class="row justify-content-center">
-      <div class="col-lg-7">
-        <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
-          <div class="card-header">
-            <h3 class="text-center font-weight-light tw-mt-4 tw-text-2xl | max-sm:tw-mt-2 max-sm:tw-text-xl max-sm:tw-font-extralight">Create Account</h3>
-            <p class="text-center text-body-tertiary | max-sm:tw-text-sm">Register now to take your logistics to the next level!</p>
+      <div class="tw-h-[87vh] tw-flex | max-sm:tw-h-full">
+        <div class="tw-bg-blue-500 tw-w-full card shadow-lg border-0 rounded-lg tw-rounded-r-none my-5 tw-overflow-hidden | max-sm:tw-hidden ">
+          <div class="tw-relative tw-z-10 tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
+            <img
+              src="/img/logo.png"
+              alt="Logo"
+              style="max-width: 250px; max-height: 50px; filter: brightness(0) invert(1); " />
+            <h2 class="tw-text-2xl tw-py-3 tw-text-white tw-font-extralight">Vendor Portal</h2>
           </div>
-          <div class="card-body | max-sm:tw-text-sm">
-            <form method="POST" action="/register">
+          <div class="tw-absolute tw-bottom-[-3rem]  tw-left-[-10rem] tw-rotate-[-35deg] tw-opacity-30 ">
+            <img src="/img/logo_white.png" class="tw-w-[500px] tw-object-cover tw-h-[250px] tw-object-top " >
+          </div>
+        </div>
+        <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5 tw-min-w-[43%] tw-rounded-l-none | max-sm:tw-rounded-lg max-sm:tw-text-sm max-sm:tw-min-w-full">
+          <div class="card-header">
+            <h3 class="text-center tw-font-extralight tw-mt-4 tw-text-xl | max-sm:tw-mt-2 max-sm:tw-text-lg">Vendor Portal Registration</h3>
+            <p class="text-center text-body-tertiary ">Sign up for the Logistics II (Vendor Portal).</p>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="/portal/register">
               @csrf
               <div class="row mb-3">
                 <div class="col-md-6">
@@ -70,37 +82,6 @@
                 @enderror
               </div>
 
-              @php
-              $superAdminExists = \App\Models\User::role('Super Admin')->exists();
-              $adminExists = \App\Models\User::role('Admin')->exists();
-              $staffCount = \App\Models\User::role('Staff')->count();
-              @endphp
-
-              <div class="form-floating mb-3">
-                <select class="form-select p-3" id="role" name="role" required>
-                  <option value="" selected>Select Role</option>
-
-                  <!-- Show "Super Admin" option if no Super Admin exists -->
-                  @if(!$superAdminExists)
-                  <option value="Super Admin">Super Admin</option>
-                  @endif
-
-                  <!-- Show "Admin" option if no Admin exists -->
-                  @if(!$adminExists)
-                  <option value="Admin">Admin</option>
-                  @endif
-
-                  <!-- Show "Staff" option if fewer than 5 Staff exist -->
-                  @if($staffCount < 5)
-                    <option value="Staff">Staff</option>
-                    @endif
-
-                    <!-- Always show "Driver" option -->
-                    <option value="Driver">Driver</option>
-                </select>
-              </div>
-
-
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
@@ -136,23 +117,24 @@
 
               <div class="mt-4 mb-0">
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary btn-block | max-sm:tw-text-sm">Create Account</button>
+                  <button type="submit" class="btn btn-primary btn-block">Create Account</button>
                 </div>
               </div>
             </form>
           </div>
           <div class="card-footer text-center py-3">
-            <div class="small tw-text-blue-700 | max-sm:tw-text-sm"><a href="/login">Have an account? Go to login</a></div>
+            <div class="small | tw-text-blue-700"><a href="/portal/login">Have an account? Go to login</a></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="tw-absolute tw-top-10 tw-right-5 | max-sm:tw-top-5">
-      @if(!Auth::check() || !Auth::user()->hasRole('Super Admin, Admin, Staff'))
-      <a href="/portal/login" class="tw-flex tw-items-center tw-justify-center tw-py-2 tw-px-4 tw-rounded-full tw-bg-blue-500 tw-text-white hover:tw-bg-white hover:tw-text-blue-500 hover:tw-border hover:tw-border-blue-500 tw-shadow-xl tw-transition tw-duration-300 tw-ease-in-out">
-        Switch to Vendor Portal<i class="fa-solid fa-arrow-right-long fa-fw tw-ml-2"></i>
-      </a>
-      @endif
-    </div>
+
+    <div class="tw-absolute tw-top-10 tw-left-5 tw-flex tw-justify-start | max-sm:tw-top-3">
+    @if(!Auth::check() || !Auth::user()->hasRole('Vendor'))
+    <a href="/login" class="tw-flex tw-items-center tw-justify-center tw-py-2 tw-px-4 tw-rounded-full tw-shadow-xl tw-bg-white tw-text-blue-500 hover:tw-bg-blue-500 hover:tw-text-white tw-transition tw-duration-300 tw-ease-in-out">
+      <i class="fa-solid fa-arrow-left-long fa-fw tw-mr-2"></i> Switch to Logistics Login
+    </a>
+    @endif
   </div>
-</x-layout.authTemplate>
+  </div>
+</x-layout.portal.portalAuthTemplate>

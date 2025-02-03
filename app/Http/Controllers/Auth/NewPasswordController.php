@@ -72,6 +72,10 @@ class NewPasswordController extends Controller
                     return redirect()->route('admin.dashboard')->with('success', __('Your password has been reset successfully.'));
                 } elseif (Auth::user()->hasRole('Staff')) {
                     return redirect()->route('staff.dashboard')->with('success', __('Your password has been reset successfully.'));
+                } elseif (Auth::user()->hasRole('Vendor')) {
+                    return redirect()->route('vendorPortal.dashboard')->with('success', __('Your password has been reset successfully.'));
+                } elseif (Auth::user()->hasRole('Driver')) {
+                    return redirect()->route('driver.dashboard')->with('success', __('Your password has been reset successfully.'));
                 }
             }
             return redirect()->route('login')->with('success', __('Your password has been reset successfully.'));

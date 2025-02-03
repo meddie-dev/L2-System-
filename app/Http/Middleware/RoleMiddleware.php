@@ -23,6 +23,9 @@ class RoleMiddleware
 
         // Check if the authenticated user has the required role
         if (!Auth::user()->hasRole($role)) {
+            if (str_contains($request->url(), '/portal')) {
+                return redirect()->route('portal.login')->with('error', 'You do not have the required role to access this resource.');
+            }
             return redirect()->route('login')->with('error', 'You do not have the required role to access this resource.');
         }
 

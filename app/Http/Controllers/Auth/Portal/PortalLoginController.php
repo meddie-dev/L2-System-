@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\Portal;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 
-class LoginController extends Controller
+class PortalLoginController extends Controller
 {
     use HasRoles;
 
@@ -19,7 +19,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        return view('pages.auth.login');
+        return view('pages.auth.portal.login');
     }
 
     /**
@@ -44,15 +44,7 @@ class LoginController extends Controller
                 return redirect()->route('two-factor.show');
             }
 
-            if ($user->hasRole('Super Admin')) {
-                return redirect()->route('superadmin.dashboard');
-            } elseif ($user->hasRole('Admin')) {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->hasRole('Driver')) {
-                return redirect()->route('driver.dashboard');
-            } else {
-                return redirect()->route('staff.dashboard');
-            }
+            return redirect()->route('vendorPortal.dashboard');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials.']);
@@ -78,6 +70,6 @@ class LoginController extends Controller
     public function destroy()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect()->route('portal.login');
     }
 }

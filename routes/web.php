@@ -2,24 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+// Controllers
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\Portal\PortalLoginController;
+use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\MFA\TwoFactorController;
+use App\Http\Controllers\Modules\VendorController;
+// Notifications
 use Illuminate\Notifications\DatabaseNotification;
-
-
-
 
 /*-------------------------------------------------------------- 
 # Default Route
 --------------------------------------------------------------*/
 
 Route::get('/', function () {
-    return view('pages.auth.login');
+    return view('pages.auth.portal.login');
 });
 
 /*--------------------------------------------------------------
@@ -44,6 +46,25 @@ Route::middleware('role:Super Admin')->group(function () {
 Route::middleware('role:Staff')->group(function () {
     // Staff Dashboard
     Route::get('/staff/dashboard', [DashboardController::class, 'staffDashboard'])->name('staff.dashboard');
+
+    // Vendor Management
+    Route::resource('vendors', VendorController::class);
+    Route::get('/vendors', [VendorController::class, 'index'])
+        ->name('vendors.index');
+    Route::post('/vendors/{vendor}/approve', [VendorController::class, 'approve'])
+        ->name('vendors.approve')
+        ->middleware('role:admin|super-admin');
+    Route::post('/vendors/{vendor}/reject', [VendorController::class, 'reject'])
+        ->name('vendors.reject')
+        ->middleware('role:admin|super-admin');
+});
+
+/*--------------------------------------------------------------
+# Driver Route
+--------------------------------------------------------------*/
+Route::middleware('role:Driver')->group(function () {
+    // Driver Dashboard
+    Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])->name('driver.dashboard');
 });
 
 /*--------------------------------------------------------------
@@ -87,7 +108,7 @@ Route::get('/notifications/{notification}', function (DatabaseNotification $noti
     $notification->markAsRead();
 
     return redirect()->route(
-        (Auth::user()->hasRole('Super Admin')) ? 'superadmin.dashboard' : ((Auth::user()->hasRole('Admin')) ? 'admin.dashboard' : 'staff.dashboard')
+        (Auth::user()->hasRole('Super Admin')) ? 'superadmin.dashboard' : ((Auth::user()->hasRole('Admin')) ? 'admin.dashboard' : ((Auth::user()->hasRole('Staff')) ? 'staff.dashboard' : 'vendorPortal.dashboard'))
     );
 })->name('notifications.show');
 
@@ -100,6 +121,32 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
     Route::get('/settings/delete-view', [SettingsController::class, 'destroyView'])->name('settings.delete-view');
     Route::post('/settings/delete-account', [SettingsController::class, 'destroy'])->name('settings.delete-account');
+});
+
+/*--------------------------------------------------------------
+# Add Ons Route
+--------------------------------------------------------------*/
+Route::view('/maps', 'pages.addOns.map')->name('map');
+Route::view('/calendar', 'pages.addOns.calendar')->name('calendar');
+
+/*--------------------------------------------------------------
+# Vendor Portal Auth Route
+--------------------------------------------------------------*/
+Route::middleware(['web'])->group(function () {
+    Route::get('/portal/login', [PortalLoginController::class, 'index'])->name('portal.login');
+    Route::post('/portal/login', [PortalLoginController::class, 'login']);
+    Route::get('/portal/register', [PortalRegisterController::class, 'index'])->name('portal.register');
+    Route::post('/portal/register', [PortalRegisterController::class, 'register']);
+    Route::post('/portal/logout', [PortalLoginController::class, 'destroy'])->name('portal.logout');
+});
+
+/*--------------------------------------------------------------
+# Vendor Portal Route
+--------------------------------------------------------------*/
+Route::middleware(['role:Vendor'])->group(function () {
+    // Vendor Portal Dashboard
+    Route::get('/portal/vendor/dashboard', [DashboardController::class, 'vendorPortalDashboard'])
+        ->name('vendorPortal.dashboard');
 });
 
 /*--------------------------------------------------------------

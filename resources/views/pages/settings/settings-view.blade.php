@@ -2,7 +2,7 @@
   <div class="container-fluid tw-my-5 | tw-px-4 max-sm:tw-px-0 ">
     <nav class="tw-flex | max-sm:justify-center" aria-label="Breadcrumb">
       <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-        <x-partials.breadcrumb href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+        <x-partials.breadcrumb href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Staff') ? 'staff.dashboard' : (Auth::user()->hasRole('Vendor') ? 'vendorPortal.dashboard' : 'driver.dashboard')))) }}" :active="false" :isLast="false">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
           Dashboard
         </x-partials.breadcrumb>
@@ -50,7 +50,7 @@
           <!-- Role -->
           <div>
             <label for="role" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Role</label>
-            <input type="text" id="role" name="role" value="{{ Auth::user()->hasRole('Super Admin') ? 'Super Admin' : (Auth::user()->hasRole('Admin') ? 'Admin' : 'Staff') }}" required readonly
+            <input type="text" id="role" name="role" value="{{ Auth::user()->roles->pluck('name')->first() }}" readonly
               class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm">
           </div>
 

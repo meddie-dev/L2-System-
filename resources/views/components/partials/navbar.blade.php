@@ -1,14 +1,14 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" :notifications="$notifications">
+<nav class="sb-topnav navbar navbar-expand navbar-{{ auth()->user()->hasRole('Vendor') ? 'light' : 'dark' }} bg-{{ auth()->user()->hasRole('Vendor') ? 'light' : 'dark' }}" :notifications="$notifications">
   <!-- Navbar Brand-->
-  <a href="/" class="navbar-brand ps-3">
+  <a href="{{ auth()->user()->hasRole('Super Admin') ? '/superadmin/dashboard' : (auth()->user()->hasRole('Admin') ? '/admin/dashboard' : (auth()->user()->hasRole('Staff') ? '/staff/dashboard' : (auth()->user()->hasRole('Vendor') ? '/portal/vendor/dashboard' : '/driver/dashboard'))) }}" class="navbar-brand ps-3">
     <img
       src="/img/logo.png"
       alt="Logo"
-      style="max-width: 150px; max-height: 50px; filter: brightness(0) invert(1);" />
+      style="max-width: 150px; max-height: 50px; {{ Auth::user()->hasRole('Vendor') ? '' : 'filter: brightness(0) invert(1);' }}" />
   </a>
 
   <!-- Sidebar Toggle-->
-  <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+  <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 " id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
   <!-- Navbar Search-->
   <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
@@ -40,7 +40,7 @@
         </a>
 
         <div class="dropdown-menu dropdown-menu-end p-0 border-0 shadow | max-sm:tw-translate-x-[15%]" aria-labelledby="notificationIcon" id="notificationList" style="width: 350px;">
-          <div class=" p-3 text-white | tw-bg-[#232529d3]">
+          <div class="p-3 text-white {{ auth()->user()->hasRole('Vendor') ? 'tw-bg-[#b3b3b3d3] tw-text-gray-500' : 'tw-bg-[#232529d3]' }}">
             <h5 class="mb-0">Notifications</h5>
           </div>
           <div class="list-group list-group-flush" style="max-height: 200px; overflow-y: auto;">
@@ -80,7 +80,11 @@
           <hr class="dropdown-divider" />
         </li>
         <li>
+          @if(Auth::user()->hasRole('Vendor'))
+          <form action="{{ route('portal.logout') }}" method="POST">
+          @else
           <form action="/logout" method="POST">
+          @endif
             @csrf
             <button type="submit" class="dropdown-item">Logout</button>
           </form>

@@ -62,6 +62,10 @@ class SettingsController extends Controller
         $user->delete();
 
         // Redirect to login with a success message
-        return redirect('/login')->with('success', 'Your account has been deleted successfully.');
+        if (Auth::user()->hasRole('Vendor')) {
+            return redirect('/portal/login')->with('success', 'Your account has been deleted successfully.');
+        } else {
+            return redirect('/login')->with('success', 'Your account has been deleted successfully.');
+        }
     }
 }

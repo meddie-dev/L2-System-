@@ -39,8 +39,11 @@
             </form>
           </div>
           <div class="card-footer text-center py-3">
-            <div class="small text-primary"><a href="{{route('register')}}">Need an account? Sign up!</a></div>
-          </div>
+            @if (Auth::check())
+            <a href="@if(Auth::user()->hasRole('Super Admin')) /superadmin/dashboard @elseif(Auth::user()->hasRole('Admin')) /admin/dashboard @elseif(Auth::user()->hasRole('Staff')) /staff/dashboard @elseif(Auth::user()->hasRole('Vendor')) /portal/vendor/dashboard @elseif(Auth::user()->hasRole('Driver')) /driver/dashboard @endif" class="text-primary">Go back to Dashboard</a>
+            @else
+            <div class="small text-primary"><a href="@if(Auth::check() && Auth::user()->hasRole('Vendor')) {{route('portal.register')}} @else {{route('register')}} @endif">Need an account? Sign up!</a></div>
+            @endif
         </div>
       </div>
     </div>

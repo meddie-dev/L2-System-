@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\Portal;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 
-class RegisterController extends Controller
+class PortalRegisterController extends Controller
 {
     /**
      * Show the application registration form.
@@ -22,7 +22,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        return view('pages.auth.register');
+        return view('pages.auth.portal.register');
     }
 
     /**
@@ -38,48 +38,17 @@ class RegisterController extends Controller
         // Create the user
         $user = $this->create($request->all());
 
-        // Get counts
-        $totalUsers = User::count();
-
-        // Retrieve the role requested from the registration form
-        $requestedRole = $request->input('role');
-
-        // Role assignment logic:
-        if ($totalUsers == 1) {
-            $user->assignRole('Super Admin');
-        } elseif ($totalUsers == 2) {
-            $user->assignRole('Admin');
-        } elseif ($requestedRole === 'Driver') {
-            $user->assignRole('Driver');
-        } elseif ($requestedRole === 'Staff') {
-            $user->assignRole('Staff');
-        } else {
-            $user->assignRole('Driver');
-        }
-
+        // Assign default role after registration
+        $user->assignRole('Vendor');
+        
         // Notify the user
-        $user->notify(new NewNotification('Welcome to ' . config('app.name') . '! You have been successfully registered as a ' . $user->roles->first()->name . '.'));
+        $user->notify(new NewNotification('Welcome to ' . config('app.name') . '! You have been successfully registered as a Vendor.'));
 
         // Log the user in
         Auth::login($user);
 
-        switch ($user->roles->first()->name) {
-            case 'Super Admin':
-                return redirect()->route('superadmin.dashboard')
-                    ->with('success', 'Welcome! You have been successfully registered as a Super Admin.');
-                break;
-            case 'Admin':
-                return redirect()->route('admin.dashboard')
-                    ->with('success', 'Welcome! You have been successfully registered as an Admin.');
-                break;
-            case 'Driver':
-                return redirect()->route('driver.dashboard')
-                    ->with('success', 'Welcome! You have been successfully registered as a Driver.');
-                break;
-            default:
-                return redirect()->route('staff.dashboard')
-                    ->with('success', 'Welcome! You have been successfully registered as a Staff.');
-        }
+        return redirect()->route('vendorPortal.dashboard')
+            ->with('success', 'Welcome! You have been successfully registered as a Vendor.');
     }
 
     /**

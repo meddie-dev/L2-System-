@@ -95,6 +95,8 @@ class TwoFactorController extends Controller
                 Auth::user()->hasRole('Super Admin') => 'superadmin.dashboard',
                 Auth::user()->hasRole('Admin') => 'admin.dashboard',
                 Auth::user()->hasRole('Staff') => 'staff.dashboard',
+                Auth::user()->hasRole('Vendor') => 'vendorPortal.dashboard',
+                Auth::user()->hasRole('Driver') => 'driver.dashboard',
                 default => throw new \Exception('Unknown user role'),
             };
 

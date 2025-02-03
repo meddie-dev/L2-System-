@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Logistics II</title>
+  <title>Vendor Portal</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,12 +26,11 @@
     crossorigin=""></script>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
-
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
-<body class="tw-bg-gray-100 tw-p-8 | max-sm:tw-p-4">
+<body class="tw-bg-gray-100 tw-p-8 | max-sm:tw-p-4 max-sm:tw-bg-white">
 
   <div class="sb-nav-fixed">
     @include('components.partials.navbar')

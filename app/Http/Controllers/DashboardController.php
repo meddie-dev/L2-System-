@@ -51,4 +51,14 @@ class DashboardController extends Controller
     {
         return view('components.dashboard.staff');
     }
+
+    public function vendorPortalDashboard()
+    {
+        return view('components.dashboard.vendorPortal');
+    }
+
+    public function driverDashboard()
+    {
+        return view('components.dashboard.driver');
+    }
 }

@@ -2,7 +2,7 @@
   <div class="container-fluid tw-my-10 tw-px-4 | max-sm:tw-px-0 max-sm:tw-my-5">
     <nav class="tw-flex tw-mb-5 | max-sm:flex-start" aria-label="Breadcrumb">
       <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse">
-        <x-partials.breadcrumb href="{{ (Auth::user()->hasRole('Super Admin')) ? '/superadmin/dashboard' : ((Auth::user()->hasRole('Admin')) ? '/admin/dashboard' : '/staff/dashboard') }}" :active="true" :isLast="true">
+        <x-partials.breadcrumb href="{{ route('vendorPortal.dashboard') }}" :active="true" :isLast="true">
           <div class="sb-nav-link-icon tw-pr-2 | max-sm:tw-text-sm"><i class="fa-solid fa-table-columns | max-sm:tw-text-sm"></i>
             Dashboard
           </div>
