@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\ActivityLogs;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewNotification;
 use Illuminate\Http\Request;
@@ -61,6 +62,12 @@ class NewPasswordController extends Controller
                 
             }
         );
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Password changed time of: " . now()->format('Y-m-d H:i:s'),
+            'ip_address' => $request->ip(),
+        ]);
 
         // Check if the password was successfully reset
         if ($status === Password::PASSWORD_RESET) {

@@ -217,7 +217,6 @@
           </a>
           <div class="collapse" id="collapseVendor" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/vendor/order">Vendor Order Request</a>
               <a class="nav-link" href="/staff/dashboard/vendor/request">Manage Request</a>
             </nav>
           </div>

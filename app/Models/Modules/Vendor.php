@@ -5,44 +5,39 @@ namespace App\Models\Modules;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-
-
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Vendor extends Model
 {
     use HasFactory, Notifiable, HasRoles;
+    protected $title = 'vendor';
     
     protected $fillable = [
-        'firstName',
-        'lastName',
-        'email',
-        'password',
-        'two_factor_enabled',
-        'two_factor_code', 
-        'two_factor_expires_at'
+    'user_id',
+    'orderNumber',
+    'pickupLocation',
+    'deliveryLocation',
+    'deliveryDeadline',
+    'packageWeight',
+    'specialInstructions',
+    'documentUpload',
+    'approval_status',
+    'approved_by',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function user()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(User::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function isPending()
+    {
+        return $this->approval_status === 'pending';
     }
 }

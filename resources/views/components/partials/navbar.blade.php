@@ -51,7 +51,7 @@
             <a class="list-group-item list-group-item-action {{ $notification->read_at ? '' : 'bg-light' }}" href="{{ route('notifications.show', $notification->id) }} ">
               <div class="d-flex w-100 justify-content-center align-items-center ">
                 <div class="flex-grow-1">
-                  <p class="mb-2 | max-sm:tw-text-sm">{{ $notification->data['message'] }}</p>
+                  <p class="mb-2 {{ Str::length($notification->data['message']) > 50 ? 'tw-text-xs' : 'tw-text-sm' }} | max-sm:tw-text-[11px]">{{ $notification->data['message'] }}</p>
                   <div class="d-flex justify-content-between">
                     <div class="text-muted" style="font-size: 0.8em;">{{ $notification->created_at->timezone('Asia/Manila')->format('M d, Y') }}</div>
                     <div class="text-muted" style="font-size: 0.8em;">{{ $notification->created_at->timezone('Asia/Manila')->format('h:i A') }}</div>

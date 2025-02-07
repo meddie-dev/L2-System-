@@ -2,8 +2,8 @@
   <div class="container tw-mt-16 tw-max-w-[85%] | max-sm:tw-mt-5 ">
     <div class="row justify-content-center ">
       <div class="tw-h-[82vh] tw-flex | max-sm:tw-h-full">
-        <div class="tw-bg-blue-500 tw-w-full card shadow-lg border-0 rounded-lg tw-rounded-r-none my-5 tw-overflow-hidden | max-sm:tw-hidden  ">
-          <div class="tw-relative tw-z-10  tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
+        <div class="tw-bg-blue-500 tw-w-full tw-shadow-lg card shadow-lg border-0 rounded-lg tw-rounded-r-none my-5 tw-overflow-hidden | max-sm:tw-hidden  ">
+          <div class="tw-relative tw-z-10   tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
             <img
               src="/img/logo.png"
               alt="Logo"
@@ -92,9 +92,9 @@
     </div>
   </div>
 
-  <div class="tw-absolute tw-top-10 tw-left-5 tw-flex tw-justify-start | max-sm:tw-top-3">
+  <div class="tw-absolute tw-top-10 tw-left-5 tw-flex tw-justify-start  | max-sm:tw-top-3">
     @if(!Auth::check() || !Auth::user()->hasRole('Vendor'))
-    <a href="/login" class="tw-flex tw-items-center tw-justify-center tw-py-2 tw-px-4 tw-rounded-full tw-bg-white tw-text-blue-500 tw-shadow-xl hover:tw-bg-blue-500 hover:tw-text-white tw-transition tw-duration-300 tw-ease-in-out">
+    <a href="/login" class="tw-flex tw-items-center tw-justify-center  tw-border tw-border-blue-500 tw-py-2 tw-px-4 tw-rounded-full tw-bg-white tw-text-blue-500 tw-shadow-xl hover:tw-bg-blue-500 hover:tw-text-white tw-transition tw-duration-300 tw-ease-in-out">
       <i class="fa-solid fa-arrow-left-long fa-fw tw-mr-2"></i> Switch to Logistics Login
     </a>
     @endif

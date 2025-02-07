@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-
+use App\Models\Modules\Vendor;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -26,7 +27,7 @@ class User extends Authenticatable
         'password',
         'two_factor_enabled',
         'two_factor_code', 
-        'two_factor_expires_at'
+        'two_factor_expires_at',
     ];
 
     /**
@@ -50,5 +51,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isOnline()
+    {
+        return $this->last_active_at && $this->last_active_at->gt(Carbon::now()->subMinutes(5));
+    }
+
+    public function vehicles()
+    {
+        // return $this->hasMany(Vehicle::class);
+    }
+
+    public function activity_logs()
+    {
+        return $this->hasMany(ActivityLogs::class);
+    }
+
+    public function vendor()
+    {
+        return $this->hasMany(Vendor::class);
     }
 }

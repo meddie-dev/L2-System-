@@ -1,4 +1,4 @@
-<x-layout.dashboardTemplate>
+<x-layout.portal.portalDashboardTemplate>
   <div class="container-fluid tw-my-10 tw-px-4 | max-sm:tw-px-0 max-sm:tw-my-5">
     <nav class="tw-flex tw-mb-5 | max-sm:flex-start" aria-label="Breadcrumb">
       <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse">
@@ -21,4 +21,4 @@
     </div>
 
   </div>
-</x-layout.dashboardTemplate>
+</x-layout.portal.portalDashboardTemplate>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLogs;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,12 @@ class SettingsController extends Controller
         ]);
 
         $user = Auth::user();
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated profile record successfully",
+            'ip_address' => $request->ip(),
+        ]);
 
         $user->firstName = $request->first_name;
         $user->lastName = $request->last_name;

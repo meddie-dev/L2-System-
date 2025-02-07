@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\ActivityLogs;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewNotification;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+
 
 
 class RegisterController extends Controller
@@ -37,6 +37,9 @@ class RegisterController extends Controller
 
         // Create the user
         $user = $this->create($request->all());
+
+        $user->last_active_at = now('Asia/Manila')->format('Y-m-d H:i');
+        $user->save();
 
         // Get counts
         $totalUsers = User::count();

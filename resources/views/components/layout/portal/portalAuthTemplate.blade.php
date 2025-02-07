@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>Vendor Portal</title>
 
@@ -25,7 +26,7 @@
 
 </head>
 
-<body class="tw-bg-indigo-200 ">
+<body class="tw-bg-white">
   <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
       @if (session('success'))

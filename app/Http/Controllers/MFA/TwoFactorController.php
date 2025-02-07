@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Notifications\TwoFactorCodeNotification;
 use App\Notifications\NewNotification;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLogs;
 use Spatie\Permission\Traits\HasRoles;
 
 class TwoFactorController extends Controller
@@ -91,6 +92,12 @@ class TwoFactorController extends Controller
 
             $user->notify(new NewNotification('Two-factor authentication Code has been verified successfully.'));
 
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Two-factor authentication Code has been verified time of: " . now()->format('Y-m-d H:i:s'),
+                'ip_address' => $request->ip(),
+            ]);
+
             $route = match (true) {
                 Auth::user()->hasRole('Super Admin') => 'superadmin.dashboard',
                 Auth::user()->hasRole('Admin') => 'admin.dashboard',
@@ -117,6 +124,12 @@ class TwoFactorController extends Controller
         $user->two_factor_expires_at = null;
         $user->two_factor_enabled = false;
         $user->save();
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Two-factor authentication has been disabled time of: " . now()->format('Y-m-d H:i:s'),
+            'ip_address' => $request->ip(),
+        ]);
 
         $user->notify(new NewNotification('Two-factor authentication has been successfully disabled for your account. We recommend that you enable two-factor authentication again to enhance the security of your account.'));
 

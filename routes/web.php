@@ -27,7 +27,7 @@ Route::get('/', function () {
 /*--------------------------------------------------------------
 # Admin Route
 --------------------------------------------------------------*/
-Route::middleware('role:Admin')->group(function () {
+Route::middleware('role:Admin', 'active')->group(function () {
     // Admin Dashboard
     Route::get('/admin/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
 });
@@ -35,7 +35,7 @@ Route::middleware('role:Admin')->group(function () {
 /*--------------------------------------------------------------
 # Super Admin Route
 --------------------------------------------------------------*/
-Route::middleware('role:Super Admin')->group(function () {
+Route::middleware('role:Super Admin', 'active')->group(function () {
     // Super Admin Dashboard
     Route::get('/superadmin/dashboard', [DashboardController::class, 'superAdminDashboard'])->name('superadmin.dashboard');
 });
@@ -43,26 +43,26 @@ Route::middleware('role:Super Admin')->group(function () {
 /*--------------------------------------------------------------
 # Staff Route
 --------------------------------------------------------------*/
-Route::middleware('role:Staff')->group(function () {
+Route::middleware('role:Staff', 'active')->group(function () {
     // Staff Dashboard
-    Route::get('/staff/dashboard', [DashboardController::class, 'staffDashboard'])->name('staff.dashboard');
+    Route::get('/staff/dashboard', [DashboardController::class, 'staffDashboard'])
+        ->name('staff.dashboard');
 
     // Vendor Management
-    Route::resource('vendors', VendorController::class);
-    Route::get('/vendors', [VendorController::class, 'index'])
-        ->name('vendors.index');
-    Route::post('/vendors/{vendor}/approve', [VendorController::class, 'approve'])
-        ->name('vendors.approve')
-        ->middleware('role:admin|super-admin');
+    Route::get('/staff/dashboard/vendor/request', [VendorController::class, 'manage'])
+        ->name('staff.vendors.manage');
+    Route::get('/staff/dashboard/vendor/{vendor}', [VendorController::class, 'show'])
+        ->name('staff.vendors.show');
+    Route::patch('/staff/dashboard/vendor/{vendor}/approve', [VendorController::class, 'approve'])
+        ->name('staff.vendors.approve');
     Route::post('/vendors/{vendor}/reject', [VendorController::class, 'reject'])
-        ->name('vendors.reject')
-        ->middleware('role:admin|super-admin');
+        ->name('staff.vendors.reject');
 });
 
 /*--------------------------------------------------------------
 # Driver Route
 --------------------------------------------------------------*/
-Route::middleware('role:Driver')->group(function () {
+Route::middleware('role:Driver', 'active')->group(function () {
     // Driver Dashboard
     Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])->name('driver.dashboard');
 });
@@ -95,7 +95,7 @@ Route::middleware([])->group(function () {
 /*--------------------------------------------------------------
 # Two Factor Authentication Route
 --------------------------------------------------------------*/
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('two-factor', [TwoFactorController::class, 'show'])->name('two-factor.show');
     Route::post('two-factor/send-code', [TwoFactorController::class, 'sendCode'])->name('two-factor.send');
     Route::post('two-factor/verify', [TwoFactorController::class, 'verify'])->name('two-factor.verify');
@@ -116,7 +116,7 @@ Route::get('/notifications/{notification}', function (DatabaseNotification $noti
 /*--------------------------------------------------------------
 # Settings Route
 --------------------------------------------------------------*/
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
     Route::get('/settings/delete-view', [SettingsController::class, 'destroyView'])->name('settings.delete-view');
@@ -143,10 +143,25 @@ Route::middleware(['web'])->group(function () {
 /*--------------------------------------------------------------
 # Vendor Portal Route
 --------------------------------------------------------------*/
-Route::middleware(['role:Vendor'])->group(function () {
+Route::middleware(['role:Vendor', 'active'])->group(function () {
     // Vendor Portal Dashboard
     Route::get('/portal/vendor/dashboard', [DashboardController::class, 'vendorPortalDashboard'])
         ->name('vendorPortal.dashboard');
+
+    // Vendor Portal Modules
+    Route::resource('vendors', VendorController::class);
+    Route::get('/portal/vendor/dashboard/order', [VendorController::class, 'index'])
+        ->name('vendorPortal.order');
+    Route::get('/portal/vendor/dashboard/order/new', [VendorController::class, 'create'])
+        ->name('vendorPortal.order.new');
+    Route::post('/portal/vendor/dashboard/order/{user}', [VendorController::class, 'store'])
+        ->name('vendorPortal.order.store');
+    Route::get('/portal/vendor/dashboard/order/{vendor}', [VendorController::class, 'edit'])
+        ->name('vendorPortal.order.edit');
+    Route::patch('/portal/vendor/dashboard/order/{vendor}', [VendorController::class, 'update'])
+        ->name('vendorPortal.order.update');
+    Route::get('/portal/vendor/dashboard/order/approved/{vendor}', [VendorController::class, 'checkApproved'])
+        ->name('vendorPortal.order.checkApproved');
 });
 
 /*--------------------------------------------------------------

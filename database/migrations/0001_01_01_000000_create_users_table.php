@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('two_factor_enabled')->default(false); // 0 = false, 1 = true
             $table->string('two_factor_code')->nullable(); 
             $table->timestamp('two_factor_expires_at')->nullable();
+            $table->timestamp('last_active_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

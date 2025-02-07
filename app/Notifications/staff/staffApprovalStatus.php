@@ -11,16 +11,16 @@ class staffApprovalStatus extends Notification
 {
     use Queueable;
 
-    protected $item;
-    protected $status;
+    protected $approvalType;
+    protected $approvable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($item, $status)
+    public function __construct($approvalType, $approvable)
     {
-        $this->item = $item;
-        $this->status = $status;
+        $this->approvalType = $approvalType;
+        $this->approvable = $approvable;
     }
 
     /**
@@ -38,10 +38,37 @@ class staffApprovalStatus extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        // Check the approval type to generate the correct message
+        $type = $this->approvalType;
+        $approvable = $this->approvable;
+
+        $message = "A new {$type} request ({$approvable->id}) requires approval.";
+
+        // Customize further based on the approval type
+        switch ($type) {
+            case 'Order':
+                $message = "Order Number: ({$approvable->orderNumber}) is ". strtoupper($approvable->approval_status) ." by ".($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                break;
+
+            case 'Document':
+                $message = "Document request ID: {$approvable->documentId} is awaiting approval.";
+                break;
+
+            case 'Fleet':
+                $message = "Fleet reservation request ID: {$approvable->reservationId} is waiting for your approval.";
+                break;
+
+            case 'Vehicle Reservation':
+                $message = "Vehicle reservation request ID: {$approvable->reservationId} requires your review.";
+                break;
+
+                // Add more cases for other types if needed
+        }
+
         return (new MailMessage)
-            ->subject('Approval Status Update')
-            ->line("Your request ({$this->item->id}) has been {$this->status}.")
-            ->line('Thank you.');
+            ->subject("{$type} Approval Request")
+            ->line($message)
+            ->line('Please review and take action.');
     }
 
     /**

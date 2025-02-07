@@ -9,6 +9,8 @@ use Spatie\Permission\Traits\HasRoles;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLogs;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -38,11 +40,21 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'), $request->remember)) {
             $user = Auth::user();
 
+            // Update the last active time for the authenticated user
+            $user->last_active_at = Carbon::now('Asia/Manila')->format('Y-m-d H:i');
+            $user->save();
+
             // Check if the user has 2FA enabled (0 = false, 1 = true)
             if ($user->two_factor_enabled == 1) {
                 $this->sendTwoFactorCode($user);
                 return redirect()->route('two-factor.show');
             }
+
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Logged in at: " . now()->format('Y-m-d H:i:s'),
+                'ip_address' => $request->ip(),
+            ]);
 
             if ($user->hasRole('Super Admin')) {
                 return redirect()->route('superadmin.dashboard');
@@ -72,10 +84,10 @@ class LoginController extends Controller
         $user->notify(new TwoFactorCodeNotification($code));
     }
 
-     /**
+    /**
      * Handle the logout process.
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
         Auth::logout();
         return redirect('/login');

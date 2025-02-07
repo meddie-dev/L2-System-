@@ -13,15 +13,18 @@ return new class extends Migration
     {
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
-            $table->string('firstName');
-            $table->string('lastName');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('two_factor_enabled')->default(false); // 0 = false, 1 = true
-            $table->string('two_factor_code')->nullable(); 
-            $table->timestamp('two_factor_expires_at')->nullable();
-            $table->rememberToken();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('orderNumber');
+            $table->string('pickupLocation');
+            $table->string('deliveryLocation');
+            $table->string('deliveryDeadline');
+            $table->decimal('packageWeight', 10, 2);
+            $table->string('specialInstructions')->nullable();
+            $table->string('documentUpload')->nullable();
+            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
