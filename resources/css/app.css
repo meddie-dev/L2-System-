@@ -4745,6 +4745,11 @@ textarea.form-control-lg {
   width: 400px; 
 }
 
+@media (max-width: 576px) {
+  .alert-custom-position {
+    width: 300px;
+  }
+}
 
 @keyframes progress-bar-stripes {
   0% {

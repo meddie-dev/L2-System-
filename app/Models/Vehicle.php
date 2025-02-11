@@ -1,24 +1,19 @@
 <?php
 
-namespace App\Models\Modules;
+namespace App\Models;
 
-use App\Models\Fuel;
-use App\Models\User;
-use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Modules\VehicleReservation;
+use App\Models\Fuel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class VehicleReservation extends Model
+class Vehicle extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'vehicle_reservations';
+    protected $table = 'vehicles';
     protected $guarded = [];
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class);
-    }
 
     // Driver
     public function user()
@@ -26,8 +21,14 @@ class VehicleReservation extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function vehicleReservations()
+    {
+        return $this->hasMany(VehicleReservation::class);
+    }
+
     public function fuel()
     {
-        return $this->belongsToMany(Fuel::class, 'reservation_fuel');
+        return $this->hasMany(Fuel::class);
     }
+
 }

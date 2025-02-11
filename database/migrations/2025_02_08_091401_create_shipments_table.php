@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vendors', function (Blueprint $table) {
+        Schema::create('shipments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('orderNumber');
-            $table->string('pickupLocation');
-            $table->string('deliveryLocation');
-            $table->string('deliveryDeadline');
-            $table->decimal('packageWeight', 10, 2);
-            $table->string('specialInstructions')->nullable();
-            $table->string('documentUpload')->nullable();
-            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->string('trackingNumber', 50)->unique();
+            $table->enum('shipmentStatus', ['scheduled', 'in_transit', 'delayed', 'delivered']);
+            $table->timestamp('departureTime')->nullable();
+            $table->timestamp('arrivalTime')->nullable();
+            $table->string('currentLocation', 255)->nullable();
+            $table->timestamp('estimatedDeliveryTime')->nullable();
+
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vendors');
+        Schema::dropIfExists('shipments');
     }
 };

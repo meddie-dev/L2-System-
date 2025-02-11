@@ -229,16 +229,6 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDriver" aria-expanded="false" aria-controls="collapseDriver">
-                Driver Management
-                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-              </a>
-              <div class="collapse" id="collapseDriver" aria-labelledby="headingOne" data-bs-parent="#collapseDriver">
-                <nav class="sb-sidenav-menu-nested nav">
-                  <a class="nav-link" href="/admin/fleet/driver/request">Approve Driver Requests</a>
-                  <a class="nav-link" href="/admin/fleet/driver/issue">Report Driver Issues</a>
-                </nav>
-              </div>
               <a class="nav-link" href="/staff/dashboard/fleet/issue">Report Vehicle Issues</a>
               <a class="nav-link" href="/staff/dashboard/fleet/request">Request Vehicle Maintenance</a>
             </nav>
@@ -250,55 +240,28 @@
         <!-- Vendor-specific links -->
         <div>
           <!-- Order Managements -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+          <a class="nav-link collapsed" href="/portal/vendor/dashboard/order">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
             Order Management
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
           </a>
-          <div class="collapse" id="collapseOrder" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/portal/vendor/dashboard/order">Orders List Request</a>
-            </nav>
-          </div>
-
-          <!-- Fleet Reservation -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFleet" aria-expanded="false" aria-controls="collapseFleet">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-van-shuttle"></i></div>
-            Fleet Reservation
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-          </a>
-          <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/portal/vendor/dashboard/fleet/booking">Booking Interface</a>
-              <a class="nav-link" href="/portal/vendor/dashboard/fleet/track">Fleet Tracking</a>
-            </nav>
-          </div>
 
           <!-- Document Management -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDocument" aria-expanded="false" aria-controls="collapseDocument">
-            <div class="sb-nav-link-icon"><i class="fa-regular fa-file"></i></div>
-            Document Management
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          <a class="nav-link collapsed" href="/portal/vendor/dashboard/document">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-folder"></i></div>
+            Uploaded Document
           </a>
-          <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/portal/vendor/dashboard/document/upload">Upload Document</a>
-              <a class="nav-link" href="/portal/vendor/dashboard/document/approved">View Approved Documents</a>
-            </nav>
-          </div>
 
-          <!-- Payment & Report Management -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
-            Payment & Report Management
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+           <!-- Payment Management -->
+           <a class="nav-link collapsed" href="/portal/vendor/dashboard/payment">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-credit-card"></i></div>
+            Payment
           </a>
-          <div class="collapse" id="collapsePayment" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/payment/invoice">Invoice Status</a>
-              <a class="nav-link" href="/staff/dashboard/payment/performance">Performance Reports</a>
-            </nav>
-          </div>
+
+          <!-- Transaction History Management -->
+          <a class="nav-link collapsed" href="/portal/vendor/dashboard/transaction">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-history"></i></div>
+            Transaction History
+          </a>
         </div>
         @endif
 

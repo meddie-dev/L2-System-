@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('documentNumber')->unique();
-            $table->string('documentName');
-            $table->string('documentUrl');
-            $table->enum('documentStatus', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
-
+            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->string('paymentNumber')->unique();
+            $table->enum('paymentMethod', ['cash_on_delivery', 'e-wallet', 'card'])->default('cash_on_delivery');
+            $table->string('amount');
+            $table->enum('paymentStatus', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+            
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('payments');
     }
 };

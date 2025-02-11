@@ -2,38 +2,45 @@
 
 namespace App\Models\Modules;
 
+use App\Models\Payment;
+use App\Models\Shipments;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
-class Vendor extends Model
+class Order extends Model
 {
     use HasFactory, Notifiable, HasRoles;
-    protected $title = 'vendor';
     
-    protected $fillable = [
-    'user_id',
-    'orderNumber',
-    'pickupLocation',
-    'deliveryLocation',
-    'deliveryDeadline',
-    'packageWeight',
-    'specialInstructions',
-    'documentUpload',
-    'approval_status',
-    'approved_by',
-    ];
+    protected $title = 'orders';
+    
+    protected $guarded = [];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    public function document()
+    {
+        return $this->hasMany(Document::class);
+    }
+
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function shipment()
+    {
+        return $this->hasOne(Shipments::class);
     }
 
     public function isPending()

@@ -32,9 +32,10 @@
           @if($notifications->count() > 0)
           <!-- Red circle badge -->
           <span
-            class="position-absolute top-10 start-70 translate-middle badge rounded-pill bg-danger"
+            class="position-absolute tw-top-3 start-100 translate-middle badge rounded-pill bg-danger"
             id="notificationDot"
-            style="width: 10px; height: 10px; z-index: 1; padding: 0;">
+            style="width: 18px; height: 18px; z-index: 1; font-size: 0.6em; display: flex; justify-content: center; align-items: center; transform: translate(-50%, -50%);">
+            {{ $notifications->count() }}
           </span>
           @endif
         </a>

@@ -51,11 +51,11 @@ class staffApprovalStatus extends Notification
                 break;
 
             case 'Document':
-                $message = "Document request ID: {$approvable->documentId} is awaiting approval.";
+                $message = "Document Number: ({$approvable->documentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
-            case 'Fleet':
-                $message = "Fleet reservation request ID: {$approvable->reservationId} is waiting for your approval.";
+            case 'Payment':
+                $message = "Payment Number: ({$approvable->paymentNumber}) is ". strtoupper($approvable->approval_status) ." by ".($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
             case 'Vehicle Reservation':

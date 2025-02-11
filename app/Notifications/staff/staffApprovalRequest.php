@@ -51,11 +51,11 @@ class staffApprovalRequest extends Notification
                 break;
 
             case 'Document':
-                $message = "Document request ID: {$approvable->documentId} is awaiting approval.";
+                $message = "Document Uploaded by {$approvable->user->firstName} {$approvable->user->lastName} with Document Number: ({$approvable->documentNumber}) is awaiting for review and approval.";
                 break;
 
-            case 'Fleet':
-                $message = "Fleet reservation request ID: {$approvable->reservationId} is waiting for your approval.";
+            case 'Payment':
+                $message = "Payment by {$approvable->user->firstName} {$approvable->user->lastName} with Payment Number: ({$approvable->paymentNumber}) is awaiting for review and approval.";
                 break;
 
             case 'Vehicle Reservation':

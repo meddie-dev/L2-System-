@@ -1,0 +1,82 @@
+<x-layout.portal.mainTemplate>
+  <nav class="tw-flex | max-md:tw-hidden" aria-label="Breadcrumb">
+    <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+        <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
+        Dashboard
+      </x-partials.breadcrumb>
+
+      <x-partials.breadcrumb href="{{ route('vendorPortal.order') }}" :active="false" :isLast="false">
+        Order Management
+      </x-partials.breadcrumb>
+
+      <x-partials.breadcrumb :active="true" :isLast="true">
+        (Step 3) Payment
+      </x-partials.breadcrumb>
+    </ol>
+  </nav>
+
+  <div class="tw-px-4">
+    <p class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs"><span class="tw-font-semibold">Instructions:</span> Please fill out the form below to create a new order request. All fields with an <span class="tw-text-red-500">*</span> are required.</p>
+    <form action="{{ route('vendorPortal.order.payment.store', ['order' => $order->id]) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
+      @csrf
+      <div class="tw-text-sm">
+        <!-- Payment Number -->
+        <div class="tw-mb-4">
+          <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Payment Number<span class="tw-text-red-500">*</span></label>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
+          @error('paymentNumber')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Payment Method -->
+        <div class="tw-mb-4">
+          <label for="paymentMethod" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Method<span class="tw-text-red-500">*</span></label>
+          <select id="paymentMethod" name="paymentMethod" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 appearance-none | max-md:tw-text-xs" required>
+            <option value="cash_on_delivery">Cash On Delivery</option>
+            <option value="e-wallet">E-Wallet</option>
+            <option value="card">Card</option>
+          </select>
+          @error('paymentMethod')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Amount -->
+        <div class="tw-mb-4">
+          <label for="amount" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Amount<span class="tw-text-red-500">*</span></label>
+          <div class="tw-relative">
+            <div class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400 tw-text-xs tw-flex tw-items-center">PHP l</div>
+            <input type="text" id="amount" name="amount" class="tw-pl-[45px] tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm  tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="Enter total amount" value="{{$order->total_amount }}" readonly>
+          </div>
+          @error('amount')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+
+          <div class="tw-my-2 tw-px-2 tw-text-xs tw-text-gray-600 tw-opacity-50">
+            <p>Subtotal: <span class="tw-font-medium">₱{{ number_format($order->subtotal, 2, '.', ',') }}</span></p>
+            <p>Shipping Fee: <span class="tw-font-medium | max-md:tw-text-xs">$50.00</span></p>
+            <p>Tax (10%): <span class="tw-font-medium | max-md:tw-text-xs">₱{{ number_format($order->subtotal * 0.10, 2, '.', ',') }}</span></p>
+            <p>Discount: <span class="tw-font-medium text-red-500 | max-md:tw-text-xs">-₱{{ number_format($order->discount, 2, '.', ',') }}</span></p>
+            <p class="tw-mt-2 tw-font-semibold | max-md:tw-text-xs">Total Amount:
+              <span class="tw-font-bold ">₱{{$order->total_amount}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Registration Button -->
+      <div class="tw-my-6 tw-flex tw-justify-end | max-md:tw-my-2">
+        <button type="submit" id="submitBtn" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700 | max-md:tw-text-sm">Proceed</button>
+      </div>
+    </form>
+    <hr>
+    <div>
+      <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Review After Submission</h3>
+      <div class="tw-text-xs tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
+        <p class="tw-mb-1">Once the order request is submitted, you will receive an email notification. Please check your email for further instructions. The Staff will review your order request and provide you with a response within 24 hours or as soon as possible.</p>
+      </div>
+    </div>
+  </div>
+</x-layout.portal.mainTemplate>

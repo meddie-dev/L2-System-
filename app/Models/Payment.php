@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models\Modules;
+namespace App\Models;
 
-use App\Models\User;
+use App\Models\Modules\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Document extends Model
+class Payment extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'documents';
+    protected $table = 'payments';
     protected $guarded = [];
 
     public function user()

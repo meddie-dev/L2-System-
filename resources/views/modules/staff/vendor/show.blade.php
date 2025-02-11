@@ -12,7 +12,7 @@
 
       <x-partials.breadcrumb :active="true" :isLast="true">
         <div class="tw-flex tw-items-center tw-justify-center ">
-          Review Order Request (<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $vendor->orderNumber }}</span>)
+          Review Order Request (<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $order->orderNumber }}</span>)
         </div>
       </x-partials.breadcrumb>
     </ol>
@@ -23,54 +23,54 @@
       <h3 class="tw-text-md tw-font-bold tw-my-4">Vendor Information</h3>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm ">
         <div>
-          <p class="tw-font-semibold">Vendor ID: (<span class="tw-text-gray-700 tw-font-normal">{{ $vendor->user->id }}</span>)</p>
+          <p class="tw-font-semibold">Vendor ID: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->id }}</span>)</p>
         </div>
         <div>
-          <p class="tw-font-semibold ">Vendor Name: (<span class="tw-text-gray-700 tw-font-normal">{{ $vendor->user->firstName }} {{ $vendor->user->lastName }}</span>)</p>
+          <p class="tw-font-semibold ">Vendor Name: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->firstName }} {{ $order->user->lastName }}</span>)</p>
         </div>
         <div>
-          <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ $vendor->user->email }}</span>)</p>
+          <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->email }}</span>)</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Verification Status: (<span class="tw-text-gray-700 tw-font-normal">{{ $vendor->user->two_factor_enabled ? 'Verified' : 'Not Verified' }}</span>)</p>
+          <p class=" tw-font-semibold">Verification Status: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->two_factor_enabled ? 'Verified' : 'Not Verified' }}</span>)</p>
         </div>
       </div>
       <h3 class="tw-text-md tw-font-bold tw-my-4">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm">
         <div>
           <p class=" tw-font-semibold">Order Number:</p>
-          <p class="tw-text-gray-700">{{ $vendor->orderNumber }}</p>
+          <p class="tw-text-gray-700">{{ $order->orderNumber }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Pickup Location:</p>
-          <p class="tw-text-gray-700">{{ $vendor->pickupLocation }}</p>
+          <p class="tw-text-gray-700">{{ $order->pickupLocation }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Delivery Location:</p>
-          <p class="tw-text-gray-700">{{ $vendor->deliveryLocation }}</p>
+          <p class="tw-text-gray-700">{{ $order->deliveryLocation }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Package Weight:</p>
-          <p class="tw-text-gray-700"> {{ $vendor->packageWeight }} kg ({{ $vendor->packageWeight * 2.20462 }} lbs)</p>
+          <p class="tw-text-gray-700"> {{ $order->packageWeight }} kg ({{ $order->packageWeight * 2.20462 }} lbs)</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Document Upload:</p>
-          <p class="tw-text-gray-700">{{ $vendor->documentUpload ? $vendor->documentUpload : 'N/A' }}</p>
+          <p class="tw-text-gray-700">{{ $order->documentUpload ? $order->documentUpload : 'N/A' }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Created At:</p>
-          <p class="tw-text-gray-700">{{ $vendor->created_at->format('M d, Y') }}</p>
+          <p class="tw-text-gray-700">{{ $order->created_at->format('M d, Y') }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($vendor->approval_status) }}</p>
+          <p class="tw-text-gray-700">{{ ucfirst($order->approval_status) }}</p>
         </div>
         <div>
           <p class=" tw-font-semibold">Order Details/Descriptions:</p>
-          <p class="tw-text-gray-700">{{ $vendor->specialInstructions ? $vendor->specialInstructions : 'N/A' }}</p>
+          <p class="tw-text-gray-700">{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}</p>
         </div>
         <div>
-          <form action="{{ route('staff.vendors.approve', $vendor->id) }}" method="POST">
+          <form action="{{ route('staff.vendors.approve', $order->id) }}" method="POST">
             @csrf
             @method('PATCH')
             <button type="submit" class="tw-text-white tw-bg-blue-700 tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-sm:tw-text-sm">Approve Order</button>

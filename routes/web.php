@@ -12,7 +12,10 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\MFA\TwoFactorController;
-use App\Http\Controllers\Modules\VendorController;
+use App\Http\Controllers\Modules\DocumentController;
+use App\Http\Controllers\Modules\OrderController;
+use App\Http\Controllers\PaymentController;
+
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -49,13 +52,13 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.dashboard');
 
     // Vendor Management
-    Route::get('/staff/dashboard/vendor/request', [VendorController::class, 'manage'])
+    Route::get('/staff/dashboard/vendor/request', [OrderController::class, 'manage'])
         ->name('staff.vendors.manage');
-    Route::get('/staff/dashboard/vendor/{vendor}', [VendorController::class, 'show'])
+    Route::get('/staff/dashboard/vendor/{vendor}', [OrderController::class, 'show'])
         ->name('staff.vendors.show');
-    Route::patch('/staff/dashboard/vendor/{vendor}/approve', [VendorController::class, 'approve'])
+    Route::patch('/staff/dashboard/vendor/{vendor}/approve', [OrderController::class, 'approve'])
         ->name('staff.vendors.approve');
-    Route::post('/vendors/{vendor}/reject', [VendorController::class, 'reject'])
+    Route::post('/vendors/{vendor}/reject', [OrderController::class, 'reject'])
         ->name('staff.vendors.reject');
 });
 
@@ -117,10 +120,14 @@ Route::get('/notifications/{notification}', function (DatabaseNotification $noti
 # Settings Route
 --------------------------------------------------------------*/
 Route::middleware(['auth', 'active'])->group(function () {
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
-    Route::get('/settings/delete-view', [SettingsController::class, 'destroyView'])->name('settings.delete-view');
-    Route::post('/settings/delete-account', [SettingsController::class, 'destroy'])->name('settings.delete-account');
+    Route::get('/settings', [SettingsController::class, 'index'])
+        ->name('settings.index');
+    Route::post('/settings/update', [SettingsController::class, 'update'])
+        ->name('settings.update');
+    Route::get('/settings/delete-view', [SettingsController::class, 'destroyView'])
+        ->name('settings.delete-view');
+    Route::post('/settings/delete-account', [SettingsController::class, 'destroy'])
+        ->name('settings.delete-account');
 });
 
 /*--------------------------------------------------------------
@@ -148,20 +155,48 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     Route::get('/portal/vendor/dashboard', [DashboardController::class, 'vendorPortalDashboard'])
         ->name('vendorPortal.dashboard');
 
-    // Vendor Portal Modules
-    Route::resource('vendors', VendorController::class);
-    Route::get('/portal/vendor/dashboard/order', [VendorController::class, 'index'])
+    // Order Management
+    Route::resource('vendors', OrderController::class);
+    Route::get('/portal/vendor/dashboard/order', [OrderController::class, 'index'])
         ->name('vendorPortal.order');
-    Route::get('/portal/vendor/dashboard/order/new', [VendorController::class, 'create'])
+    Route::get('/portal/vendor/dashboard/order/new', [OrderController::class, 'create'])
         ->name('vendorPortal.order.new');
-    Route::post('/portal/vendor/dashboard/order/{user}', [VendorController::class, 'store'])
+    Route::post('/portal/vendor/dashboard/order/{user}', [OrderController::class, 'store'])
         ->name('vendorPortal.order.store');
-    Route::get('/portal/vendor/dashboard/order/{vendor}', [VendorController::class, 'edit'])
+    Route::get('/portal/vendor/dashboard/order/{order}', [OrderController::class, 'edit'])
         ->name('vendorPortal.order.edit');
-    Route::patch('/portal/vendor/dashboard/order/{vendor}', [VendorController::class, 'update'])
+    Route::patch('/portal/vendor/dashboard/order/{order}', [OrderController::class, 'update'])
         ->name('vendorPortal.order.update');
-    Route::get('/portal/vendor/dashboard/order/approved/{vendor}', [VendorController::class, 'checkApproved'])
+    Route::get('/portal/vendor/dashboard/order/approved/{order}', [OrderController::class, 'checkApproved'])
         ->name('vendorPortal.order.checkApproved');
+
+    // Document Management
+    Route::get('/portal/vendor/dashboard/document', [DocumentController::class, 'index'])
+        ->name('vendorPortal.order.document');
+    Route::get('/portal/vendor/dashboard/order/document/new/{order}', [DocumentController::class, 'create'])
+        ->name('vendorPortal.order.document.new');
+    Route::post('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'store'])
+        ->name('vendorPortal.order.document.store');
+    Route::get('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'edit'])
+        ->name('vendorPortal.order.document.edit');
+    Route::patch('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'update'])
+        ->name('vendorPortal.order.document.update');
+    Route::get('/portal/vendor/dashboard/document/details/{document}', [DocumentController::class, 'details'])
+        ->name('vendorPortal.document.details');
+
+    // Payment Management
+    Route::get('/portal/vendor/dashboard/payment', [PaymentController::class, 'index'])
+        ->name('vendorPortal.order.payment');
+    Route::get('/portal/vendor/dashboard/order/payment/new/{order}', [PaymentController::class, 'create'])
+        ->name('vendorPortal.order.payment.new');
+    Route::post('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'store'])
+        ->name('vendorPortal.order.payment.store');
+    Route::get('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'edit'])
+        ->name('vendorPortal.order.payment.edit');
+    Route::patch('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'update'])
+        ->name('vendorPortal.order.payment.update');
+    Route::get('/portal/vendor/dashboard/payment/details/{payment}', [PaymentController::class, 'details'])
+        ->name('vendorPortal.payment.details');
 });
 
 /*--------------------------------------------------------------

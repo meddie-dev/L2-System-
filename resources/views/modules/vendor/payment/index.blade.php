@@ -1,5 +1,5 @@
-<x-layout.mainTemplate>
-  <nav class="tw-flex tw-justify-between | max-sm:justify-center" aria-label="Breadcrumb">
+<x-layout.portal.mainTemplate>
+  <nav class="tw-flex tw-justify-between | max-md:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
       <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
@@ -7,7 +7,7 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Request Management
+        Payment
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -18,22 +18,26 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Order No. </th>
-            <th class="tw-px-4 tw-py-2">Delivery Create</th>
-            <th class="tw-px-4 tw-py-2"> Delivery Deadline</th>
+            <th class="tw-px-4 tw-py-2">Payment No. </th>
+            <th class="tw-px-4 tw-py-2">Payment Method</th>
+            <th class="tw-px-4 tw-py-2">Created Date</th>
+            <th class="tw-px-4 tw-py-2">Amount</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
+          @foreach($payments as $payment)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a></td>
-            <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status) }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <a href="{{ route('vendorPortal.payment.details', $payment->id) }}">
+                {{ $payment->paymentNumber }}
+              </a>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ ucfirst(str_replace('_', ' ', $payment->paymentMethod)) }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $payment->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">₱{{ $payment->amount }}</td>
+            <td class="tw-px-4 tw-py-2">{{ ucfirst($payment->paymentStatus)}}</td>
 
           </tr>
           @endforeach
@@ -42,12 +46,12 @@
       <hr>
     </div>
     <div>
-      <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2">Order Table Instructions</h3>
-      <div class="tw-text-xs tw-text-gray-600 tw-mb-2">
+      <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Order Table Instructions</h3>
+      <div class="tw-text-xs tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
         <p class="tw-mb-1">In the table above, you can view and manage your order requests created by you by clicking on the "Order No." column of the table. When you click on the "Order No.", you will be redirected to the order details page. </p>
         <p class="tw-mt-2">To add a new order request, click the "Add New" button.</p>
       </div>
     </div>
   </div>
 
-</x-layout.mainTemplate>
+</x-layout.portal.mainTemplate>

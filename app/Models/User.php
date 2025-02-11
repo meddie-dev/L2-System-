@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Modules\Document;
+use App\Models\Modules\Order;
+use App\Models\Modules\VehicleReservation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,6 +18,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+
+    
 
     /**
      * The attributes that are mass assignable.
@@ -58,18 +64,34 @@ class User extends Authenticatable
         return $this->last_active_at && $this->last_active_at->gt(Carbon::now()->subMinutes(5));
     }
 
-    public function vehicles()
-    {
-        // return $this->hasMany(Vehicle::class);
-    }
-
     public function activity_logs()
     {
         return $this->hasMany(ActivityLogs::class);
     }
 
-    public function vendor()
+    // MODULES
+    public function order()
     {
-        return $this->hasMany(Vendor::class);
+        return $this->hasMany(Order::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function document()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function vehicles()
+    {
+        // return $this->hasMany(Vehicle::class);
+    }
+
+    public function vehicleReservations()
+    {
+        return $this->hasMany(VehicleReservation::class);
     }
 }

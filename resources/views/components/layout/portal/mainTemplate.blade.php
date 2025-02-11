@@ -10,7 +10,6 @@
         <h2 class="tw-text-2xl tw-py-3 tw-text-gray-700 tw-font-extralight | max-sm:tw-text-[16px] max-sm:tw-py-1">Vendor Portal</h2>
       </div>
       
-      
       {{ $slot }}
       
       

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
+  
   <title>Vendor Portal</title>
 
   <!-- Fonts -->
@@ -43,14 +43,14 @@
 
       <div id="layoutSidenav_content">
         @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
+        <div class="alert alert-success alert-dismissible fade show alert-custom-position | max-md:tw-text-sm" role="alert" id="autoHideAlert">
           {{ session('success') }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
 
         @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show alert-custom-position" role="alert" id="autoHideAlert">
+        <div class="alert alert-danger alert-dismissible fade show alert-custom-position | max-md:tw-text-sm" role="alert" id="autoHideAlert">
           {{ session('error') }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

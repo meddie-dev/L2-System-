@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Modules\Document;
+use App\Models\Modules\Order;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +18,7 @@ class DashboardController extends Controller
     {
         $months = [];
         $userCounts = [];
-        $roles = ['Super Admin', 'Admin', 'Staff'];
+        $roles = ['Super Admin', 'Admin', 'Staff', 'Vendor', 'Driver'];
         $roleCounts = [];
 
         // Loop through the last 12 months
@@ -54,7 +57,25 @@ class DashboardController extends Controller
 
     public function vendorPortalDashboard()
     {
-        return view('components.dashboard.vendorPortal');
+        $orders = Order::where('user_id', Auth::id())->get();
+        $documents = Document::where('user_id', Auth::id())->get();
+        $payments = Payment::where('user_id', Auth::id())->get();
+        $months = [];
+        $orderCounts = [];
+
+        // Loop through the last 12 months
+        for ($i = 0; $i < 12; $i++) {
+            $month = Carbon::now()->subMonths(11 - $i); // Starting from 11 months ago to current month
+            $months[] = $month->format('M Y');
+
+            // Count orders created in each month
+            $orderCounts[] = Order::where('user_id', Auth::id())
+                ->whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->count();
+        }
+
+        return view('components.dashboard.vendorPortal', compact('orders', 'months', 'orderCounts', 'documents', 'payments'));
     }
 
     public function driverDashboard()

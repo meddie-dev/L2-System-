@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_reservations', function (Blueprint $table) {
+        Schema::create('fuels', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('reservationNumber')->unique();
-            $table->date('reservationDate');
-            $table->timestamp('pickupTime');
-            $table->timestamp('dropoffTime');
-            $table->enum('vehicleReservationStatus', ['scheduled', 'on_going', 'completed', 'cancelled'])->default(NULL);
+            $table->string('fuelNumber')->unique();
+            $table->enum('fuelType', ['diesel', 'gasoline', 'electric'])->default('diesel');
+            $table->decimal('estimatedFuelConsumption', 8, 2); 
+            $table->decimal('estimatedCost', 10, 2); 
+            $table->date('fuelScheduleDate');
+            $table->time('fuelScheduleTime');
+            $table->enum('fuelStatus', ['scheduled', 'completed'])->default('scheduled');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle_reservations');
+        Schema::dropIfExists('fuels');
     }
 };
