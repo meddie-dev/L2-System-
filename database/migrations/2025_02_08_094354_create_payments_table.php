@@ -16,10 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('paymentNumber')->unique();
-            $table->enum('paymentMethod', ['cash_on_delivery', 'e-wallet', 'card'])->default('cash_on_delivery');
-            $table->string('amount');
-            $table->enum('paymentStatus', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
-            
+            $table->string('paymentUrl');
+
+            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending'); 
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');

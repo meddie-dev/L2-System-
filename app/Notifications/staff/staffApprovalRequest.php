@@ -59,7 +59,7 @@ class staffApprovalRequest extends Notification
                 break;
 
             case 'Vehicle Reservation':
-                $message = "Vehicle reservation request ID: {$approvable->reservationId} requires your review.";
+                $message = "Vehicle reservation request by {$approvable->user->firstName} {$approvable->user->lastName} on Request Date and Time: {$approvable->reservationDate}, {$approvable->reservationTime} is awaiting for review and approval.";
                 break;
 
                 // Add more cases for other types if needed

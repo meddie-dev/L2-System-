@@ -22,7 +22,7 @@
       @csrf
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-text-sm | max-md:tw-grid-cols-1 max-md:tw-gap-2 ">
         <!-- Order Number -->
-        <div class="tw-mb-4 ">
+        <div class="tw-mb-4">
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Order Number<span class="tw-text-red-500">*</span></label>
           <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
           @error('orderNumber')
@@ -30,40 +30,50 @@
           @enderror
         </div>
 
-        <!-- Pickup Location -->
+        <!-- Product -->
         <div class="tw-mb-4">
-          <label for="pickupLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700  | max-md:tw-text-xs">Pickup Location<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="pickupLocation" name="pickupLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter pickup location" required>
-          @error('pickupLocation')
+          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Product<span class="tw-text-red-500">*</span></label>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter product" required>
+          @error('product')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
 
-        <!-- Delivery Location -->
+        <!-- Quantity -->
         <div class="tw-mb-4">
-          <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Location<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery location" required>
-          @error('deliveryLocation')
+          <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Quantity<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter quantity" required min="1">
+          @error('quantity')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
 
-        <!-- Delivery Deadline -->
+        <!-- Weight -->
         <div class="tw-mb-4">
-          <label for="deliveryDeadline" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Deadline<span class="tw-text-red-500">*</span></label>
+          <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Weight (Kg)<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter weight" required>
+          @error('weight')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+        
+
+        <!-- Delivery Address -->
+        <div class="tw-mb-4">
+          <label for="deliveryAddress" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Address<span class="tw-text-red-500">*</span></label>
+          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery address" required>
+          @error('deliveryAddress')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Delivery Request Date -->
+        <div class="tw-mb-4">
+          <label for="deliveryRequestDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Request Date<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="date" id="deliveryDeadline" name="deliveryDeadline" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery deadline" required>
+            <input type="date" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery request date" required>
           </div>
-          @error('deliveryDeadline')
-          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-          @enderror
-        </div>
-
-        <!-- Package Weight -->
-        <div class="tw-mb-4">
-          <label for="packageWeight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Package Weight (kg)<span class="tw-text-red-500">*</span></label>
-          <input type="number" step="0.01" id="packageWeight" name="packageWeight" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter package weight in kilograms (kg)" required min="0">
-          @error('packageWeight')
+          @error('deliveryRequestDate')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
@@ -73,15 +83,6 @@
           <label for="specialInstructions" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Special Instructions (Optional)</label>
           <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter any special instructions">
           @error('specialInstructions')
-          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-          @enderror
-        </div>
-
-        <!-- Amount -->
-        <div class="tw-mb-4">
-          <label for="total_amount" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Amount<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="total_amount" name="total_amount" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter total amount" required min="0">
-          @error('total_amount')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
@@ -100,14 +101,4 @@
       </div>
     </div>
   </div>
-  
-  <script>
-    const inputElement = document.getElementById("total_amount");
-    inputElement.addEventListener("input", function(e) {
-      let value = e.target.value;
-      value = value.replace(/[^\d]/g, "");
-      value = parseInt(value).toLocaleString("en-US");
-      e.target.value = value;
-    });
-  </script>
 </x-layout.portal.mainTemplate>

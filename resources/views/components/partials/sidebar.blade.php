@@ -98,8 +98,7 @@
           </a>
           <div class="collapse" id="collapseVendor" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/admin/vendor/vendor-request">Vendor Request</a>
-              <a class="nav-link" href="/admin/vendor/vendor-approved">Approved Request</a>
+              <a class="nav-link" href="/admin/dashboard/vendors">Our Vendors</a>
             </nav>
           </div>
 
@@ -125,8 +124,7 @@
           </a>
           <div class="collapse" id="collapseVehicle" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/admin/vehicle/reservation">Manage Reservations</a>
-              <a class="nav-link" href="/admin/vehicle/review-request">Review Reservation Requests</a>
+              <a class="nav-link" href="/admin/dashboard/vehicleReservation/manage">Manage Reservations</a>
             </nav>
           </div>
 
@@ -138,8 +136,8 @@
           </a>
           <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/admin/document/storage">Document Storage</a>
-              <a class="nav-link" href="/admin/document/archived">Review Document Submissions</a>
+              <a class="nav-link" href="/admin/dashboard/document/storage">Document Storage</a>
+              <a class="nav-link" href="/admin/dashboard/document/review">Review Submissions</a>
             </nav>
           </div>
 
@@ -151,18 +149,9 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInventory" aria-expanded="false" aria-controls="collapseInventory">
-                Driver Management
-                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-              </a>
-              <div class="collapse" id="collapseInventory" aria-labelledby="headingOne" data-bs-parent="#collapseFleet">
-                <nav class="sb-sidenav-menu-nested nav">
-                  <a class="nav-link" href="/admin/fleet/driver/request">Approve Driver Requests</a>
-                  <a class="nav-link" href="/admin/fleet/driver/performance">Monitor Driver Performance</a>
-                </nav>
-              </div>
-              <a class="nav-link" href="/admin/fleet/fuel">Fuel Management</a>
-              <a class="nav-link" href="/admin/fleet/maintenance">Maintenance Management</a>
+              <a class="nav-link" href="/admin/dashboard/fleet/vehicle">Manage Vehicles</a>
+              <a class="nav-link" href="/admin/dashboard/fleet/driver">Manage Drivers</a>
+              <a class="nav-link" href="/admin/dashboard/fleet/fuel">Manage Shipments</a>
             </nav>
           </div>
         </div>
@@ -191,21 +180,8 @@
           </a>
           <div class="collapse" id="collapseVehicle" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/vehicle/request">Request Reservations</a>
-              <a class="nav-link" href="/staff/dashboard/vehicle/status">Reservation Status</a>
-            </nav>
-          </div>
-
-          <!-- Document Management -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDocument" aria-expanded="false" aria-controls="collapseDocument">
-            <div class="sb-nav-link-icon"><i class="fa-regular fa-file"></i></div>
-            Document Management
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-          </a>
-          <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/document/request">View Request Documents</a>
-              <a class="nav-link" href="/staff/dashboard/document/approved">View Approved Documents</a>
+              <a class="nav-link" href="/staff/dashboard/vehicleReservation/order">Reservations for Orders</a>
+              <a class="nav-link" href="/staff/dashboard/vehicleReservation/vehicle">Reservations for Vehicles</a>
             </nav>
           </div>
 
@@ -217,7 +193,9 @@
           </a>
           <div class="collapse" id="collapseVendor" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/vendor/request">Manage Request</a>
+              <a class="nav-link" href="/staff/dashboard/vendor/request">Order Submission</a>
+              <a class="nav-link" href="/staff/dashboard/document/payment">Payment Submission</a>
+              <a class="nav-link" href="/staff/dashboard/document/submission">Document Submission</a>
             </nav>
           </div>
 
@@ -251,16 +229,16 @@
             Uploaded Document
           </a>
 
-           <!-- Payment Management -->
-           <a class="nav-link collapsed" href="/portal/vendor/dashboard/payment">
+          <!-- Payment Management -->
+          <a class="nav-link collapsed" href="/portal/vendor/dashboard/payment">
             <div class="sb-nav-link-icon"><i class="fa-solid fa-credit-card"></i></div>
             Payment
           </a>
 
-          <!-- Transaction History Management -->
-          <a class="nav-link collapsed" href="/portal/vendor/dashboard/transaction">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-history"></i></div>
-            Transaction History
+          <!-- Vehicle Reservation Management -->
+          <a class="nav-link collapsed" href="/portal/vendor/dashboard/vehicleReservation">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
+            Vehicle Reservation
           </a>
         </div>
         @endif
@@ -310,6 +288,7 @@
         </div>
         @endif
 
+        @if(!(Auth::user()->hasRole('Vendor') || Auth::user()->hasRole('Driver')))
         <!-- Addons or Features -->
         <div class="sb-sidenav-menu-heading">Addons</div>
         <a class="nav-link" href="{{ route('map') }}">
@@ -320,6 +299,16 @@
           <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar"></i></div>
           Calendar and Schedule
         </a>
+        @endif
+
+        @if(Auth::user()->hasRole('Vendor') || Auth::user()->hasRole('Driver'))
+        <!-- Addons or Features -->
+        <div class="sb-sidenav-menu-heading">Addons</div>
+        <a class="nav-link" href="">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
+          Activity Log
+        </a>
+        @endif
 
         <!-- Settings in Small Screen -->
         <div class="tw-hidden max-sm:tw-block">

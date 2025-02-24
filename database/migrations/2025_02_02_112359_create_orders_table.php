@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('orderNumber');
-            $table->string('pickupLocation');
-            $table->string('deliveryLocation');
-            $table->string('deliveryDeadline');
-            $table->decimal('packageWeight', 10, 2);
+            $table->string('orderNumber')->nullable();
+            $table->string('product')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->decimal('weight', 8, 2)->nullable();
+            $table->string('deliveryAddress')->nullable();
+            $table->string('deliveryRequestDate')->nullable();
             $table->string('specialInstructions')->nullable();
-            $table->string('total_amount')->nullable();
-            $table->enum('orderStatus', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
 
             $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');

@@ -6,39 +6,40 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb :active="true" :isLast="false">
-        Vendor Management
+      <x-partials.breadcrumb  :active="true" :isLast="false">
+        Vehicle Reservation
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Order Submission
+        Manage Reservation
       </x-partials.breadcrumb>
     </ol>
   </nav>
-  
+
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
       <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Order No. </th>
-            <th class="tw-px-4 tw-py-2">Delivery Create</th>
-            <th class="tw-px-4 tw-py-2"> Delivery Deadline</th>
+            <th class="tw-px-4 tw-py-2">Reservation Number </th>
+            <th class="tw-px-4 tw-py-2">Reservation Date</th>
+            <th class="tw-px-4 tw-py-2">Reservation Time</th>            
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
+          @foreach($vehicleReservations as $vehicleReservation)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a></td>
-            <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status) }}</td>
-
+            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.vendors.show', $vehicleReservation->id) }}">{{ $vehicleReservation->reservationNumber }}</a></td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($vehicleReservation->reservationDate)->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($vehicleReservation->reservationTime)->format('g:i A') }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                {{ ucfirst($vehicleReservation->approval_status) }}
+              </span>
+            </td>
           </tr>
           @endforeach
         </tbody>

@@ -11,6 +11,9 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Notifications\NewNotification;
 use App\Notifications\staff\staffApprovalRequest;
+use App\Notifications\staff\staffApprovalStatus;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -22,7 +25,7 @@ class PaymentController extends Controller
 
     // VENDOR/ORDER SECTION
 
-    public function create(Order $order, User $user)
+    public function create(Order $order)
     {
 
         Order::findOrFail($order->id);
@@ -34,25 +37,20 @@ class PaymentController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'paymentNumber' => 'required|string|max:255',
-            'paymentMethod' => 'required|string',
-            'amount' => 'required|string|min:0',
+            'paymentNumber' => 'required|string|max:255|unique:payments',
+            'paymentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
         ]);
 
-        $checkPaymentNumber = Payment::where('paymentNumber', $request->paymentNumber)->first();
-        if ($checkPaymentNumber) {
-            $paymentNumber = strtoupper(Str::random(20));
-        } else {
-            $paymentNumber = $request->paymentNumber;
-        }
+        $paymentNumber = $request->paymentNumber;
+
+        $file = $request->file('paymentUrl');
+        $path = $file->storeAs("payment/{$user->id}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
 
         $payment = Payment::create([
             'order_id' => $order->id,
             'user_id' => auth()->user()->id,
             'paymentNumber' => $paymentNumber,
-            'paymentMethod' => $request->paymentMethod,
-            'amount' => $request->amount,
-            'paymentStatus' => 'pending',
+            'paymentUrl' => $path,
         ]);
 
         // Get active staff members (last active within 5 minutes)
@@ -95,18 +93,29 @@ class PaymentController extends Controller
         return view('modules.vendor.payment.edit', compact('order'));
     }
 
-    public function update(Request $request, Payment $payment , Order $order)
+    public function update(Request $request, Payment $payment, Order $order)
     {
         $request->validate([
             'paymentNumber' => 'required|string|max:255',
-            'paymentMethod' => 'required|string',
-            'amount' => 'required|string|min:0',
+            'paymentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
         ]);
+
+        $userId = auth()->user()->id;
+        $paymentNumber = $request->paymentNumber;
+
+        if ($request->hasFile('paymentUrl')) {
+            $file = $request->file('paymentUrl');
+            $path = $file->storeAs("payment/{$userId}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
+
+            if ($payment->paymentUrl) {
+                Storage::disk('public')->delete($payment->paymentUrl);
+            }
+
+            $payment->paymentUrl = $path;
+        }
 
         $payment->update([
             'paymentNumber' => $request->paymentNumber,
-            'paymentMethod' => $request->paymentMethod,
-            'amount' => $request->amount,
         ]);
 
         ActivityLogs::create([
@@ -133,5 +142,36 @@ class PaymentController extends Controller
         return redirect()->route('vendorPortal.order')->with('success', 'Order Request deleted successfully.');
     }
 
+    // STAFF SECTION
 
+    public function manage()
+    {
+        $orders = Order::where('assigned_to', auth()->id())->get();
+        return view('modules.staff.payment.manage', compact('orders'));
+    }
+
+    public function show(Order $order)
+    {
+        return view('modules.staff.payment.show', compact('order'));
+    }
+
+    public function approve(Payment $payment)
+    {
+        $payment->update(['approval_status' => 'approved']);
+
+        $payment->approved_by = Auth::id();
+        $payment->save();
+
+        $payment->notify(new staffApprovalStatus('Payment', $payment));
+
+        return redirect()->route('staff.payment.manage')->with('success', 'Order approved successfully.');
+    }
+    public function reject(Order $order)
+    {
+        $order->update(['approval_status' => 'rejected']);
+
+        $order->creator->notify(new staffApprovalStatus($order, 'rejected'));
+
+        return redirect()->route('orders.index')->with('error', 'order rejected.');
+    }
 }

@@ -3,7 +3,7 @@
 <li class="tw-inline-flex tw-items-center  {{ $active ? 'tw-text-gray-500 dark:tw-text-gray-400' : 'tw-text-gray-700 hover:tw-text-blue-600 dark:tw-text-gray-400 dark:hover:tw-text-white' }}"
   @if($active) aria-current="page" @endif>
   @if(!$active)
-  <a href="{{ $attributes->get('href') }}" class="tw-flex tw-h-10 tw-items-center tw-gap-1.5 tw-bg-white tw-pr-2 tw-transition hover:tw-text-gray-900">
+  <a href="{{ $attributes->get('href') }}" class="tw-flex tw-h-10 tw-items-center tw-gap-1.5  tw-pr-2 tw-transition hover:tw-text-gray-900">
             {{ $slot }}
         </a>
     @else

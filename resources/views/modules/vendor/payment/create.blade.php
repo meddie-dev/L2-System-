@@ -30,39 +30,13 @@
           @enderror
         </div>
 
-        <!-- Payment Method -->
+        <!-- Payment Url -->
         <div class="tw-mb-4">
-          <label for="paymentMethod" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Method<span class="tw-text-red-500">*</span></label>
-          <select id="paymentMethod" name="paymentMethod" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 appearance-none | max-md:tw-text-xs" required>
-            <option value="cash_on_delivery">Cash On Delivery</option>
-            <option value="e-wallet">E-Wallet</option>
-            <option value="card">Card</option>
-          </select>
-          @error('paymentMethod')
+          <label for="paymentUrl" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Upload Payment Receipt<span class="tw-text-red-500">*</span></label>
+          <input type="file" id="paymentUrl" name="paymentUrl" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm | max-md:tw-text-xs">
+          @error('paymentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
-        </div>
-
-        <!-- Amount -->
-        <div class="tw-mb-4">
-          <label for="amount" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Amount<span class="tw-text-red-500">*</span></label>
-          <div class="tw-relative">
-            <div class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400 tw-text-xs tw-flex tw-items-center">PHP l</div>
-            <input type="text" id="amount" name="amount" class="tw-pl-[45px] tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm  tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="Enter total amount" value="{{$order->total_amount }}" readonly>
-          </div>
-          @error('amount')
-          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-          @enderror
-
-          <div class="tw-my-2 tw-px-2 tw-text-xs tw-text-gray-600 tw-opacity-50">
-            <p>Subtotal: <span class="tw-font-medium">₱{{ number_format($order->subtotal, 2, '.', ',') }}</span></p>
-            <p>Shipping Fee: <span class="tw-font-medium | max-md:tw-text-xs">$50.00</span></p>
-            <p>Tax (10%): <span class="tw-font-medium | max-md:tw-text-xs">₱{{ number_format($order->subtotal * 0.10, 2, '.', ',') }}</span></p>
-            <p>Discount: <span class="tw-font-medium text-red-500 | max-md:tw-text-xs">-₱{{ number_format($order->discount, 2, '.', ',') }}</span></p>
-            <p class="tw-mt-2 tw-font-semibold | max-md:tw-text-xs">Total Amount:
-              <span class="tw-font-bold ">₱{{$order->total_amount}}</span>
-            </p>
-          </div>
         </div>
       </div>
 

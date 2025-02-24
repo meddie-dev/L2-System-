@@ -11,33 +11,53 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Order Submission
+        Our Vendors
       </x-partials.breadcrumb>
     </ol>
   </nav>
-  
+
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
       <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
+            <th class="tw-px-4 tw-py-2">&nbsp;</th>
+
+            <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Order No. </th>
-            <th class="tw-px-4 tw-py-2">Delivery Create</th>
-            <th class="tw-px-4 tw-py-2"> Delivery Deadline</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
+            <th class="tw-px-4 tw-py-2">Email</th>
+            <th class="tw-px-4 tw-py-2">Created At</th>
+            <th class="tw-px-4 tw-py-2">Active Status</th>
+
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
+          @foreach($users as $user)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a></td>
-            <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status) }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <div class="tw-inline-block tw-w-3 tw-h-3 tw-rounded-full {{ $user->two_factor_enabled == 0 ? 'tw-bg-red-500' : 'tw-bg-green-500' }} tw-translate-x-3 tw-translate-y--1"></div>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $user->firstName }} {{ $user->lastName }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $user->email }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($user->created_at)->format('F j, Y')  }}</td>
+            <td class="tw-px-4 tw-py-2">
+              @php
+              $currentDate = now();
+              $lastLoginDate = $user->last_active_at;
+              $daysSinceLastLogin = $lastLoginDate  ? (int) abs($currentDate->diffInDays($lastLoginDate)) : null;
+              @endphp
+
+              @if (!is_null($daysSinceLastLogin))
+              <span class="tw-text-{{ $daysSinceLastLogin < 30 ? 'green-500' : ($daysSinceLastLogin < 60 ? 'yellow-500' : 'red-500') }}">
+              {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
+              </span>
+              @else
+              <span class="tw-text-gray-500">Last Login: N/A</span>
+              @endif
+            </td>
 
           </tr>
           @endforeach

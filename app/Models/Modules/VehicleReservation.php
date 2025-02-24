@@ -15,15 +15,18 @@ class VehicleReservation extends Model
 
     protected $table = 'vehicle_reservations';
     protected $guarded = [];
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class);
-    }
+    
 
     // Driver
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Order
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 
     public function fuel()

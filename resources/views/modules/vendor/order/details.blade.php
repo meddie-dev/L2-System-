@@ -27,31 +27,28 @@
           <p class="tw-text-gray-700">{{ $order->orderNumber }}</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Pickup Location:</p>
-          <p class="tw-text-gray-700">{{ $order->pickupLocation }}</p>
+          <p class=" tw-font-semibold">Product:</p>
+          <p class="tw-text-gray-700">{{ $order->product }}</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Delivery Location:</p>
-          <p class="tw-text-gray-700">{{ $order->deliveryLocation }}</p>
+          <p class=" tw-font-semibold">Quantity:</p>
+          <p class="tw-text-gray-700">{{ $order->quantity }}</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Package Weight:</p>
-          <p class="tw-text-gray-700"> {{ $order->packageWeight }} kg ({{ $order->packageWeight * 2.20462 }} lbs)</p>
+          <p class=" tw-font-semibold">Weight:</p>
+          <p class="tw-text-gray-700">{{ $order->weight }}</p>
+        </div>
+        
+        <div>
+          <p class=" tw-font-semibold">Delivery Address:</p>
+          <p class="tw-text-gray-700">{{ $order->deliveryAddress }}</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Document Upload:</p>
-          <p class="tw-text-gray-700">{{ $order->documentUpload ? $order->documentUpload : 'N/A' }}</p>
+          <p class=" tw-font-semibold">Delivery Request Date:</p>
+          <p class="tw-text-gray-700">{{ $order->deliveryRequestDate }}</p>
         </div>
         <div>
-          <p class=" tw-font-semibold">Created At:</p>
-          <p class="tw-text-gray-700">{{ $order->created_at->format('M d, Y') }}</p>
-        </div>
-        <div>
-          <p class=" tw-font-semibold">Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($order->approval_status) }}</p>
-        </div>
-        <div>
-          <p class=" tw-font-semibold">Order Details/Descriptions:</p>
+          <p class=" tw-font-semibold">Special Instructions:</p>
           <p class="tw-text-gray-700">{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}</p>
         </div>
       </div>

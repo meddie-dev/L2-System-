@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('vehicle_reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('reservationNumber')->unique();
+            $table->string('vehicle_type');
             $table->date('reservationDate');
-            $table->timestamp('pickupTime');
-            $table->timestamp('dropoffTime');
-            $table->enum('vehicleReservationStatus', ['scheduled', 'on_going', 'completed', 'cancelled'])->default(NULL);
+            $table->time('reservationTime');
+            $table->string('pickUpLocation');
+            $table->string('dropOffLocation');
+            
+            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

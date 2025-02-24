@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLogs;
 use App\Models\Modules\Document;
 use App\Models\Modules\Order;
 use App\Models\Payment;
@@ -52,7 +53,22 @@ class DashboardController extends Controller
 
     public function staffDashboard()
     {
-        return view('components.dashboard.staff');
+        $activityLogs = ActivityLogs::where('user_id', Auth::id())->get();
+        $months = [];
+        $orderCounts = [];
+
+        // Loop through the last 12 months
+        for ($i = 0; $i < 12; $i++) {
+            $month = Carbon::now()->subMonths(11 - $i); // Starting from 11 months ago to current month
+            $months[] = $month->format('M Y');
+
+            // Count orders created in each month
+            $orderCounts[] = Order::where('user_id', Auth::id())
+                ->whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->count();
+        }
+        return view('components.dashboard.staff', compact('activityLogs', 'months', 'orderCounts'));
     }
 
     public function vendorPortalDashboard()

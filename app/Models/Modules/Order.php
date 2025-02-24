@@ -28,6 +28,11 @@ class Order extends Model
         return $this->hasMany(Document::class);
     }
 
+    public function vehicleReservations()
+    {
+        return $this->hasMany(VehicleReservation::class);
+    }
+
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
@@ -36,6 +41,12 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    
+    public function vehicleReservation()
+    {
+        return $this->hasOne(VehicleReservation::class);
     }
 
     public function shipment()

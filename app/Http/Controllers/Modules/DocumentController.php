@@ -14,6 +14,7 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
@@ -51,11 +52,13 @@ class DocumentController extends Controller
             $documentNumber = $request->documentNumber;
         }
 
-        $path = $request->file('documentUrl')->store('documentUrl', 'public');
+        $userId = auth()->id();
+        $file = $request->file('documentUrl');
+        $path = $file->storeAs("documents/{$userId}", $documentNumber . '.' . $file->getClientOriginalExtension(), 'public');
 
         $document = Document::create([
             'order_id' => $order->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => $userId,
             'documentUrl' => $path,
             'documentNumber' => $documentNumber,
             'documentName' => $request->documentName,
@@ -109,12 +112,17 @@ class DocumentController extends Controller
         ]);
 
 
+        $userId = auth()->user()->id;
+        $documentNumber = $request->documentNumber;
+
         if ($request->hasFile('documentUrl')) {
+            $file = $request->file('documentUrl');
+            $path = $file->storeAs("documents/{$userId}", $documentNumber . '.' . $file->getClientOriginalExtension(), 'public');
+
             if ($document->documentUrl) {
                 Storage::disk('public')->delete($document->documentUrl);
             }
 
-            $path = $request->file('documentUrl')->store('documents', 'public');
             $document->documentUrl = $path;
         }
 
@@ -143,5 +151,44 @@ class DocumentController extends Controller
         Storage::disk('public')->delete($document->documentUrl);
         $document->delete();
         return redirect()->route('vendorPortal.order.payment.edit', ['order' => $document->order_id]);
+    }
+
+    // STAFF SECTION
+
+    public function manage() {
+        $orders = Order::where('assigned_to', auth()->id())->get();
+        return view('modules.staff.document.manage', compact('orders'));
+    }
+
+    public function show(Order $order) {
+        return view('modules.staff.document.show', compact('order'));
+    }
+
+    public function approve(Document $document) {
+        $document->update(['approval_status' => 'approved']);
+
+        $document->approved_by = auth()->id();
+        $document->save();
+
+        $document->notify(new staffApprovalStatus('Document', $document));
+
+        return redirect()->route('staff.document.manage')->with('success', 'Order approved successfully.');
+    }
+    public function reject(Order $order)
+    {
+        $order->update(['approval_status' => 'rejected']);
+
+        $order->creator->notify(new staffApprovalStatus($order, 'rejected'));
+
+        return redirect()->route('orders.index')->with('error', 'order rejected.');
+    }
+
+    // Admin
+
+    public function indexAdmin() {
+        $users = User::role('Vendor')->whereHas('document', function ($query) {
+            $query->where('approval_status', 'approved');
+        })->get();
+        return view('modules.admin.document.manage', compact('users'));
     }
 }

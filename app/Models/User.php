@@ -19,7 +19,9 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
-    
+    protected $casts = [
+        'last_login_at' => 'datetime',
+    ];
 
     /**
      * The attributes that are mass assignable.

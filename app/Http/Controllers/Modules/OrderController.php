@@ -5,18 +5,15 @@ namespace App\Http\Controllers\Modules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
-use App\Models\Modules\Document;
 use App\Models\Modules\Order;
 use App\Models\User;
 use App\Notifications\staff\staffApprovalRequest;
 use App\Notifications\staff\staffApprovalStatus;
 use App\Notifications\NewNotification;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
-use PhpParser\Comment\Doc;
+
 
 class OrderController extends Controller
 {
@@ -35,12 +32,12 @@ class OrderController extends Controller
     {
         $request->validate([
             'orderNumber' => 'required|string|max:255',
-            'pickupLocation' => 'required|string|max:255',
-            'deliveryLocation' => 'required|string|max:255',
-            'deliveryDeadline' => 'required|date',
-            'packageWeight' => 'required|numeric|min:0',
+            'product' => 'required|string|max:255',
+            'quantity' => 'required|numeric|max:255',
+            'deliveryAddress' => 'required|string|max:255',
+            'deliveryRequestDate' => 'required|date',
             'specialInstructions' => 'nullable|string|max:1000',
-            'total_amount' => 'required|string|min:0',
+            'weight' => 'required|numeric|max:255',
         ]);
 
         $checkOrderNumber = Order::where('orderNumber', $request->orderNumber)->first();
@@ -53,17 +50,18 @@ class OrderController extends Controller
         $order = Order::create([
             'user_id' => $user->id,
             'orderNumber' => $orderNumber,
-            'pickupLocation' => $request->pickupLocation,
-            'deliveryLocation' => $request->deliveryLocation,
-            'deliveryDeadline' => $request->deliveryDeadline,
-            'packageWeight' => $request->packageWeight,
+            'product' => $request->product,
+            'quantity' => $request->quantity,
+            'deliveryAddress' => $request->deliveryAddress,
+            'deliveryRequestDate' => $request->deliveryRequestDate,
             'specialInstructions' => $request->specialInstructions,
-            'total_amount' => $request->total_amount,
+            'weight' => $request->weight,
             'assigned_to' => null,
             'approval_status' => 'pending',
             'approved_by' => null
         ]);
 
+       
         ActivityLogs::create([
             'user_id' => Auth::id(),
             'event' => "Submitted Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
@@ -106,22 +104,22 @@ class OrderController extends Controller
     {
         $request->validate([
             'orderNumber' => 'required|string|max:255',
-            'pickupLocation' => 'required|string|max:255',
-            'deliveryLocation' => 'required|string|max:255',
-            'deliveryDeadline' => 'required|date',
-            'packageWeight' => 'required|numeric|min:0',
+            'product' => 'required|string|max:255',
+            'quantity' => 'required|string|max:255',
+            'deliveryAddress' => 'required|string|max:255',
+            'deliveryRequestDate' => 'required|string|max:255',
             'specialInstructions' => 'nullable|string|max:1000',
-            'total_amount' => 'required|string|min:0',
+            'weight' => 'required|numeric|max:999999.99',
         ]);
 
         $order->update([
             'orderNumber' => $request->orderNumber,
-            'pickupLocation' => $request->pickupLocation,
-            'deliveryLocation' => $request->deliveryLocation,
-            'deliveryDeadline' => $request->deliveryDeadline,
-            'packageWeight' => $request->packageWeight,
+            'product' => $request->product,
+            'quantity' => $request->quantity,
+            'deliveryAddress' => $request->deliveryAddress,
+            'deliveryRequestDate' => $request->deliveryRequestDate,
             'specialInstructions' => $request->specialInstructions,
-            'total_amount' => $request->total_amount,
+            'weight' => $request->weight,
             'approval_status' => 'pending',
             'approved_by' => null
         ]);
@@ -135,9 +133,9 @@ class OrderController extends Controller
         return redirect()->route('vendorPortal.order.document.edit', ['order' => $order->id]);
     }
 
-    public function checkApproved(Order $order)
+    public function details(Order $order)
     {
-        return view('modules.order.order.approved', compact('order'));
+        return view('modules.vendor.order.details', compact('order'));
     }
 
     public function destroy(Order $order)
@@ -148,8 +146,8 @@ class OrderController extends Controller
 
     // STAFF SECTION
 
-    public function manage(Order $order) {
-        $orders = order::where('assigned_to', Auth::id())->get();
+    public function manage() {
+        $orders = Order::where('assigned_to', Auth::id())->get();
         return view('modules.staff.vendor.manage', compact('orders'));
     }
 
@@ -165,7 +163,7 @@ class OrderController extends Controller
 
         $order->notify(new staffApprovalStatus('Order', $order));
 
-        return redirect()->route('staff.orders.manage')->with('success', 'Order approved successfully.');
+        return redirect()->route('staff.vendors.manage')->with('success', 'Order approved successfully.');
     }
     public function reject(Order $order)
     {
@@ -175,6 +173,8 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('error', 'order rejected.');
     }
+
+    
 
     
 }

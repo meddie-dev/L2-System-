@@ -7,63 +7,60 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb href="{{ route('vendorPortal.order.document') }}" :active="false" :isLast="false">
-        Uploaded Documents
+        Vehicle Reservation
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
         <div class="tw-flex tw-items-center tw-justify-center ">
-          Review Uploaded Document (<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $document->documentNumber }}</span>)
+          Review Reservation (<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $vehicleReservation->reservationNumber }}</span>)
         </div>
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
-    <div>
-      <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
-        @if (Str::endsWith(strtolower($document->documentUrl), ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']))
-        <img src="{{ asset('storage/' . $document->documentUrl) }}"
-          class="tw-w-full tw-h-auto tw-rounded-md tw-shadow-md tw-max-w-[800px]"
-          alt="Image"> <!-- Use a generic alt text or dynamic based on context -->
-        @else
-        <p class="tw-text-sm tw-text-gray-500">No preview available. Click to <a href="{{ asset('storage/' . $document->documentUrl) }}" target="_blank" class="tw-text-blue-500 hover:tw-text-blue-700 hover:tw-underline">Download</a></p>
-        @endif
-      </div>
-    </div>
     <div class="tw-overflow-x-auto tw-mb-6">
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs ">
         <div>
           <p class=" tw-font-semibold" >Order Number:</p>
-          <p class="tw-text-gray-700">{{ $document->order->orderNumber ?? 'N/A' }}</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->order->orderNumber ?? 'N/A' }}</p>
         </div>
       </div>
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Document Information</h3>
+      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Reservation Information</h3>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
-          <p class="tw-font-semibold">Document Name:</p>
-          <p class="tw-text-gray-700">{{ $document->documentName }}</p>
+          <p class="tw-font-semibold">Reservation Number:</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationNumber }}</p>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Number:</p>
-          <p class="tw-text-gray-700">{{ $document->documentNumber }}</p>
+          <p class="tw-font-semibold">Reservation Date:</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationDate }}</p>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($document->approval_status) }}</p>
+          <p class="tw-font-semibold">Reservation Time:</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationTime }}</p>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Created Date:</p>
-          <p class="tw-text-gray-700">{{ $document->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</p>
+          <p class="tw-font-semibold">Vehicle Type:</p>
+          <p class="tw-text-gray-700">{{ ucfirst( $vehicleReservation->vehicle_type) }}</p>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Created Time:</p>
-          <p class="tw-text-gray-700">{{ $document->created_at->setTimezone('Asia/Manila')->format('h:i A') }}</p>
+          <p class="tw-font-semibold">Pick Up Location:</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->pickUpLocation }}</p>
+        </div>
+        <div>
+          <p class="tw-font-semibold">Drop Off Location:</p>
+          <p class="tw-text-gray-700">{{ $vehicleReservation->dropOffLocation }}</p>
+        </div>
+        <div>
+          <p class="tw-font-semibold">Status:</p>
+          <p class="tw-text-gray-700">{{ ucfirst($vehicleReservation->approval_status) }}</p>
         </div>
       </div>
       <div>
         <div class="tw-flex tw-items-center tw-justify-start tw-mt-6">
-          <a href="{{ route('vendorPortal.order.document') }}" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white tw-text-gray-700 tw-font-semibold tw-text-sm tw-cursor-pointer | max-md:tw-text-xs">
+          <a href="{{ route('vendorPortal.vehicleReservation') }}" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white tw-text-gray-700 tw-font-semibold tw-text-sm tw-cursor-pointer | max-md:tw-text-xs">
             <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
             Back
           </a>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->foreignId('reservation_id')->references('id')->on('vehicle_reservations')->onDelete('cascade');
             $table->string('trackingNumber', 50)->unique();
             $table->enum('shipmentStatus', ['scheduled', 'in_transit', 'delayed', 'delivered']);
             $table->timestamp('departureTime')->nullable();

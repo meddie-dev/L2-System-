@@ -19,9 +19,7 @@
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
             <th class="tw-px-4 tw-py-2">Payment No. </th>
-            <th class="tw-px-4 tw-py-2">Payment Method</th>
             <th class="tw-px-4 tw-py-2">Created Date</th>
-            <th class="tw-px-4 tw-py-2">Amount</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
@@ -34,10 +32,8 @@
                 {{ $payment->paymentNumber }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst(str_replace('_', ' ', $payment->paymentMethod)) }}</td>
             <td class="tw-px-4 tw-py-2">{{ $payment->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">₱{{ $payment->amount }}</td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst($payment->paymentStatus)}}</td>
+            <td class="tw-px-4 tw-py-2">{{ ucfirst($payment->approval_status)}}</td>
 
           </tr>
           @endforeach

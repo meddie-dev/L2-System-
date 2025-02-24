@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('vehicleMake');
             $table->string('vehicleColor');
             $table->year('vehicleYear');
+            $table->enum('vehicleFuelType', ['diesel', 'gasoline', 'electric'])->default('diesel');
             $table->integer('vehicleCapacity');
             $table->string('vehicleImage');
             $table->enum('vehicleStatus', ['available', 'unavailable','maintenance'])->default('available');

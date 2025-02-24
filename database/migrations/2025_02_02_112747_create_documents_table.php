@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('documentNumber')->unique();
             $table->string('documentName');
             $table->string('documentUrl');
-            $table->enum('documentStatus', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
 
+            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');

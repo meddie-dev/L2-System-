@@ -7,12 +7,12 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Order Management
+        Vechile Reservation
       </x-partials.breadcrumb>
     </ol>
 
     <div class="tw-flex">
-      <a href="{{ route('vendorPortal.order.new') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-1 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+      <a href="{{ route('vendorPortal.vehicleReservation.new') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-1 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
         <i class="fa-solid fa-plus tw-text-xl | max-md:tw-text-sm"></i>
         <span class="tw-pl-1 tw-text-sm | max-md:tw-text-xs">Add New</span>
       </a>
@@ -25,28 +25,24 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Order No. </th>
+            <th class="tw-px-4 tw-py-2">Vehicle Reservation No. </th>
             <th class="tw-px-4 tw-py-2">Date</th>
-            <th class="tw-px-4 tw-py-2"> Delivery Deadline</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
-            @if (!is_null($order->orderNumber))
-              <tr class="hover:tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2">
-                  <a href="{{ $order->approval_status === 'approved' ? route('vendorPortal.order.checkApproved', $order->id) : route('vendorPortal.order.edit', $order->id) }}">
-                    {{ $order->orderNumber }}
-                  </a>
-                </td>
-                <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-                <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
-                <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status)}}</td>
+          @foreach($vehicleReservation as $vehicleReservations)
+          <tr class="hover:tw-bg-gray-100">
+            <td class="tw-px-4 tw-py-2">
+              <a href="{{ $vehicleReservations->approval_status == 'approved' ? route('vendorPortal.vehicleReservation.details', $vehicleReservations->id) : route('vendorPortal.vehicleReservation.edit', $vehicleReservations->id) }}">
+                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
+              </a>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ ucfirst($vehicleReservations->approval_status)}}</td>
 
-              </tr>
-            @endif
+          </tr>
           @endforeach
         </tbody>
       </table>

@@ -23,7 +23,7 @@
     <form action="{{ route('vendorPortal.order.document.update', $order->id) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
       @csrf
       @method('PATCH')
-      <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-text-sm | max-sm:tw-grid-cols-1 max-sm:tw-text-[13px] ">
+      <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-text-sm | max-sm:tw-text-[13px] ">
         <!-- Document Number -->
         <div class="tw-mb-4">
           <label for="documentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500">Document Number<span class="tw-text-red-500">*</span></label>
