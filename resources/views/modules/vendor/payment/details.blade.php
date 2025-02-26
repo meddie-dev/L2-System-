@@ -19,7 +19,7 @@
   </nav>
 
   <div class="card-body tw-px-4">
-  <div>
+    <div>
       <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
         @if (Str::endsWith(strtolower($payment->paymentUrl), ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']))
         <img src="{{ asset('storage/' . $payment->paymentUrl) }}"
@@ -34,36 +34,54 @@
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs">
         <div>
-          <p class=" tw-font-semibold">Order Number:</p>
-          <p class="tw-text-gray-700">{{ $payment->order->orderNumber ?? 'N/A' }}</p>
+          <label for="orderNumber" class="tw-font-semibold">Order Number:</label>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
         </div>
       </div>
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Payment</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
-          <p class="tw-font-semibold">Name:</p>
-          <p class="tw-text-gray-700">{{ $payment->user->firstName }} {{ $payment->user->lastName }}</p>
+          <label for="name" class="tw-font-semibold">Name:</label>
+          <input type="text" id="name" name="name" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER NAME" value="{{ $payment->user->firstName }} {{ $payment->user->lastName }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Payment Number:</p>
-          <p class="tw-text-gray-700">{{ $payment->paymentNumber }}</p>
+          <label for="paymentNumber" class="tw-font-semibold">Payment Number:</label>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER PAYMENT NUMBER" value="{{ $payment->paymentNumber }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Payment Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($payment->approval_status) }}</p>
+          <label for="paymentStatus" class="tw-font-semibold">Payment Status:</label>
+          <input type="text" id="paymentStatus" name="paymentStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER PAYMENT STATUS" value="{{ ucfirst($payment->approval_status) }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Created Date:</p>
-          <p class="tw-text-gray-700">{{ $payment->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</p>
+          <label for="documentCreatedDate" class="tw-font-semibold">Document Created Date:</label>
+          <input type="text" id="documentCreatedDate" name="documentCreatedDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED DATE" value="{{ $payment->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Document Created Time:</p>
-          <p class="tw-text-gray-700">{{ $payment->created_at->setTimezone('Asia/Manila')->format('h:i A') }}</p>
+          <label for="documentCreatedTime" class="tw-font-semibold">Document Created Time:</label>
+          <input type="text" id="documentCreatedTime" name="documentCreatedTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED TIME" value="{{ $payment->created_at->setTimezone('Asia/Manila')->format('h:i A') }}" readonly>
         </div>
       </div>
+
+      <!-- Approved By -->
+      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Approved By</h3>
+      <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
+        <div>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
+          <input type="text" id="approvedByName" name="approvedByName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="APPROVED BY NAME" value="{{ optional(App\Models\User::find($payment->approved_by))->firstName }} {{ optional(App\Models\User::find($payment->approved_by))->lastName }}" readonly>
+        </div>
+        <div>
+          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Approved At</label>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->updated_at->format('Y-m-d') }}" readonly>
+        </div>
+        <div>
+          <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Role</label>
+          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ optional(App\Models\User::find($payment->approved_by))->roles->pluck('name')->first() }}" readonly>
+        </div>
+       
+      </div>
       <div>
-        <div class="tw-flex tw-items-center tw-justify-start tw-mt-6">
-          <a href="{{ route('vendorPortal.order.document') }}" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white tw-text-gray-700 tw-font-semibold tw-text-sm tw-cursor-pointer | max-md:tw-text-xs">
+        <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+          <a href="{{ route('vendorPortal.order.payment') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
             <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
             Back
           </a>

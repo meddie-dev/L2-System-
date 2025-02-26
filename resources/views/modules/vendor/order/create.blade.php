@@ -24,7 +24,7 @@
         <!-- Order Number -->
         <div class="tw-mb-4">
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Order Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('orderNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
           @error('orderNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -33,7 +33,7 @@
         <!-- Product -->
         <div class="tw-mb-4">
           <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Product<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter product" required>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('product') is-invalid @enderror" placeholder="Enter product" required>
           @error('product')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -42,7 +42,7 @@
         <!-- Quantity -->
         <div class="tw-mb-4">
           <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Quantity<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter quantity" required min="1">
+          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('quantity') is-invalid @enderror" placeholder="Enter quantity" required min="1">
           @error('quantity')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -51,7 +51,7 @@
         <!-- Weight -->
         <div class="tw-mb-4">
           <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Weight (Kg)<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter weight" required>
+          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('weight') is-invalid @enderror" placeholder="Enter weight" required>
           @error('weight')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -61,7 +61,7 @@
         <!-- Delivery Address -->
         <div class="tw-mb-4">
           <label for="deliveryAddress" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Address<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery address" required>
+          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('deliveryAddress') is-invalid @enderror" placeholder="Enter delivery address" required>
           @error('deliveryAddress')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -71,7 +71,7 @@
         <div class="tw-mb-4">
           <label for="deliveryRequestDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Request Date<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="date" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery request date" required>
+            <input type="date" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('deliveryRequestDate') is-invalid @enderror" placeholder="Enter delivery request date" required>
           </div>
           @error('deliveryRequestDate')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -81,7 +81,7 @@
         <!-- Special Instructions -->
         <div class="tw-mb-4">
           <label for="specialInstructions" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Special Instructions (Optional)</label>
-          <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter any special instructions">
+          <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('specialInstructions') is-invalid @enderror" placeholder="Enter any special instructions">
           @error('specialInstructions')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror

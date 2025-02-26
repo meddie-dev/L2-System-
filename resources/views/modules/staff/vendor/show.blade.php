@@ -20,58 +20,65 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
+      <!-- Vendor -->
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Vendor Information</h3>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
-          <p class="tw-font-semibold">Vendor ID: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->id }}</span>)</p>
+          <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
+          <input type="text" id="vendorID" name="vendorID" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user->id }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold ">Vendor Name: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->firstName }} {{ $order->user->lastName }}</span>)</p>
+          <label for="vendorName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor Name</label>
+          <input type="text" id="vendorName" name="vendorName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user->firstName }} {{ $order->user->lastName }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->email }}</span>)</p>
+          <label for="vendorEmail" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Email</label>
+          <input type="text" id="vendorEmail" name="vendorEmail" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user->email }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Verification Status: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user->two_factor_enabled ? 'Verified' : 'Not Verified' }}</span>)</p>
+          <label for="verificationStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Verification Status</label>
+          <input type="text" id="verificationStatus" name="verificationStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user->two_factor_enabled ? 'Verified' : 'Not Verified' }}" readonly>
         </div>
       </div>
+
+      <!-- Order -->
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
-          <p class=" tw-font-semibold">Order Number:</p>
-          <p class="tw-text-gray-700">{{ $order->orderNumber }}</p>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $order->orderNumber }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Product:</p>
-          <p class="tw-text-gray-700">{{ $order->product }}</p>
+          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Product</label>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->product }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Delivery Location:</p>
-          <p class="tw-text-gray-700">{{ $order->deliveryAddress }}</p>
+          <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Location</label>
+          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->deliveryAddress }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Quantity:</p>
-          <p class="tw-text-gray-700"> {{ $order->quantity }}</p>
+          <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Quantity</label>
+          <input type="text" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->quantity }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Weight:</p>
-          <p class="tw-text-gray-700">{{ $order->weight }}</p>
+          <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Weight</label>
+          <input type="text" id="weight" name="weight" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->weight }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Created At:</p>
-          <p class="tw-text-gray-700">{{ $order->created_at->format('Y-m-d') }}</p>
+          <label for="createdAt" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Created At</label>
+          <input type="text" id="createdAt" name="createdAt" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->created_at->format('Y-m-d') }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Delivery Request Date:</p>
-          <p class="tw-text-gray-700">{{ $order->deliveryRequestDate }}</p>
+          <label for="deliveryRequestDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Request Date</label>
+          <input type="text" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->deliveryRequestDate }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($order->approval_status) }}</p>
+          <label for="status" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Status</label>
+          <input type="text" id="status" name="status" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ ucfirst($order->approval_status) }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Order Details/Descriptions:</p>
-          <p class="tw-text-gray-700">{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}</p>
+          <label for="orderDetails" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Details/Descriptions</label>
+          <input type="text" id="orderDetails" name="orderDetails" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}" readonly>
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>

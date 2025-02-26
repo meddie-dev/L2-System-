@@ -27,7 +27,7 @@
         <!-- Order Number -->
         <div class="tw-mb-4">
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500">Order Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed" placeholder="ENTER ORDER NUMBER" value="{{ $order->orderNumber }}" readonly>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed @error('orderNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $order->orderNumber }}" readonly>
           @error('orderNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -36,7 +36,7 @@
         <!-- Product -->
         <div class="tw-mb-4">
           <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Product<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->product }}" placeholder="Enter product" required>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('product') is-invalid @enderror" value="{{ $order->product }}" placeholder="Enter product" required>
           @error('product')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -45,7 +45,7 @@
         <!-- Quantity -->
         <div class="tw-mb-4">
           <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Quantity<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->quantity }}" placeholder="Enter quantity" required max="255">
+          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('quantity') is-invalid @enderror" value="{{ $order->quantity }}" placeholder="Enter quantity" required max="255">
           @error('quantity')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -54,7 +54,7 @@
         <!-- Weight -->
         <div class="tw-mb-4">
           <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Weight (Kg)<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->weight }}" placeholder="Enter weight" required>
+          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('weight') is-invalid @enderror" value="{{ $order->weight }}" placeholder="Enter weight" required>
           @error('weight')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -64,7 +64,7 @@
         <!-- Delivery Address -->
         <div class="tw-mb-4">
           <label for="deliveryAddress" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Delivery Address<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->deliveryAddress }}" placeholder="Enter delivery address" required>
+          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('deliveryAddress') is-invalid @enderror" value="{{ $order->deliveryAddress }}" placeholder="Enter delivery address" required>
           @error('deliveryAddress')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -74,7 +74,7 @@
         <div class="tw-mb-4">
           <label for="deliveryRequestDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Delivery Request Date<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="date" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->deliveryRequestDate }}" placeholder="Enter delivery request date" required>
+            <input type="date" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('deliveryRequestDate') is-invalid @enderror" value="{{ $order->deliveryRequestDate }}" placeholder="Enter delivery request date" required>
           </div>
           @error('deliveryRequestDate')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -84,7 +84,7 @@
         <!-- Special Instructions -->
         <div class="tw-mb-4">
           <label for="specialInstructions" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Special Instructions (Optional)</label>
-          <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" value="{{ $order->specialInstructions ?? '' }}" placeholder="Enter any special instructions">
+          <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('specialInstructions') is-invalid @enderror" value="{{ $order->specialInstructions ?? '' }}" placeholder="Enter any special instructions">
           @error('specialInstructions')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror

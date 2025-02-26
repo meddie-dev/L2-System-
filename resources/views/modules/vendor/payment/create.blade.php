@@ -24,7 +24,7 @@
         <!-- Payment Number -->
         <div class="tw-mb-4">
           <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Payment Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('paymentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
           @error('paymentNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -33,7 +33,7 @@
         <!-- Payment Url -->
         <div class="tw-mb-4">
           <label for="paymentUrl" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Upload Payment Receipt<span class="tw-text-red-500">*</span></label>
-          <input type="file" id="paymentUrl" name="paymentUrl" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm | max-md:tw-text-xs">
+          <input type="file" id="paymentUrl" name="paymentUrl" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm | max-md:tw-text-xs @error('paymentUrl') is-invalid @enderror">
           @error('paymentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror

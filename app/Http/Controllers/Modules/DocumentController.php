@@ -7,13 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Document;
 use App\Models\Modules\Order;
-use App\Models\Payment;
 use App\Notifications\NewNotification;
 use App\Notifications\staff\staffApprovalRequest;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Vehicle;
 use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Storage;
 
@@ -185,10 +184,9 @@ class DocumentController extends Controller
 
     // Admin
 
-    public function indexAdmin() {
-        $users = User::role('Vendor')->whereHas('document', function ($query) {
-            $query->where('approval_status', 'approved');
-        })->get();
-        return view('modules.admin.document.manage', compact('users'));
+    public function manageAdmin() {
+        $vehicles = Vehicle::all();
+        $users = User::role(['Driver', 'Staff', 'Vendor'])->get();
+        return view('modules.admin.document.manage', compact('vehicles', 'users'));
     }
 }

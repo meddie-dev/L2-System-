@@ -14,10 +14,12 @@ use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\MFA\TwoFactorController;
 use App\Http\Controllers\Modules\AuditController;
 use App\Http\Controllers\Modules\DocumentController;
+use App\Http\Controllers\Modules\FleetController;
 use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Models\Modules\Audit;
+use App\Models\Vehicle;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -50,12 +52,36 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.vendors.manage');
 
     // Document Management
-    Route::get('/admin/dashboard/document/review', [DocumentController::class, 'indexAdmin'])
+    Route::get('/admin/dashboard/document/manage', [DocumentController::class, 'manageAdmin'])
         ->name('admin.document.manage');
    
     // Vehicle Reservation Management
-   Route::get('/admin/dashboard/vehicleReservation/manage', [VehicleReservationController::class, 'indexAdmin'])
+    Route::get('/admin/dashboard/vehicleReservation/manage', [VehicleReservationController::class, 'indexAdmin'])
         ->name('admin.vehicleReservation.manage');
+    Route::get('/admin/dashboard/vehicleReservation/{vehicleReservation}', [VehicleReservationController::class, 'showAdmin'])
+        ->name('admin.vehicleReservation.show');
+    Route::patch('/admin/dashboard/vendor/approve/{vehicleReservation}', [VehicleReservationController::class, 'approve'])
+        ->name('admin.vehicleReservation.approve');
+    Route::post('/vendors/{vendor}/reject', [VehicleReservationController::class, 'reject'])
+        ->name('admin.vehicleReservation.reject');
+
+    // Fleet Management -> Vehicle
+    Route::get('/admin/dashboard/fleet/vehicle', [FleetController::class, 'index'])
+        ->name('admin.fleet.index');
+    Route::get('/admin/dashboard/fleet/vehicle/new', [FleetController::class, 'create'])
+        ->name('admin.fleet.vehicle.new');
+    Route::post('/admin/dashboard/fleet/vehicle', [FleetController::class, 'store'])
+        ->name('admin.fleet.store');
+    Route::get('/admin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'edit'])
+        ->name('admin.fleet.edit');
+    Route::patch('/admin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'update'])
+        ->name('admin.fleet.update');
+    Route::get('/admin/dashboard/fleet/vehicle/details/{vehicle }', [FleetController::class, 'details'])
+        ->name('admin.fleet.details');
+
+    // Fleet Management -> Driver
+    Route::get('/admin/dashboard/fleet/driver', [FleetController::class, 'driverIndex'])
+        ->name('admin.fleet.driver.index');
 });
 
 /*--------------------------------------------------------------
@@ -132,7 +158,7 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
         ->name('vendorPortal.order.edit');
     Route::patch('/portal/vendor/dashboard/order/{order}', [OrderController::class, 'update'])
         ->name('vendorPortal.order.update');
-    Route::get('/portal/vendor/dashboard/order/approved/{order}', [OrderController::class, 'details'])
+    Route::get('/portal/vendor/dashboard/order/details/{order}', [OrderController::class, 'details'])
         ->name('vendorPortal.order.details');
 
     // Document Management

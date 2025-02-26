@@ -23,44 +23,44 @@
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs ">
         <div>
-          <p class=" tw-font-semibold" >Order Number:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->order->orderNumber ?? 'N/A' }}</p>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Order Number:</label>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->order->orderNumber ?? 'N/A' }}" readonly>
         </div>
       </div>
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Reservation Information</h3>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
-          <p class="tw-font-semibold">Reservation Number:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationNumber }}</p>
+          <label for="reservationNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Number:</label>
+          <input type="text" id="reservationNumber" name="reservationNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->reservationNumber }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Reservation Date:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationDate }}</p>
+          <label for="reservationDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Date:</label>
+          <input type="text" id="reservationDate" name="reservationDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->reservationDate }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Reservation Time:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->reservationTime }}</p>
+          <label for="reservationTime" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Time:</label>
+          <input type="text" id="reservationTime" name="reservationTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->reservationTime }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Vehicle Type:</p>
-          <p class="tw-text-gray-700">{{ ucfirst( $vehicleReservation->vehicle_type) }}</p>
+          <label for="vehicle_type" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Vehicle Type:</label>
+          <input type="text" id="vehicle_type" name="vehicle_type" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ ucfirst( $vehicleReservation->vehicle_type) }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Pick Up Location:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->pickUpLocation }}</p>
+          <label for="pickUpLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Pick Up Location:</label>
+          <input type="text" id="pickUpLocation" name="pickUpLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->pickUpLocation }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Drop Off Location:</p>
-          <p class="tw-text-gray-700">{{ $vehicleReservation->dropOffLocation }}</p>
+          <label for="dropOffLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Drop Off Location:</label>
+          <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->dropOffLocation }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Status:</p>
-          <p class="tw-text-gray-700">{{ ucfirst($vehicleReservation->approval_status) }}</p>
+          <label for="approval_status" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Status:</label>
+          <input type="text" id="approval_status" name="approval_status" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ ucfirst($vehicleReservation->approval_status) }}" readonly>
         </div>
       </div>
       <div>
-        <div class="tw-flex tw-items-center tw-justify-start tw-mt-6">
-          <a href="{{ route('vendorPortal.vehicleReservation') }}" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white tw-text-gray-700 tw-font-semibold tw-text-sm tw-cursor-pointer | max-md:tw-text-xs">
+        <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+          <a href="{{ route('vendorPortal.vehicleReservation') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
             <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
             Back
           </a>

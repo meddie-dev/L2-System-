@@ -91,35 +91,7 @@
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your Activity logs:</p>
       <div class="card-body tw-px-4">
         <div class="tw-overflow-x-auto ">
-        <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4" id="datatablesSimple">
-    <thead class="tw-bg-gray-200 tw-text-gray-700">
-        <tr>
-            <th class="tw-px-4 tw-py-2">Month</th>
-            <th class="tw-px-4 tw-py-2">Activity</th>
-        </tr>
-    </thead>
-    <tbody id="orderRecords" class="tw-bg-white">
-        @php
-            $groupedLogs = $activityLogs->groupBy(fn($log) => $log->created_at->format('F Y'));
-        @endphp
-
-        @foreach($groupedLogs as $month => $logs)
-            <!-- Display Month as a Full-Row Header -->
-            <tr class="tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2 tw-font-bold" colspan="2">{{ $month }}</td>
-                <td></td>
-            </tr>
-            
-            <!-- List all activities under the month -->
-            @foreach($logs as $log)
-                <tr class="hover:tw-bg-gray-50">
-                    <td class="tw-px-4 tw-py-2"></td> 
-                    <td class="tw-px-4 tw-py-2">{{ $log->event }}</td>
-                </tr>
-            @endforeach
-        @endforeach
-    </tbody>
-</table>
+         
 
         </div>
       </div>

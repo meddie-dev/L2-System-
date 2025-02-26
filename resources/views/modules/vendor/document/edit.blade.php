@@ -27,7 +27,7 @@
         <!-- Document Number -->
         <div class="tw-mb-4">
           <label for="documentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500">Document Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="documentNumber" name="documentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed" placeholder="ENTER ORDER NUMBER" value="{{ $order->document->first()->documentNumber ?? '' }}" readonly>
+          <input type="text" id="documentNumber" name="documentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed @error('documentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $order->document->first()->documentNumber ?? '' }}" readonly>
           @error('documentNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -36,7 +36,7 @@
         <!-- Document Name -->
         <div class="tw-mb-4">
           <label for="documentName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Document Name/Description<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="documentName" name="documentName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500" placeholder="Bill of Lading (BOL)" value="{{ $order->document->first()->documentName ?? '' }}" required>
+          <input type="text" id="documentName" name="documentName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('documentName') is-invalid @enderror" placeholder="Bill of Lading (BOL)" value="{{ $order->document->first()->documentName ?? '' }}" required>
           @error('documentName')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -48,7 +48,7 @@
             Document Upload <span class="tw-text-red-500">*</span>
           </label>
           <div>
-            <input type="file" id="documentUrl" name="documentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm" value="{{ $order->document->first()->documentUrl ?? '' }}">
+            <input type="file" id="documentUrl" name="documentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm @error('documentUrl') is-invalid @enderror" value="{{ $order->document->first()->documentUrl ?? '' }}">
           </div>
           @error('documentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

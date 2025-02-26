@@ -27,7 +27,7 @@
         <!-- Payment Number -->
         <div class="tw-mb-4">
           <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500">Payment Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed" placeholder="ENTER ORDER NUMBER" value="{{ $order->payment->first()->paymentNumber ?? '' }}" readonly>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed @error('paymentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $order->payment->first()->paymentNumber ?? '' }}" readonly>
           @error('paymentNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -39,7 +39,7 @@
             payment Upload <span class="tw-text-red-500">*</span>
           </label>
           <div>
-            <input type="file" id="paymentUrl" name="paymentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm" value="{{ $order->payment->first()->paymentUrl ?? '' }}">
+            <input type="file" id="paymentUrl" name="paymentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm @error('paymentUrl') is-invalid @enderror" value="{{ $order->payment->first()->paymentUrl ?? '' }}">
           </div>
           @error('paymentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

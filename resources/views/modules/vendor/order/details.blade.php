@@ -23,92 +23,59 @@
       <h3 class="tw-text-md tw-font-bold tw-my-4">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm ">
         <div>
-          <p class=" tw-font-semibold">Order Number:</p>
-          <p class="tw-text-gray-700">{{ $order->orderNumber }}</p>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Order Number:</label>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Product:</p>
-          <p class="tw-text-gray-700">{{ $order->product }}</p>
+          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Product:</label>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->product }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Quantity:</p>
-          <p class="tw-text-gray-700">{{ $order->quantity }}</p>
+          <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Quantity:</label>
+          <input type="text" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->quantity }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Weight:</p>
-          <p class="tw-text-gray-700">{{ $order->weight }}</p>
-        </div>
-        
-        <div>
-          <p class=" tw-font-semibold">Delivery Address:</p>
-          <p class="tw-text-gray-700">{{ $order->deliveryAddress }}</p>
+          <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Weight:</label>
+          <input type="text" id="weight" name="weight" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->weight }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Delivery Request Date:</p>
-          <p class="tw-text-gray-700">{{ $order->deliveryRequestDate }}</p>
+          <label for="deliveryAddress" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Delivery Address:</label>
+          <input type="text" id="deliveryAddress" name="deliveryAddress" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->deliveryAddress }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Special Instructions:</p>
-          <p class="tw-text-gray-700">{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}</p>
+          <label for="deliveryRequestDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Delivery Request Date:</label>
+          <input type="text" id="deliveryRequestDate" name="deliveryRequestDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->deliveryRequestDate }}" readonly>
+        </div>
+        <div>
+          <label for="specialInstructions" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Special Instructions:</label>
+          <input type="text" id="specialInstructions" name="specialInstructions" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->specialInstructions ? $order->specialInstructions : 'N/A' }}" readonly>
         </div>
       </div>
-      <h3 class="tw-text-md tw-font-bold tw-my-4">Approved By</h3>
-      <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm">
+
+      <!-- Approved By -->
+      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Approved By</h3>
+      <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
         <div>
-          <p class="tw-font-semibold">Name: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->firstName }} {{ \App\Models\User::find($order->assigned_to)->lastName }}</span>)</p>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
+          <input type="text" id="approvedByName" name="approvedByName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="APPROVED BY NAME" value="{{ optional(App\Models\User::find($order->approved_by))->firstName }} {{ optional(App\Models\User::find($order->approved_by))->lastName }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Role: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->roles->pluck('name')->first() }}</span>)</p>
+          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Approved At</label>
+          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->updated_at->format('Y-m-d') }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->email }}</span>)</p>
+          <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Role</label>
+          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ optional(App\Models\User::find($order->approved_by))->roles->pluck('name')->first() }}" readonly>
         </div>
-        <div>
-          <p class="tw-font-semibold">Approved Time: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('h:i A') }}</span>)</p>
-        </div>
-        <div>
-          <p class="tw-font-semibold">Approved Date: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('M d, Y') }}</span>)</p>
-        </div>
+
       </div>
-      <hr class="tw-mt-4 tw-mx-auto">
-      <h3 class="tw-text-md tw-font-bold tw-my-4">Delivery Information</h3>
-      <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm ">
-        <h4 class="tw-text-md tw-font-bold tw-my-1">Driver Information</h4>
-        <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm">
-          <div>
-            <p class="tw-font-semibold">Name: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->firstName }} {{ \App\Models\User::find($order->assigned_to)->lastName }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Role: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->roles->pluck('name')->first() }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->email }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Approved Time: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('h:i A') }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Approved Date: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('M d, Y') }}</span>)</p>
-          </div>
-        </div>
-        <h4 class="tw-text-md tw-font-bold tw-my-1">Fleet Information</h4>
-        <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm">
-          <div>
-            <p class="tw-font-semibold">Name: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->firstName }} {{ \App\Models\User::find($order->assigned_to)->lastName }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Role: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->roles->pluck('name')->first() }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ \App\Models\User::find($order->assigned_to)->email }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Approved Time: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('h:i A') }}</span>)</p>
-          </div>
-          <div>
-            <p class="tw-font-semibold">Approved Date: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->updated_at->setTimezone('Asia/Manila')->format('M d, Y') }}</span>)</p>
-          </div>
-        </div>
+    </div>
+    <div>
+      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+        <a href="{{ route('vendorPortal.order') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+          <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+          Back
+        </a>
       </div>
     </div>
     <hr>

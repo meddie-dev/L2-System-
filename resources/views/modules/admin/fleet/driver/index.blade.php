@@ -7,61 +7,68 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="false">
-        Document Tracking
+        Fleet Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Documents
+        Manage Drivers
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-       <!-- Users -->
-       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
-        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Users</h2>
-        <p class="tw-text-xs | max-md:tw-text-xs">Ensure that all user records are accurate and up-to-date for effective tracking and management.</p>
-      </div>
       <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
             <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Role</th>
+            <th class="tw-px-4 tw-py-2">Email</th>
+            <th class="tw-px-4 tw-py-2">Last Login</th>
+            <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($users as $user)
+          @foreach($drivers as $driver)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $user->firstName }} {{ $user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $user->hasRole($user->roles->first()->name) ? ucfirst($user->roles->first()->name) : '' }}</td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
+            <td class="tw-px-4 tw-py-2"> {{ $driver->id }}</td>
+            <td class="tw-px-4 tw-py-2"><a href="{{ route('admin.fleet.edit', $driver->id) }}">{{ $driver->firstName }} {{ $driver->lastName }}</a></td>
+            <td>{{ $driver->email}}</td>
 
-      <!-- Vehicle -->
-      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
-        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Vehicle</h2>
-        <p class="tw-text-xs | max-md:tw-text-xs">Ensure that all related document details are accurate and up-to-date for effective tracking and management.</p>
-      </div>
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
-        <thead class="tw-bg-gray-200 tw-text-gray-700 ">
-          <tr>
-            <th class="tw-px-4 tw-py-2">ID</th>
-            <th class="tw-px-4 tw-py-2">Plate Number</th>
-          </tr>
-        </thead>
+            <td class="tw-px-4 tw-py-2">
+              @php
+              $currentDate = now();
+              $lastLoginDate = $driver->last_active_at;
+              $daysSinceLastLogin = $lastLoginDate ? (int) abs($currentDate->diffInDays($lastLoginDate)) : null;
+              @endphp
 
-        <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicles as $vehicle)
-          <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $vehicle->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicle->plateNumber }}</td>
+              @if (!is_null($daysSinceLastLogin))
+              <span class="tw-text-{{ $daysSinceLastLogin < 0 ? 'green-500' : ($daysSinceLastLogin < 3 ? 'yellow-500' : 'red-500') }} tw-font-medium">
+                {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
+              </span>
+              @else
+              <span class="tw-text-gray-500">Last Login: N/A</span>
+              @endif
+            </td>
+
+            <td class="tw-px-4 tw-py-2">
+              @php
+              $driverStatus = 'Available';
+
+              if (!is_null($driver->shipments) && $driver->shipments->isNotEmpty()) {
+              $driverStatus = 'Not Available';
+              } elseif (!is_null($driver->vehicleReservations) && $driver->vehicleReservations->where('assign_to', $driver->id)->isNotEmpty()) {
+              $driverStatus = 'Scheduled';
+              }
+              @endphp
+
+              <span class="tw-text-{{ $driverStatus === 'Available' ? 'green-500' : ($driverStatus === 'Scheduled' ? 'yellow-500' : 'red-500') }}">
+                {{ $driverStatus }}
+              </span>
+
+            </td>
           </tr>
           @endforeach
         </tbody>

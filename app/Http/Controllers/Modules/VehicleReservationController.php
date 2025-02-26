@@ -276,20 +276,23 @@ class VehicleReservationController extends Controller
 
     // Admin 
 
-
     public function indexAdmin()
     {
-        $vehicleReservations = VehicleReservation::where('assigned_to', auth()->user()->id)->get();
+        $vehicleReservations = VehicleReservation::all();
         return view('modules.admin.vehicleReservation.manage', compact('vehicleReservations'));
     }
 
-    public function approve()
+    public function showAdmin(VehicleReservation $vehicleReservation) {
+        return view('modules.admin.vehicleReservation.show', compact('vehicleReservation'));
+    }
+
+    public function approve(VehicleReservation $vehicleReservation)
     {
-        $vehicleReservation = VehicleReservation::findOrFail(request('id'));
         $vehicleReservation->update(['approval_status' => 'approved']);
         $vehicleReservation->approved_by = Auth::id();
         $vehicleReservation->save();
+        
         $vehicleReservation->notify(new staffApprovalStatus('Vehicle reservation', $vehicleReservation));
-        return redirect()->route('staff.vehicleReservation.index')->with('success', 'Vehicle reservation approved successfully.');
+        return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Vehicle reservation approved successfully.');
     }
 }

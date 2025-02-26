@@ -27,7 +27,7 @@
         <!-- Reservation Number -->
         <div class="tw-mb-4">
           <label for="reservationNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="reservationNumber" name="reservationNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->reservationNumber }}" readonly>
+          <input type="text" id="reservationNumber" name="reservationNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('reservationNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $vehicleReservation->reservationNumber }}" readonly>
           @error('reservationNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -37,7 +37,7 @@
         <div class="tw-mb-4">
           <label for="reservationDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Reservation Request Date<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="date" id="reservationDate" name="reservationDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery request date" value="{{ $vehicleReservation->reservationDate }}" required>
+            <input type="date" id="reservationDate" name="reservationDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('reservationDate') is-invalid @enderror" placeholder="Enter delivery request date" value="{{ $vehicleReservation->reservationDate }}" required>
           </div>
           @error('reservationDate')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -48,7 +48,7 @@
         <div class="tw-mb-4">
           <label for="reservationTime" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Reservation Request Time<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="time" id="reservationTime" name="reservationTime" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery request time" value="{{ $vehicleReservation->reservationTime }}" required>
+            <input type="time" id="reservationTime" name="reservationTime" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('reservationTime') is-invalid @enderror" placeholder="Enter delivery request time" value="{{ $vehicleReservation->reservationTime }}" required>
           </div>
           @error('reservationTime')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -59,7 +59,7 @@
         <div class="tw-mb-4">
           <label for="vehicle_type" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Type<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <select id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" value="{{ $vehicleReservation->vehicle_type }}" required>
+            <select id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicle_type') is-invalid @enderror" value="{{ $vehicleReservation->vehicle_type }}" required>
               <option value="" disabled>Select vehicle type</option>
               <option value="motorcycle">Motorcycle</option>
               <option value="van">Van</option>
@@ -75,7 +75,7 @@
         <div class="tw-mb-4">
           <label for="pickUpLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Pick Up Location<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="text" id="pickUpLocation" name="pickUpLocation" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter pick up location" value="{{ $vehicleReservation->pickUpLocation }}" required>
+            <input type="text" id="pickUpLocation" name="pickUpLocation" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('pickUpLocation') is-invalid @enderror" placeholder="Enter pick up location" value="{{ $vehicleReservation->pickUpLocation }}" required>
           </div>
           @error('pickUpLocation')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -86,7 +86,7 @@
         <div class="tw-mb-4">
           <label for="dropOffLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Drop Off Location<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter drop off location" value="{{ $vehicleReservation->dropOffLocation }}" required>
+            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('dropOffLocation') is-invalid @enderror" placeholder="Enter drop off location" value="{{ $vehicleReservation->dropOffLocation }}" required>
           </div>
           @error('dropOffLocation')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

@@ -14,7 +14,7 @@
   
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
@@ -35,7 +35,11 @@
             </td>
             <td class="tw-px-4 tw-py-2">{{ $document->documentName }}</td>
             <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ ucfirst($document->documentStatus)}}</td>
+            <td class="tw-px-4 tw-py-2">
+              <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                {{ ucfirst($document->approval_status) }}
+              </span>
+            </td>
 
           </tr>
           @endforeach

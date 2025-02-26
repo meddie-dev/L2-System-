@@ -57,7 +57,7 @@
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your order requests that are currently in shipment:</p>
       <div class="card-body tw-px-4">
         <div class="tw-overflow-x-auto ">
-          <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  " id="datatablesSimple">
+          <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4">
 
             <thead class="tw-bg-gray-200 tw-text-gray-700 ">
               <tr>

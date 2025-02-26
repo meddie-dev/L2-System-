@@ -131,13 +131,13 @@
           <!-- Document Management -->
           <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDocument" aria-expanded="false" aria-controls="collapseDocument">
             <div class="sb-nav-link-icon"><i class="fa-regular fa-file"></i></div>
-            Document Management
+            Document Tracking
             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
           </a>
           <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/admin/dashboard/document/storage">Document Storage</a>
-              <a class="nav-link" href="/admin/dashboard/document/review">Review Submissions</a>
+              <a class="nav-link" href="/admin/dashboard/document/manage">Manage Documents</a>
+              <a class="nav-link" href="/admin/dashboard/document/complianceAndLegal">Compliance & Legal</a>
             </nav>
           </div>
 

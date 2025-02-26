@@ -24,7 +24,7 @@
         <!-- Document Number -->
         <div class="tw-mb-4">
           <label for="documentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Document Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="documentNumber" name="documentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
+          <input type="text" id="documentNumber" name="documentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('documentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
           @error('documentNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -33,7 +33,7 @@
         <!-- Document Name -->
         <div class="tw-mb-4">
           <label for="documentName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs ">Document Name/Description<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="documentName" name="documentName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Bill of Lading (BOL)" required>
+          <input type="text" id="documentName" name="documentName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('documentName') is-invalid @enderror" placeholder="Bill of Lading (BOL)" required>
           @error('documentName')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -44,7 +44,7 @@
             Document Upload <span class="tw-text-red-500">*</span>
           </label>
           <div>
-            <input type="file" id="documentUrl" name="documentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm | max-md:tw-text-xs">
+            <input type="file" id="documentUrl" name="documentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm | max-md:tw-text-xs @error('documentUrl') is-invalid @enderror">
           </div>
           @error('documentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

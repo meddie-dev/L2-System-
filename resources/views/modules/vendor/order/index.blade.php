@@ -16,12 +16,12 @@
         <i class="fa-solid fa-plus tw-text-xl | max-md:tw-text-sm"></i>
         <span class="tw-pl-1 tw-text-sm | max-md:tw-text-xs">Add New</span>
       </a>
-  </div>
+    </div>
   </nav>
-  
+
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
@@ -34,19 +34,23 @@
 
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($orders as $order)
-            @if (!is_null($order->orderNumber))
-              <tr class="hover:tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2">
-                  <a href="{{ $order->approval_status === 'approved' ? route('vendorPortal.order.checkApproved', $order->id) : route('vendorPortal.order.edit', $order->id) }}">
-                    {{ $order->orderNumber }}
-                  </a>
-                </td>
-                <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-                <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
-                <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status)}}</td>
+          @if (!is_null($order->orderNumber))
+          <tr class="hover:tw-bg-gray-100">
+            <td class="tw-px-4 tw-py-2">
+              <a href="{{ $order->approval_status === 'approved' ? route('vendorPortal.order.details', $order->id) : route('vendorPortal.order.edit', $order->id) }}">
+                {{ $order->orderNumber }}
+              </a>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                {{ ucfirst($order->approval_status) }}
+              </span>
+            </td>
 
-              </tr>
-            @endif
+          </tr>
+          @endif
           @endforeach
         </tbody>
       </table>

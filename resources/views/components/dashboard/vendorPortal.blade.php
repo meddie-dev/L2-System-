@@ -87,11 +87,11 @@
       </div>
     </div>
 
-    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
+    <div class="tw-bg-white tw-rounded-lg tw-mb-4  tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your order requests that are currently in shipment:</p>
       <div class="card-body tw-px-4">
         <div class="tw-overflow-x-auto ">
-          <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  " id="datatablesSimple">
+          <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  ">
 
             <thead class="tw-bg-gray-200 tw-text-gray-700 ">
               <tr>
@@ -104,7 +104,43 @@
               @foreach($orders as $order)
               <tr class="hover:tw-bg-gray-100">
                 <td class="tw-px-4 tw-py-2">{{ $order->orderNumber }}</td>
-                <td class="tw-px-4 tw-py-2">{{ ucfirst($order->approval_status)}}</td>
+                <td class="tw-px-4 tw-py-2">
+                  <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                    {{ ucfirst($order->approval_status) }}
+                  </span>
+                </td>
+
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
+      <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your order requests that are completed:</p>
+      <div class="card-body tw-px-4">
+        <div class="tw-overflow-x-auto ">
+          <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  ">
+
+            <thead class="tw-bg-gray-200 tw-text-gray-700 ">
+              <tr>
+                <th class="tw-px-4 tw-py-2">Shipment No. </th>
+                <th class="tw-px-4 tw-py-2">Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="orderRecords" class="tw-bg-white">
+              @foreach($orders as $order)
+              <tr class="hover:tw-bg-gray-100">
+                <td class="tw-px-4 tw-py-2">{{ $order->orderNumber }}</td>
+                <td class="tw-px-4 tw-py-2">
+                  <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                    {{ ucfirst($order->approval_status) }}
+                  </span>
+                </td>
 
               </tr>
               @endforeach

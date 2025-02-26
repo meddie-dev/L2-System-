@@ -18,12 +18,10 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm " id="datatablesSimple">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">&nbsp;</th>
-
             <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Name</th>
             <th class="tw-px-4 tw-py-2">Email</th>
@@ -36,9 +34,6 @@
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($users as $user)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">
-              <div class="tw-inline-block tw-w-3 tw-h-3 tw-rounded-full {{ $user->two_factor_enabled == 0 ? 'tw-bg-red-500' : 'tw-bg-green-500' }} tw-translate-x-3 tw-translate-y--1"></div>
-            </td>
             <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
             <td class="tw-px-4 tw-py-2">{{ $user->firstName }} {{ $user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">{{ $user->email }}</td>
@@ -51,7 +46,7 @@
               @endphp
 
               @if (!is_null($daysSinceLastLogin))
-              <span class="tw-text-{{ $daysSinceLastLogin < 30 ? 'green-500' : ($daysSinceLastLogin < 60 ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $daysSinceLastLogin < 0 ? 'green-500' : ($daysSinceLastLogin < 3 ? 'yellow-500' : 'red-500') }}">
               {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
               </span>
               @else
