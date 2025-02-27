@@ -82,6 +82,10 @@ Route::middleware('role:Admin', 'active')->group(function () {
     // Fleet Management -> Driver
     Route::get('/admin/dashboard/fleet/driver', [FleetController::class, 'driverIndex'])
         ->name('admin.fleet.driver.index');
+
+    // Fleet Management -> Shipment
+    Route::get('/admin/dashboard/fleet/shipment', [FleetController::class, 'shipmentIndex'])
+        ->name('admin.fleet.shipment.manage');
 });
 
 /*--------------------------------------------------------------
@@ -105,7 +109,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     // Document Management
     Route::get('/staff/dashboard/document/submission', [DocumentController::class, 'manage'])
         ->name('staff.document.manage');
-    Route::get('/staff/dashboard/document/submission/{order}', [DocumentController::class, 'show'])
+    Route::get('/staff/dashboard/document/submission/{document}', [DocumentController::class, 'show'])
         ->name('staff.document.show');
     Route::patch('/staff/dashboard/document/approve/{document}', [DocumentController::class, 'approve'])
         ->name('staff.document.approve');

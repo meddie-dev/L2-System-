@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('paymentNumber')->unique();
             $table->string('paymentUrl');
 
-            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending'); 
+            $table->enum('approval_status', ['pending','reviewed', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('redirected_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

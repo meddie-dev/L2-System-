@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Staff\SendPaymentApprovalNotification;
+use App\Jobs\Vendor\SendPaymentNotifications;
 use App\Models\ActivityLogs;
 use Illuminate\Http\Request;
 use App\Models\Modules\Order;
 use App\Models\Payment;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Notifications\NewNotification;
-use App\Notifications\staff\staffApprovalRequest;
 use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
+    // Vendor
     public function index()
     {
         $payments = Payment::where('user_id', auth()->user()->id)->get();
         return view('modules.vendor.payment.index', compact('payments'));
     }
-
-    // VENDOR/ORDER SECTION
 
     public function create(Order $order)
     {
@@ -40,52 +39,43 @@ class PaymentController extends Controller
             'paymentNumber' => 'required|string|max:255|unique:payments',
             'paymentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
         ]);
-
-        $paymentNumber = $request->paymentNumber;
-
-        $file = $request->file('paymentUrl');
-        $path = $file->storeAs("payment/{$user->id}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
-
-        $payment = Payment::create([
-            'order_id' => $order->id,
-            'user_id' => auth()->user()->id,
-            'paymentNumber' => $paymentNumber,
-            'paymentUrl' => $path,
-        ]);
-
-        // Get active staff members (last active within 5 minutes)
-        $activeStaffs = User::role('Staff')->whereHas('roles', function ($query) {
-            $query->where('name', 'Staff')->where('last_active_at', '>=', Carbon::now()->subMinutes(5));
-        })->orderBy('last_active_at', 'desc')->limit(1)->get();
-
-        // If no active staff found, get active admin instead
-        if ($activeStaffs->count() == 0) {
-            $activeStaffs = User::role('Admin')->get();
-
-            foreach ($activeStaffs as $admin) {
-                $payment->assigned_to = $admin->id;
-                $payment->save();
-                $admin->notify(new staffApprovalRequest('Payment', $payment));
-                $admin->notify(new NewNotification("Payment by {$user->firstName} {$user->lastName} with Payment Number: ({$payment->paymentNumber}). Waiting for your approval."));
-            }
-        } else {
-            // Send notification to active staff members
-            foreach ($activeStaffs as $staff) {
-                $payment->assigned_to = $staff->id;
-                $payment->save();
-                $staff->notify(new staffApprovalRequest('Payment', $payment));
-                $staff->notify(new NewNotification("Payment by {$user->firstName} {$user->lastName} with Payment Number: ({$payment->paymentNumber}). Waiting for your approval."));
-            }
+    
+        DB::beginTransaction();
+    
+        try {
+            $paymentNumber = $request->paymentNumber;
+            $file = $request->file('paymentUrl');
+            $path = $file->storeAs("payment/{$user->id}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
+    
+            $payment = Payment::create([
+                'order_id' => $order->id,
+                'user_id' => $user->id,
+                'paymentNumber' => $paymentNumber,
+                'paymentUrl' => $path,
+                'approval_status' => 'pending',
+                'reviewed_by' => null,
+                'approved_by' => null,
+                'rejected_by' => null,
+                'assigned_to' => null,
+                'redirected_to' => null,
+            ]);
+    
+            ActivityLogs::create([
+                'user_id' => $user->id,
+                'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => $request->ip(),
+            ]);
+    
+            DB::commit();
+    
+            // Dispatch job asynchronously
+            SendPaymentNotifications::dispatch($payment, $user);
+    
+            return redirect()->route('vendorPortal.order')->with('success', 'Order Request submitted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
         }
-
-        ActivityLogs::create([
-            'user_id' => auth()->id(),
-            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
-            'ip_address' => $request->ip(),
-        ]);
-
-        $user->notify(new NewNotification("Your order ({$order->orderNumber}) has been submitted. Please wait for approval."));
-        return redirect()->route('vendorPortal.order')->with('success', 'Order Request submitted successfully.');
     }
 
     public function edit(Order $order)
@@ -142,7 +132,7 @@ class PaymentController extends Controller
         return redirect()->route('vendorPortal.order')->with('success', 'Order Request deleted successfully.');
     }
 
-    // STAFF SECTION
+    // Staff
 
     public function manage()
     {
@@ -157,15 +147,26 @@ class PaymentController extends Controller
 
     public function approve(Payment $payment)
     {
-        $payment->update(['approval_status' => 'approved']);
+        DB::beginTransaction();
 
-        $payment->approved_by = Auth::id();
-        $payment->save();
+        try {
+            $payment->update([
+                'approval_status' => 'reviewed',
+                'reviewed_by' => auth()->id(),
+            ]);
 
-        $payment->notify(new staffApprovalStatus('Payment', $payment));
+            DB::commit();
 
-        return redirect()->route('staff.payment.manage')->with('success', 'Order approved successfully.');
+            // Dispatch job asynchronously
+            SendPaymentApprovalNotification::dispatch($payment);
+
+            return redirect()->route('staff.payment.manage')->with('success', 'Payment reviewed successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
+
     public function reject(Order $order)
     {
         $order->update(['approval_status' => 'rejected']);

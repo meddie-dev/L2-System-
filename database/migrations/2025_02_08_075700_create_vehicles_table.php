@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('plateNumber')->unique();
             $table->string('vehicleType') ;
             $table->string('vehicleModel');
@@ -27,8 +28,6 @@ return new class extends Migration
             $table->string('maintenanceDescription')->nullable();
             $table->string('maintenanceSchedule')->nullable();
             $table->enum('conditionStatus', ['good', 'fair', 'poor', 'damaged'])->default('good');
-
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

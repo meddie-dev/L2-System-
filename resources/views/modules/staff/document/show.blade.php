@@ -12,7 +12,7 @@
 
       <x-partials.breadcrumb :active="true" :isLast="true">
         <div class="tw-flex tw-items-center tw-justify-center ">
-          Review Document No.(<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $order->document->first()->documentNumber }}</span>)
+          Review Document No.(<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $document->documentNumber }}</span>)
         </div>
       </x-partials.breadcrumb>
     </ol>
@@ -20,64 +20,82 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Vendor Information</h3>
+      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Vendor Information</h3>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
-          <p class="tw-font-semibold">Vendor ID: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user ? $order->user->id : 'N/A' }}</span>)</p>
+          <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
+          <input type="text" id="vendorID" name="vendorID" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->user->id ?? 'N/A' }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold ">Vendor Name: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user ? $order->user->firstName . ' ' . $order->user->lastName : 'N/A' }}</span>)</p>
+          <label for="vendorName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor Name</label>
+          <input type="text" id="vendorName" name="vendorName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->user ? $document->user->firstName . ' ' . $document->user->lastName : 'N/A' }}" readonly>
         </div>
         <div>
-          <p class="tw-font-semibold">Email: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user ? $order->user->email : 'N/A' }}</span>)</p>
+          <label for="vendorEmail" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Email</label>
+          <input type="text" id="vendorEmail" name="vendorEmail" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->user ? $document->user->email : 'N/A' }}" readonly>
         </div>
         <div>
-          <p class=" tw-font-semibold">Verification Status: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->user ? ($order->user->two_factor_enabled ? 'Verified' : 'Not Verified') : 'N/A' }}</span>)</p>
+          <label for="verificationStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Verification Status</label>
+          <input type="text" id="verificationStatus" name="verificationStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->user ? ($document->user->two_factor_enabled ? 'Verified' : 'Not Verified') : 'N/A' }}" readonly>
         </div>
       </div>
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
+
+      <!-- Custom Divider -->
+      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      </div>
+
+      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-flex tw-flex-col tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
-          <p class=" tw-font-semibold">Order Number: (<span class="tw-text-gray-700 tw-font-normal">{{ $order->orderNumber}}</span>)</p>
-          </p>
+          <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->order->orderNumber ?? 'N/A' }}" readonly>
         </div>
       </div>
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Document Submissions</h3>
+
+      <!-- Custom Divider -->
+      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      </div>
+
+      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Document Submissions</h3>
       <div class="tw-flex tw-flex-col tw-gap-2 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div class="tw-flex tw-items-center tw-justify-center tw-relative tw-mb-4">
-          <img src="{{ asset('storage/' . $order->document->first()->documentUrl) }}" alt="Document Image" class="tw-max-w-[500px]  tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
+          <img src="{{ asset('storage/' . $document->documentUrl) }}" alt="Document Image" class="tw-max-w-[500px]  tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
           <div style="font-size: 2rem; left: 50%; top: 50%; transform: translate(-50%, -50%);" class="tw-absolute tw-z-10 tw-text-gray-700 tw-opacity-10 tw-font-bold">
-            {{ $order->document->first()->documentNumber ?? 'N/A' }}
+            {{ $document->documentNumber ?? 'N/A' }}
           </div>
         </div>
 
         <div class="tw-grid tw-grid-cols-2 tw-gap-2">
           <div>
-            <p class=" tw-font-semibold">Document Number: </p>
-            <p class="tw-text-gray-700">{{ $order->document->first()->documentNumber }}</p>
+            <label for="documentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Number</label>
+            <input type="text" id="documentNumber" name="documentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->documentNumber }}" readonly>
           </div>
           <div>
-            <p class=" tw-font-semibold">Document Name:</p>
-            <p class="tw-text-gray-700">{{ $order->document->first()->documentName }}</p>
+            <label for="documentName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Name</label>
+            <input type="text" id="documentName" name="documentName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $document->documentName }}" readonly>
           </div>
           <div>
-            <p class=" tw-font-semibold">Document Status:</p>
-            <p class="tw-text-gray-700">{{ ucfirst($order->document->first()->approval_status) }}</p>
+            <label for="documentStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Status</label>
+            <input type="text" id="documentStatus" name="documentStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ ucfirst($document->approval_status) }}" readonly>
           </div>
           <div>
-            <p class=" tw-font-semibold">Document Create:</p>
-            <p class="tw-text-gray-700">{{ $order->document->first()->created_at->format('Y-m-d') }}</p>
+            <label for="documentCreate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Create</label>
+            <input type="text" id="documentCreate" name="documentCreate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ optional($document->created_at)->format('Y-m-d') ?? 'N/A' }}" readonly>
           </div>
-
         </div>
       </div>
-
     </div>
     <div class="tw-flex tw-justify-end tw-mb-6">
-      <form action="{{ route('staff.document.approve', $order->document->first()->id) }}" method="POST">
+      <form action="{{ route('staff.document.approve', $document->id) }}" method="POST">
         @csrf
         @method('PATCH')
-        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Document</button>
+        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Reviewed</button>
       </form>
     </div>
     <hr>

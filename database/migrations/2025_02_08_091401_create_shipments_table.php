@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreignId('reservation_id')->references('id')->on('vehicle_reservations')->onDelete('cascade');
-            $table->string('trackingNumber', 50)->unique();
-            $table->enum('shipmentStatus', ['scheduled', 'in_transit', 'delayed', 'delivered']);
+            $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->string('trackingNumber', 20)->unique();
+            $table->enum('shipmentStatus', ['scheduled', 'in_transit', 'delayed', 'delivered'])->nullable();
             $table->timestamp('departureTime')->nullable();
             $table->timestamp('arrivalTime')->nullable();
             $table->string('currentLocation', 255)->nullable();
             $table->timestamp('estimatedDeliveryTime')->nullable();
 
+            $table->enum('approval_status', ['pending','reviewed', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');

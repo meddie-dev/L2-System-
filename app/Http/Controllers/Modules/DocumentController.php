@@ -4,27 +4,27 @@ namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\Staff\SendDocumentApprovalNotification;
+use App\Jobs\Vendor\SendDocumentNotifications;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Document;
 use App\Models\Modules\Order;
-use App\Notifications\NewNotification;
-use App\Notifications\staff\staffApprovalRequest;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Notifications\staff\staffApprovalStatus;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
+    // Vendor
     public function index()
     {
         $documents = Document::where('user_id', auth()->user()->id)->get();
         return view('modules.vendor.document.index', compact('documents'));
     }
-
-    // VENDOR/ORDER SECTION
 
     public function create(Order $order)
     {
@@ -42,59 +42,47 @@ class DocumentController extends Controller
             'documentName' => 'required|string|max:255',
             'documentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
         ]);
-
-
-        $checkDocumentNumber = Document::where('documentNumber', $request->documentNumber)->first();
-        if ($checkDocumentNumber) {
-            $documentNumber = strtoupper(Str::random(20));
-        } else {
-            $documentNumber = $request->documentNumber;
+    
+        DB::beginTransaction();
+    
+        try {
+            $checkDocumentNumber = Document::where('documentNumber', $request->documentNumber)->first();
+            $documentNumber = $checkDocumentNumber ? strtoupper(Str::random(20)) : $request->documentNumber;
+    
+            $userId = auth()->id();
+            $file = $request->file('documentUrl');
+            $path = $file->storeAs("documents/{$userId}", $documentNumber . '.' . $file->getClientOriginalExtension(), 'public');
+    
+            $document = Document::create([
+                'order_id' => $order->id,
+                'user_id' => $userId,
+                'documentNumber' => $documentNumber,
+                'documentName' => $request->documentName,
+                'documentUrl' => $path,
+                'approval_status' => 'pending',
+                'reviewed_by' => null,
+                'approved_by' => null,
+                'rejected_by' => null,
+                'assigned_to' => null,
+                'redirected_to' => null,
+            ]);
+    
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Uploaded Document: {$document->documentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => $request->ip(),
+            ]);
+    
+            DB::commit();
+    
+            // Dispatch job asynchronously
+            SendDocumentNotifications::dispatch($document, $user);
+    
+            return redirect()->route('vendorPortal.order.payment.new', ['order' => $order->id]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
         }
-
-        $userId = auth()->id();
-        $file = $request->file('documentUrl');
-        $path = $file->storeAs("documents/{$userId}", $documentNumber . '.' . $file->getClientOriginalExtension(), 'public');
-
-        $document = Document::create([
-            'order_id' => $order->id,
-            'user_id' => $userId,
-            'documentUrl' => $path,
-            'documentNumber' => $documentNumber,
-            'documentName' => $request->documentName,
-        ]);
-
-        // Get active staff members (last active within 5 minutes)
-        $activeStaffs = User::role('Staff')->whereHas('roles', function ($query) {
-            $query->where('name', 'Staff')->where('last_active_at', '>=', Carbon::now()->subMinutes(5));
-        })->orderBy('last_active_at', 'desc')->limit(1)->get();
-
-        // If no active staff found, get active admin instead
-        if ($activeStaffs->count() == 0) {
-            $activeStaffs = User::role('Admin')->get();
-
-            foreach ($activeStaffs as $admin) {
-                $document->assigned_to = $admin->id;
-                $document->save();
-                $admin->notify(new staffApprovalRequest('Document', $document));
-                $admin->notify(new NewNotification("Document Uploaded by {$user->firstName} {$user->lastName} with Document Number: ({$document->documentNumber}). Waiting for your approval."));
-            }
-        } else {
-            // Send notification to active staff members
-            foreach ($activeStaffs as $staff) {
-                $document->assigned_to = $staff->id;
-                $document->save();
-                $staff->notify(new staffApprovalRequest('Document', $document));
-                $staff->notify(new NewNotification("Document Uploaded by {$user->firstName} {$user->lastName} with Document Number: ({$document->documentNumber}). Waiting for your approval."));
-            }
-        }
-
-        ActivityLogs::create([
-            'user_id' => auth()->id(),
-            'event' => "Uploaded Document: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
-            'ip_address' => $request->ip(),
-        ]);
-
-        return redirect()->route('vendorPortal.order.payment.new', ['order' => $order->id]);
     }
 
     public function edit(Order $order)
@@ -152,26 +140,39 @@ class DocumentController extends Controller
         return redirect()->route('vendorPortal.order.payment.edit', ['order' => $document->order_id]);
     }
 
-    // STAFF SECTION
+    // Staff
 
-    public function manage() {
-        $orders = Order::where('assigned_to', auth()->id())->get();
-        return view('modules.staff.document.manage', compact('orders'));
+    public function manage() 
+    {
+        $documents = Document::where('assigned_to', auth()->id())->get();
+        return view('modules.staff.document.manage', compact('documents'));
     }
 
-    public function show(Order $order) {
-        return view('modules.staff.document.show', compact('order'));
+    public function show(Document $document) 
+    {
+        return view('modules.staff.document.show', compact('document'));
     }
 
-    public function approve(Document $document) {
-        $document->update(['approval_status' => 'approved']);
+    public function approve(Document $document)
+    {
+        DB::beginTransaction();
 
-        $document->approved_by = auth()->id();
-        $document->save();
+        try {
+            $document->update([
+                'approval_status' => 'reviewed',
+                'reviewed_by' => auth()->id(),
+            ]);
 
-        $document->notify(new staffApprovalStatus('Document', $document));
+            DB::commit();
 
-        return redirect()->route('staff.document.manage')->with('success', 'Order approved successfully.');
+            // Dispatch job asynchronously
+            SendDocumentApprovalNotification::dispatch($document);
+
+            return redirect()->route('staff.document.manage')->with('success', 'Document reviewed successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
     public function reject(Order $order)
     {

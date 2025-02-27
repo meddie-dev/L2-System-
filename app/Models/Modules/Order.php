@@ -25,7 +25,7 @@ class Order extends Model
 
     public function document()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasOne(Document::class);
     }
 
     public function vehicleReservations()

@@ -6,12 +6,12 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb  :active="true" :isLast="false">
-        Vendor Management
+      <x-partials.breadcrumb :active="true" :isLast="false">
+        Fleet Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Document Submissions
+        Manage Shipments
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -22,26 +22,38 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Order ID. </th>
+            <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Document Number</th>
-            <th class="tw-px-4 tw-py-2"> Created Date</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
+            <th class="tw-px-4 tw-py-2">Email</th>
+            <th class="tw-px-4 tw-py-2">Created At</th>
+            <th class="tw-px-4 tw-py-2">Active Status</th>
+
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($documents as $document)
+          @foreach($shipments as $shipment)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $document->order->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $document->user->firstName }} {{ $document->user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a></td>
-            <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $shipment->id }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $shipment->firstName }} {{ $shipment->lastName }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $shipment->email }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($shipment->created_at)->format('F j, Y')  }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
-                {{ ucfirst($document->approval_status) }}
+              @php
+              $currentDate = now();
+              $lastLoginDate = $shipment->last_active_at;
+              $daysSinceLastLogin = $lastLoginDate  ? (int) abs($currentDate->diffInDays($lastLoginDate)) : null;
+              @endphp
+
+              @if (!is_null($daysSinceLastLogin))
+              <span class="tw-text-{{ $daysSinceLastLogin < 0 ? 'green-500' : ($daysSinceLastLogin < 3 ? 'yellow-500' : 'red-500') }}">
+              {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
               </span>
+              @else
+              <span class="tw-text-gray-500">Last Login: N/A</span>
+              @endif
             </td>
+
           </tr>
           @endforeach
         </tbody>

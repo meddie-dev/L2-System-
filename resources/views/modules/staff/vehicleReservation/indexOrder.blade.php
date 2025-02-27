@@ -11,7 +11,7 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Reservation for Order
+        Manage Reservation
       </x-partials.breadcrumb>
     </ol>
   </nav>

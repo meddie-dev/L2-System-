@@ -21,7 +21,7 @@
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <!-- Vendor -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Vendor Information</h3>
+      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Vendor Information</h3>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
           <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
@@ -41,8 +41,15 @@
         </div>
       </div>
 
+      <!-- Custom Divider -->
+      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
+        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      </div>
+
       <!-- Order -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
+      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
@@ -83,12 +90,12 @@
       </div>
     </div>
     <div class="tw-flex tw-justify-end tw-mb-6">
-          <form action="{{ route('staff.vendors.approve', $order->id) }}" method="POST">
-            @csrf
-            @method('PATCH')
-            <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Order</button>
-          </form>
-        </div>
+      <form action="{{ route('staff.vendors.approve', $order->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Reviewed</button>
+      </form>
+    </div>
     <hr>
     <div>
       <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Order Table Instructions</h3>

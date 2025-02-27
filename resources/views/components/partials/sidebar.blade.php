@@ -151,7 +151,7 @@
             <nav class="sb-sidenav-menu-nested nav">
               <a class="nav-link" href="/admin/dashboard/fleet/vehicle">Manage Vehicles</a>
               <a class="nav-link" href="/admin/dashboard/fleet/driver">Manage Drivers</a>
-              <a class="nav-link" href="/admin/dashboard/fleet/fuel">Manage Shipments</a>
+              <a class="nav-link" href="/admin/dashboard/fleet/shipment">Manage Shipments</a>
             </nav>
           </div>
         </div>

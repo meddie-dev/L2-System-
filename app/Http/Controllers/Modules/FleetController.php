@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
+use App\Models\shipments;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
@@ -134,16 +135,25 @@ class FleetController extends Controller
         return redirect()->route('admin.fleet.index')->with('success', 'Vehicle deleted successfully.');
     }
 
-    // Admin - Fleet - Driver
+    // Admin
+
+    // Fleet - Driver
     public function driverIndex()
     {
         $drivers = User::role('Driver')->get();
         return view('modules.admin.fleet.driver.index', compact('drivers'));
     }
 
+
     public function driverCreate(User $user)
     {
         return view('modules.admin.fleet.driver.create', compact('user'));
     }
 
+    // Fleet - Shipment
+    public function shipmentIndex()
+    {
+        $shipments = Shipments::all();
+        return view('modules.admin.fleet.shipment.manage', compact('shipments'));
+    }
 }
