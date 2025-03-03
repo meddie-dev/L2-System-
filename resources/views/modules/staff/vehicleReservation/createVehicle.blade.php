@@ -60,9 +60,9 @@
           <div style="color: gray">
             <select id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicle_type') is-invalid @enderror" value="{{ $vehicleReservation->vehicle_type }}" required>
               <option value="" disabled>Select vehicle type</option>
-              <option value="motorcycle">Motorcycle</option>
-              <option value="van">Van</option>
-              <option value="truck">Truck</option>
+              <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
+              <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
+              <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
             </select>
           </div>
           @error('vehicle_type')

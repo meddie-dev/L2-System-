@@ -41,7 +41,14 @@
           <!-- Vehicle Type -->
           <div class="tw-mb-4">
             <label for="vehicleType" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Type<span class="tw-text-red-500">*</span></label>
-            <input type="text" id="vehicleType" name="vehicleType" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleType') is-invalid @enderror" placeholder="Enter vehicle type" value="{{ $vehicle->vehicleType }}" required>
+            <div style="color: gray">
+              <select id="vehicleType" name="vehicleType" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleType') is-invalid @enderror" value="{{ $vehicle->vehicleType }}" required>
+                <option value="" disabled>Select vehicle type</option>
+                <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
+                <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
+                <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
+              </select>
+            </div>
             @error('vehicleType')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror

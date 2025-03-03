@@ -151,7 +151,7 @@
             <nav class="sb-sidenav-menu-nested nav">
               <a class="nav-link" href="/admin/dashboard/fleet/vehicle">Manage Vehicles</a>
               <a class="nav-link" href="/admin/dashboard/fleet/driver">Manage Drivers</a>
-              <a class="nav-link" href="/admin/dashboard/fleet/shipment">Manage Shipments</a>
+              <a class="nav-link" href="/admin/dashboard/fleet/fuel">Fuel Management</a>
             </nav>
           </div>
         </div>
@@ -246,31 +246,11 @@
         @if(Auth::user()->hasRole('Driver'))
         <!-- Driver-specific links -->
         <div>
-          <!-- Vehicle Reservation -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVehicle" aria-expanded="false" aria-controls="collapseVehicle">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-van-shuttle"></i></div>
-            Vehicle Reservation
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          <!-- Task Management -->
+          <a class="nav-link collapsed" href="/driver/dashboard/task">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
+            Task Management
           </a>
-          <div class="collapse" id="collapseVehicle" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/driver/dashboard/vehicle/inbox">Reservations Inbox</a>
-              <a class="nav-link" href="/driver/dashboard/vehicle/logs">Reservation Logs</a>
-            </nav>
-          </div>
-
-          <!-- Document Management -->
-          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDocument" aria-expanded="false" aria-controls="collapseDocument">
-            <div class="sb-nav-link-icon"><i class="fa-regular fa-file"></i></div>
-            Document Management
-            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-          </a>
-          <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-            <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/driver/dashboard/document/request">View Request Documents</a>
-              <a class="nav-link" href="/driver/dashboard/document/approved">View Approved Documents</a>
-            </nav>
-          </div>
 
           <!-- Fleet Management -->
           <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFleet" aria-expanded="false" aria-controls="collapseFleet">
@@ -280,9 +260,8 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/driver/dashboard/fleet/issue">Fuel Management</a>
-              <a class="nav-link" href="/driver/dashboard/fleet/issue">Report Vehicle Issues</a>
-              <a class="nav-link" href="/driver/dashboard/fleet/request">Request Vehicle Maintenance</a>
+              <a class="nav-link" href="/driver/dashboard/fleet/ticket">Trip Ticket</a>
+              <a class="nav-link" href="/driver/dashboard/fleet/card">Fleet Card</a>
             </nav>
           </div>
         </div>

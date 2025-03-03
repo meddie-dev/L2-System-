@@ -35,7 +35,13 @@
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">{{ $document->order->id }}</td>
             <td class="tw-px-4 tw-py-2">{{ $document->user->firstName }} {{ $document->user->lastName }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a></td>
+            <td class="tw-px-4 tw-py-2">
+              @if($document->approval_status !== 'reviewed')
+                <a href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a>
+              @else
+                {{ $document->documentNumber }}
+              @endif
+            </td>
             <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">

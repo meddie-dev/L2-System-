@@ -11,22 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shipments', function (Blueprint $table) {
+        Schema::create('trip_tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->string('trackingNumber', 20)->unique();
-            $table->enum('shipmentStatus', ['scheduled', 'in_transit', 'delayed', 'delivered'])->nullable();
+            $table->foreignId('fleet_card_id')->references('id')->on('fleet_cards')->onDelete('cascade');
+            $table->string('tripNumber')->unique();
+            $table->string('destination')->nullable(); 
             $table->timestamp('departureTime')->nullable();
             $table->timestamp('arrivalTime')->nullable();
-            $table->string('currentLocation', 255)->nullable();
-            $table->timestamp('estimatedDeliveryTime')->nullable();
+            $table->decimal('allocatedFuel', 8, 2)->nullable();
+            $table->enum('status', ['scheduled', 'in_transit', 'delayed', 'delivered'])->default('scheduled');
 
-            $table->enum('approval_status', ['pending','reviewed', 'approved', 'rejected'])->default('pending');
-            $table->foreignId('reviewed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('rejected_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipments');
+        Schema::dropIfExists('trip_tickets');
     }
 };

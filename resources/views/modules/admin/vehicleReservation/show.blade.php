@@ -17,7 +17,7 @@
       </x-partials.breadcrumb>
     </ol>
   </nav>
-
+  
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <div class="tw-flex tw-w-full  tw-gap-6">
@@ -51,7 +51,7 @@
         <div class="tw-mb-4">
           <label for="vehicle_type" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Type</label>
           <div style="color: gray">
-            <input type="text" id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ ucfirst($vehicleReservation->vehicle_type) }}" readonly>
+            <input type="text" id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $vehicleReservation->vehicle_type === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicleReservation->vehicle_type === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicleReservation->vehicle_type === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}" readonly>
           </div>
         </div>
 
@@ -76,7 +76,7 @@
       <form action="{{ route('admin.vehicleReservation.approve', $vehicleReservation->id)}}" method="POST">
         @csrf
         @method('PATCH')
-        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Order</button>
+        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Reservation</button>
       </form>
     </div>
     <hr>

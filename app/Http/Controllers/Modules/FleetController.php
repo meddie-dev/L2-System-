@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Modules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
+use App\Models\Modules\VehicleReservation;
 use App\Models\shipments;
+use App\Models\TripTicket;
 use App\Models\User;
 use App\Models\Vehicle;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -29,47 +32,36 @@ class FleetController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'plateNumber' => 'required|string|max:255',
-                'vehicleType' => 'required|string|max:255',
-                'vehicleModel' => 'required|string|max:255',
-                'vehicleMake' => 'required|string|max:255',
-                'vehicleColor' => 'required|string|max:255',
-                'vehicleYear' => 'required|integer|min:1900|max:2099',
-                'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
-                'vehicleCapacity' => 'required|integer|min:1|max:9999',
-                'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-                'vehicleStatus' => 'nullable|string|in:available,unavailable,maintenance',
-                'vehicleIssue' => 'nullable|string|max:1000',
-                'maintenanceDescription' => 'nullable|string|max:1000',
-                'maintenanceSchedule' => 'nullable|date',
-                'conditionStatus' => 'nullable|string|in:good,fair,poor,damaged',
-            ]);
-    
-            // Store vehicle image
-            $file = $request->file('vehicleImage');
-            $path = $file->storeAs("vehicles/{$request->vehicleType}", $request->plateNumber . '.' . $file->getClientOriginalExtension(), 'public');
-    
-            $vehicle = Vehicle::create(array_merge($validated, [
-                'vehicleImage' => $path,
-                'vehicleStatus' => "available",
-                'conditionStatus' => 'good',
-                'assigned_to' => null,
-            ]));
-    
-            ActivityLogs::create([
-                'user_id' => Auth::id(),
-                'event' => "Added Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
-                'ip_address' => $request->ip(),
-            ]);
-    
-            return redirect()->route('admin.fleet.index')->with('success', 'Vehicle added successfully.');
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'An unexpected error occurred: ' . $e->getMessage()])->withInput();
-        }
+        $validated = $request->validate([
+            'plateNumber' => 'required|string|max:255',
+            'vehicleType' => 'required|string|max:255',
+            'vehicleModel' => 'required|string|max:255',
+            'vehicleMake' => 'required|string|max:255',
+            'vehicleColor' => 'required|string|max:255',
+            'vehicleYear' => 'required|integer|min:1900|max:2099',
+            'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
+            'vehicleCapacity' => 'required|integer|min:1|max:9999',
+            'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Store vehicle image
+        $file = $request->file('vehicleImage');
+        $path = $file->storeAs("vehicles/{$request->vehicleType}", $request->plateNumber . '.' . $file->getClientOriginalExtension(), 'public');
+
+        $vehicle = Vehicle::create(array_merge($validated, [
+            'vehicleImage' => $path,
+            'vehicleStatus' => "available",
+            'conditionStatus' => 'good',
+            'user_id' => Auth::id(),
+        ]));
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Added Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect()->route('admin.fleet.index')->with('success', 'Vehicle added successfully.');
     }
     
 
@@ -154,6 +146,39 @@ class FleetController extends Controller
     public function shipmentIndex()
     {
         $shipments = Shipments::all();
+
         return view('modules.admin.fleet.shipment.manage', compact('shipments'));
     }
+
+    public function shipmentCreate( Shipments $shipment)
+    {
+        
+        return view('modules.admin.fleet.shipment.edit', compact('shipment'));
+    }
+
+    // Driver
+
+    public function driverTask()
+    {
+        $vehicleReservation = VehicleReservation::where('redirected_to', auth()->user()->id)->get();
+        return view('modules.driver.task.index', compact('vehicleReservation'));
+    }
+
+    public function driverTaskDetails(VehicleReservation $vehicleReservation)
+    {
+        return view('modules.driver.task.details', compact('vehicleReservation'));
+    }
+
+    public function driverTripTicketPdf(VehicleReservation $vehicleReservation)
+    {   
+        $tripTicket = TripTicket::where('user_id', auth()->user()->id)->first();
+     
+        $filename =  $tripTicket->tripNumber . '.pdf';
+        $folderPath = "trip_tickets/{$vehicleReservation->user_id}/";
+        $fullPath = str_replace(['/', '\\'], '_', "{$folderPath}{$filename}");
+        
+        $pdf = Pdf::loadView('pdf.tripTicket', compact('vehicleReservation'));
+        return $pdf->save($fullPath)->stream($filename);
+    }
+
 }

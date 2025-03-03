@@ -1,4 +1,4 @@
-<x-layout.mainTemplate>
+<x-layout.portal.mainTemplate>
   <nav class="tw-flex tw-justify-between | max-md:tw-justify-self-end" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-md:tw-hidden">
       <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
@@ -6,44 +6,33 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb :active="true" :isLast="false">
-        Vehicle Reservation
-      </x-partials.breadcrumb>
-
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Reservation
+        Task Management
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Reservation For</th>
-            <th class="tw-px-4 tw-py-2">Order Number </th>
-            <th class="tw-px-4 tw-py-2">Approved Date</th>
+            <th class="tw-px-4 tw-py-2">Task (Reservation Number)</th>
+            <th class="tw-px-4 tw-py-2">Date</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
-          <tr>
-            <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
+          @foreach($vehicleReservation as $vehicleReservations)
+          <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              @if($order->vehicleReservation !== null)
-                {{ $order->orderNumber }}
-              @else
-                <a href="{{ route('staff.vehicleReservation.createOrder', $order->id) }}">
-                  {{ $order->orderNumber }}
-                </a>
-              @endif
+              <a href="{{ route('driver.task.details', $vehicleReservations->id) }}">
+                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
+              </a>
             </td>
-            <td class="tw-px-4 tw-py-2">
-             {{ $order->updated_at->format('F j, Y') }}
-            </td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
+          </tr>
           @endforeach
         </tbody>
       </table>
@@ -58,4 +47,4 @@
     </div>
   </div>
 
-</x-layout.mainTemplate>
+</x-layout.portal.mainTemplate>

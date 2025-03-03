@@ -21,6 +21,7 @@ class SettingsController extends Controller
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'driverType' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -34,6 +35,7 @@ class SettingsController extends Controller
         $user->firstName = $request->first_name;
         $user->lastName = $request->last_name;
         $user->email = $request->email;
+        $user->driverType = $request->driverType;
         if ($user instanceof User && $user->update()) {
             return redirect()->route('settings.index')->with('success', 'Profile updated successfully.');
         }

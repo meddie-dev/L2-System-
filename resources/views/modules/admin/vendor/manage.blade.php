@@ -42,11 +42,11 @@
               @php
               $currentDate = now();
               $lastLoginDate = $user->last_active_at;
-              $daysSinceLastLogin = $lastLoginDate  ? (int) abs($currentDate->diffInDays($lastLoginDate)) : null;
+              $daysSinceLastLogin = $lastLoginDate ? (int) $currentDate->diffInDays($lastLoginDate) : null;
               @endphp
 
               @if (!is_null($daysSinceLastLogin))
-              <span class="tw-text-{{ $daysSinceLastLogin < 0 ? 'green-500' : ($daysSinceLastLogin < 3 ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $daysSinceLastLogin === 0 ? 'green-500' : ($daysSinceLastLogin < 0 ? 'yellow-500' : 'red-500') }}">
               {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
               </span>
               @else

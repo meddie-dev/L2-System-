@@ -6,6 +6,13 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+
+    protected $listen = [
+        \App\Events\VehicleReservationApproved::class => [
+            \App\Listeners\CreateShipmentOnApproval::class,
+        ],
+    ];
+    
     /**
      * Register any application services.
      */

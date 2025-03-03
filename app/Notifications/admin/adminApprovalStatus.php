@@ -47,28 +47,31 @@ class adminApprovalStatus extends Notification
         // Customize further based on the approval type
         switch ($type) {
             case 'Order':
-                $message = "Order Number: ({$approvable->orderNumber}) is ". strtoupper($approvable->approval_status) ." by ".($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Order Number: ({$approvable->orderNumber}) is " . ucfirst($approvable->approval_status) . " by " . ($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
             case 'Document':
-                $message = "Document Number: ({$approvable->documentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Document Number: ({$approvable->documentNumber}) is " . ucfirst($approvable->approval_status) . " by " . ($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
             case 'Payment':
-                $message = "Payment Number: ({$approvable->paymentNumber}) is ". strtoupper($approvable->approval_status) ." by ".($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Payment Number: ({$approvable->paymentNumber}) is " . ucfirst($approvable->approval_status) . " by " . ($approvable->reviwed_by == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
             case 'Vehicle Reservation':
-                $message = "Vehicle reservation request ID: {$approvable->reservationId} requires your review.";
+                $message = "Reservation Number: {$approvable->reservationNumber} is " . ucfirst($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
                 break;
 
-                // Add more cases for other types if needed
+            case 'Reservation':
+                $message = "You are Assigned to Reservation Number: {$approvable->reservationNumber} is " . ucfirst($approvable->approval_status) . "Prepare for your Journey, please check the system for details.";
+                break;
+
         }
 
         return (new MailMessage)
-            ->subject("{$type} Approval Request")
+            ->subject("{$type} Approval Status")
             ->line($message)
-            ->line('Please review and take action.');
+            ->line('Thank you for your patience and understanding.');
     }
 
     /**

@@ -36,7 +36,7 @@
         <div class="tw-mb-4">
           <label for="reservationDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Reservation Request Date<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="date" id="reservationDate" name="reservationDate" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter delivery request date" required>
+            <input type="date" id="reservationDate" name="reservationDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="Enter delivery request date" value="{{$order->deliveryRequestDate}}" readonly>
           </div>
           @error('reservationDate')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -60,9 +60,9 @@
           <div style="color: gray">
             <select id="vehicle_type" name="vehicle_type" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" required>
               <option value="" disabled selected>Select vehicle type</option>
-              <option value="motorcycle">Motorcycle</option>
-              <option value="van">Van</option>
-              <option value="truck">Truck</option>
+              <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
+              <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
+              <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
             </select>
           </div>
           @error('vehicle_type')
@@ -85,7 +85,7 @@
         <div class="tw-mb-4">
           <label for="dropOffLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Drop Off Location<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs" placeholder="Enter drop off location" required>
+            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs"placeholder="Enter drop off location" value="{{ $order->deliveryAddress }}" readonly>
           </div>
           @error('dropOffLocation')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

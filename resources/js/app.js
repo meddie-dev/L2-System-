@@ -93,99 +93,78 @@ window.addEventListener("load", function (e) {
     }
 });
 
-// Calendar
+
 import { Calendar } from '@fullcalendar/core';
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid'
+import multiMonthPlugin from '@fullcalendar/multimonth';
 
-
-let calendarEl = document.getElementById('calendar');
-let selectedDate = null;
-let calendar = new Calendar(calendarEl, {
-  plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin],
-  initialView: 'dayGridMonth',
-  selectable: true,
+const calendarEl = document.getElementById('calendar');
+const calendar = new Calendar(calendarEl, {
+  plugins: [multiMonthPlugin],
+  initialView: 'multiMonthFourMonth',
+  views: {
+    multiMonthFourMonth: {
+      type: 'multiMonth',
+      duration: { months: 12 }
+    }
+  },
   headerToolbar: {
-    start: 'title', 
-    center: '',
-    end: 'dayGridMonth,timeGridDay prev,next' 
+    left: '',
+    center: 'title',
+    right: ''
   },
-  businessHours: [ 
-    {
-      daysOfWeek: [ 1, 2, 3 ], // Monday, Tuesday, Wednesday
-      startTime: '08:00', // 8am
-      endTime: '18:00', // 6pm
-    },
-    {
-      daysOfWeek: [ 4, 5 ], // Thursday, Friday
-      startTime: '08:00', // 8am
-      endTime: '18:00', // 6pm
-    }
-  ],
- 
-  select: function(info) {
-    if ((info.view.type === 'dayGridMonth' && (info.start.getDay() === 0 || info.start.getDay() === 6)) || 
-        (info.view.type === 'timeGridDay' && (info.start.getDay() === 0 || info.start.getDay() === 6 || (info.start.getHours() < 8 || info.start.getHours() >= 18)))) {
-      alert('You can only make reservations on weekdays, from Monday to Friday, between 8:00 AM to 6:00 PM. Please choose another date.');
-      return;
-    }
+  eventClick: function(info) {
+    const eventObj = info.event;
+    const reservationModal = new bootstrap.Modal(document.getElementById('reservationModal'));
 
-    const reservationDateInput = document.querySelector('#reservation_date');
+    // Populate modal fields with event data
+    document.getElementById('reservation-number').textContent = eventObj.title;
+    document.getElementById('vehicle-type').textContent = eventObj.extendedProps.vehicle || 'N/A';
+    document.getElementById('reservation-date').textContent = eventObj.start.toISOString().split('T')[0];
+    document.getElementById('reservation-time').textContent = eventObj.extendedProps.reservationTime || 'N/A';
+    document.getElementById('pickup-location').textContent = eventObj.extendedProps.pickupLocation || 'N/A';
+    document.getElementById('dropoff-location').textContent = eventObj.extendedProps.dropoffLocation || 'N/A';
+    document.getElementById('approval-status').textContent = eventObj.extendedProps.approvalStatus || 'N/A';
 
-    if (selectedDate === info.startStr) {
-      selectedDate = null;
-      reservationDateInput.value = '';
-      calendar.getEvents().forEach(event => event.remove());
-      loadExistingReservations();
-    } else {
-      selectedDate = info.startStr;
-      reservationDateInput.value = selectedDate;
-      calendar.getEvents().forEach(event => event.remove());
-      loadExistingReservations();
-      const user_id = window.user_id;
-      calendar.addEvent({
-        start: selectedDate,
-        allDay: info.view.type === 'dayGridMonth',
-        display: 'background',
-        backgroundColor: existingReservations.find(reservation => reservation.user_id === user_id) ? '#ffeb3b' : '#2196f3'
-      });
-    }
-  },
+    // Show modal
+    reservationModal.show();
+  }
 });
+
+calendar.render();
 
 function loadExistingReservations() {
   existingReservations.forEach(reservation => {
-    const eventTitle = `${reservation.reservationNumber} - ${reservation.vehicleType}`;
-
-    // Determine color based on reservation status
+    const eventTitle = `${reservation.reservationNumber}`;
+    
     let backgroundColor;
     switch (reservation.approval_status) {
       case 'approved':
-        backgroundColor = 'rgba(0, 128, 0, 0.5)'; // Green for approved
+        backgroundColor = 'rgba(0, 128, 0, 0.5)';
         break;
       case 'pending':
-        backgroundColor = 'rgba(255, 223, 0, 0.5)'; // Yellow for pending
+        backgroundColor = 'rgba(255, 223, 0, 0.5)';
         break;
       case 'cancelled':
-        backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red for canceled
+        backgroundColor = 'rgba(255, 0, 0, 0.5)';
         break;
       default:
-        backgroundColor = '#2196f3'; // Default color for unknown statuses
+        backgroundColor = '#2196f3';
     }
 
-    // Add each reservation as a separate event with dynamic color
     calendar.addEvent({
       start: reservation.reservationDate,
-      title: eventTitle, // Individual title for each reservation
+      title: eventTitle,
       backgroundColor: backgroundColor,
-      borderColor: backgroundColor.replace('0.5', '1'), // Border color to match background with full opacity
+      borderColor: backgroundColor.replace('0.5', '1'),
       extendedProps: {
-        description: eventTitle // Add description for hover effect
-      }
+        reservationTime: reservation.reservationTime,
+        vehicle: reservation.vehicle_type,
+        pickupLocation: reservation.pickUpLocation,
+        dropoffLocation: reservation.dropOffLocation,
+        approvalStatus: reservation.approval_status
+      },
     });
   });
 }
 
 loadExistingReservations();
-calendar.render();

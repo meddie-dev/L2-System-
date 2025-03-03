@@ -36,7 +36,7 @@
             <td class="tw-px-4 tw-py-2">{{ $order->id }}</td>
             <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if($order->approval_status !== 'reviewed')
+              @if($order->payment->approval_status !== 'reviewed')
                 <a href="{{ route('staff.payment.show', $order->payment->id) }}">{{ $order->payment->paymentNumber }}</a>
               @else
                 {{ $order->payment->paymentNumber }}

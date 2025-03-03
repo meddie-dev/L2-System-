@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('fuels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('fleet_card_id')->references('id')->on('fleet_cards')->onDelete('cascade');
             $table->string('fuelNumber')->unique();
             $table->enum('fuelType', ['diesel', 'gasoline', 'electric'])->default('diesel');
             $table->decimal('estimatedFuelConsumption', 8, 2); 
             $table->decimal('estimatedCost', 10, 2); 
-            $table->date('fuelScheduleDate');
-            $table->time('fuelScheduleTime');
+            $table->timestamp('fuelDate');
             $table->enum('fuelStatus', ['scheduled', 'completed'])->default('scheduled');
             $table->timestamps();
         });

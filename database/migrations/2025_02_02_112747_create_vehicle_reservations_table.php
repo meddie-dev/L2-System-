@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('vehicle_id')->nullable()->constrained()->onDelete('set null');
             $table->string('reservationNumber')->unique();
             $table->string('vehicle_type');
             $table->date('reservationDate');

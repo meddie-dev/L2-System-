@@ -16,8 +16,6 @@
     </ol>
   </nav>
 
-
-
   <div class="tw-px-4">
     <p class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs"><span class="tw-font-semibold">Instructions:</span> Please fill out the form below to create a new order request. All fields with an <span class="tw-text-red-500">*</span> are required.</p>
     <form id="orderForm" action="{{ route('admin.fleet.store') }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
@@ -35,7 +33,12 @@
         <!-- Vehicle Type -->
         <div class="tw-mb-4">
           <label for="vehicleType" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Type<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="vehicleType" name="vehicleType" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleType') is-invalid @enderror" placeholder="Enter vehicle type" required>
+          <select id="vehicleType" name="vehicleType" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleType') is-invalid @enderror" required>
+            <option value="" disabled selected>Select vehicle type</option>
+            <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
+            <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
+            <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
+          </select>
           @error('vehicleType')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -71,7 +74,7 @@
         <!-- Vehicle Year -->
         <div class="tw-mb-4">
           <label for="vehicleYear" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Year<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="vehicleYear" name="vehicleYear" class="@error('vehicleYear') is-invalid @enderror tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs " placeholder="Enter vehicle year" required min="1900" max="2099" step="1">
+          <input type="number" id="vehicleYear" name="vehicleYear" class="@error('vehicleYear') is-invalid @enderror tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs " placeholder="Enter vehicle year" required min="2015" max="2099" step="1">
           @error('vehicleYear')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror

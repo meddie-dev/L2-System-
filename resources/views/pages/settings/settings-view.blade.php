@@ -30,29 +30,58 @@
           <div>
             <label for="first_name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs ">First Name</label>
             <input type="text" id="first_name" name="first_name" value="{{ Auth::user()->firstName }}" required
-              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm | max-md:tw-text-xs">
+              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm @error('first_name') is-invalid @enderror | max-md:tw-text-xs">
+            @error('first_name')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
           </div>
 
           <!-- Last Name -->
           <div>
             <label for="last_name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Last Name</label>
             <input type="text" id="last_name" name="last_name" value="{{ Auth::user()->lastName }}" required
-              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm | max-md:tw-text-xs">
+              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm @error('last_name') is-invalid @enderror | max-md:tw-text-xs">
+            @error('last_name')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
           </div>
 
           <!-- Email -->
           <div>
             <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Email</label>
             <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" required
-              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm | max-md:tw-text-xs">
+              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm @error('email') is-invalid @enderror | max-md:tw-text-xs">
+            @error('email')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
           </div>
 
           <!-- Role -->
           <div>
             <label for="role" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Role</label>
             <input type="text" id="role" name="role" value="{{ Auth::user()->roles->pluck('name')->first() }}" readonly
-              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm | max-md:tw-text-xs">
+              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm:text-sm @error('role') is-invalid @enderror | max-md:tw-text-xs">
+            @error('role')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
           </div>
+
+          @if (Auth::user()->hasRole('Driver'))
+          <div>
+            <label for="driverType" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Driver Type<span class="tw-text-red-500">*</span></label>
+            <div style="color: gray">
+              <select id="driverType" name="driverType" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('driverType') is-invalid @enderror" value="{{ Auth::user()->driverType }}" required>
+                <option value="" disabled>Select vehicle type</option>
+                <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
+                <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
+                <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
+              </select>
+            </div>
+            @error('driverType')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+          </div>
+          @endif
 
           <!-- Update Button -->
           <div class="tw-col-span-1 md:tw-col-span-2 tw-flex tw-justify-end">
@@ -98,22 +127,22 @@
         <!-- Two-Factor Authentication Section -->
         <div>
           <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 | max-md:tw-text-sm">
-            Two-Factor Authentication 
+            Two-Factor Authentication
             @if(Auth::user()->two_factor_enabled==true)
-                <i class="fa-regular fa-circle-check tw-text-green-500"></i>
+            <i class="fa-regular fa-circle-check tw-text-green-500"></i>
             @else
-                <span class="tw-text-black">(Required)</span>
+            <span class="tw-text-black">(Required)</span>
             @endif
           </h3>
           <p class="tw-text-gray-600 tw-text-sm | max-md:tw-text-xs">Add an extra layer of security to your account by enabling two-factor authentication.</p>
-          <form method="POST" 
-                action="{{ route(Auth::user()->two_factor_enabled==true ? 'two-factor.disable' : 'two-factor.send') }}" class="tw-mt-4 tw-flex tw-justify-end">
+          <form method="POST"
+            action="{{ route(Auth::user()->two_factor_enabled==true ? 'two-factor.disable' : 'two-factor.send') }}" class="tw-mt-4 tw-flex tw-justify-end">
             @csrf
             <button type="submit" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 @if(Auth::user()->two_factor_enabled==true) tw-bg-red-600 @else tw-bg-blue-600 @endif tw-text-white tw-text-sm tw-font-medium tw-rounded-md tw-shadow-sm hover:tw-bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500 tw-focus:ring-offset-2 | max-md:tw-text-xs">
               @if(Auth::user()->two_factor_enabled==true)
-                Turn Off
+              Turn Off
               @else
-                Enable
+              Enable
               @endif Two-Factor Authentication
             </button>
           </form>

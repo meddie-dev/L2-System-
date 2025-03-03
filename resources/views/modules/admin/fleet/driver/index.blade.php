@@ -41,11 +41,11 @@
               @php
               $currentDate = now();
               $lastLoginDate = $driver->last_active_at;
-              $daysSinceLastLogin = $lastLoginDate ? (int) abs($currentDate->diffInDays($lastLoginDate)) : null;
+              $daysSinceLastLogin = $lastLoginDate ? (int) $currentDate->diffInDays($lastLoginDate) : null;
               @endphp
 
               @if (!is_null($daysSinceLastLogin))
-              <span class="tw-text-{{ $daysSinceLastLogin < 0 ? 'green-500' : ($daysSinceLastLogin < 3 ? 'yellow-500' : 'red-500') }} tw-font-medium">
+              <span class="tw-text-{{ $daysSinceLastLogin === 0 ? 'green-500' : ($daysSinceLastLogin < 0 ? 'yellow-500' : 'red-500') }} tw-font-medium">
                 {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
               </span>
               @else
@@ -54,18 +54,9 @@
             </td>
 
             <td class="tw-px-4 tw-py-2">
-              @php
-              $driverStatus = 'Available';
 
-              if (!is_null($driver->shipments) && $driver->shipments->isNotEmpty()) {
-              $driverStatus = 'Not Available';
-              } elseif (!is_null($driver->vehicleReservations) && $driver->vehicleReservations->where('assign_to', $driver->id)->isNotEmpty()) {
-              $driverStatus = 'Scheduled';
-              }
-              @endphp
-
-              <span class="tw-text-{{ $driverStatus === 'Available' ? 'green-500' : ($driverStatus === 'Scheduled' ? 'yellow-500' : 'red-500') }}">
-                {{ $driverStatus }}
+              <span class="tw-text-{{ $driver->status === 'Available' ? 'green-500' : ($driver->status === 'Scheduled' ? 'yellow-500' : 'red-500') }}">
+                {{ ucfirst($driver->status) }}
               </span>
 
             </td>

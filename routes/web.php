@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddOnsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 // Controllers
@@ -19,7 +20,9 @@ use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Models\Modules\Audit;
+use App\Models\Modules\VehicleReservation;
 use App\Models\Vehicle;
+use Barryvdh\DomPDF\Facade\Pdf;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -30,6 +33,9 @@ use Illuminate\Notifications\DatabaseNotification;
 Route::get('/', function () {
     return view('pages.auth.portal.login');
 });
+
+
+Route::view('/tripTicket', 'pdf.tripTicket')->name('tripTicket');
 
 /*--------------------------------------------------------------
 # Super Admin Route
@@ -86,6 +92,8 @@ Route::middleware('role:Admin', 'active')->group(function () {
     // Fleet Management -> Shipment
     Route::get('/admin/dashboard/fleet/shipment', [FleetController::class, 'shipmentIndex'])
         ->name('admin.fleet.shipment.manage');
+    Route::get('/admin/dashboard/fleet/shipment/{shipment}', [FleetController::class, 'shipmentCreate'])
+        ->name('admin.fleet.shipment.edit');
 });
 
 /*--------------------------------------------------------------
@@ -214,6 +222,14 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
 Route::middleware('role:Driver', 'active')->group(function () {
     // Driver Dashboard
     Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])->name('driver.dashboard');
+
+    // Pdf 
+    Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])->name('driver.tripTicket.pdf');
+
+    // Task Management
+    Route::get('/driver/dashboard/task', [FleetController::class, 'driverTask'])->name('driver.task');
+    Route::get('/driver/dashboard/task/{vehicleReservation}', [FleetController::class, 'driverTaskDetails'])->name('driver.task.details');
+    
 });
 
 /*--------------------------------------------------------------
@@ -257,7 +273,7 @@ Route::get('/notifications/{notification}', function (DatabaseNotification $noti
     $notification->markAsRead();
 
     return redirect()->route(
-        (Auth::user()->hasRole('Super Admin')) ? 'superadmin.dashboard' : ((Auth::user()->hasRole('Admin')) ? 'admin.dashboard' : ((Auth::user()->hasRole('Staff')) ? 'staff.dashboard' : 'vendorPortal.dashboard'))
+        (Auth::user()->hasRole('Super Admin')) ? 'superadmin.dashboard' : ((Auth::user()->hasRole('Admin')) ? 'admin.dashboard' : ((Auth::user()->hasRole('Staff')) ? 'staff.dashboard' : ((Auth::user()->hasRole('Vendor')) ? 'vendorPortal.dashboard' : 'driver.dashboard')))
     );
 })->name('notifications.show');
 
@@ -280,7 +296,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 # Add Ons Route
 --------------------------------------------------------------*/
 Route::view('/maps', 'pages.addOns.map')->name('map');
-Route::view('/calendar', 'pages.addOns.calendar')->name('calendar');
+Route::get('/calendar', [AddOnsController::class, 'calendar'])->name('calendar');
 
 /*--------------------------------------------------------------
 # Vendor Portal Auth Route

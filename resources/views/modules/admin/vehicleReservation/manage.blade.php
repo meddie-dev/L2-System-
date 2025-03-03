@@ -22,9 +22,8 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
+            <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Reservation Number </th>
-            <th class="tw-px-4 tw-py-2">Reservation Date</th>
-            <th class="tw-px-4 tw-py-2">Reservation Time</th>            
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
@@ -32,9 +31,19 @@
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($vehicleReservations as $vehicleReservation)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">{{ $vehicleReservation->reservationNumber }}</a></td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($vehicleReservation->reservationDate)->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($vehicleReservation->reservationTime)->format('g:i A') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->id }}</td>
+            <td class="tw-px-4 tw-py-2">
+              @if($vehicleReservation->approval_status === 'approved')
+                {{ $vehicleReservation->reservationNumber }}
+              @else
+                <a href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">
+                  {{ $vehicleReservation->reservationNumber }}
+                </a>
+              @endif
+              <span class="tw-text-gray-400 tw-text-sm">
+                (Assigned to and Reviewed By: {{ \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->firstName . ' ' . \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->lastName }})
+              </span>
+            </td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($vehicleReservation->approval_status) }}

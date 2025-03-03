@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('two_factor_code')->nullable(); 
             $table->timestamp('two_factor_expires_at')->nullable();
             $table->timestamp('last_active_at')->nullable();
+            $table->timestamp('driverType')->nullable();
+            $table->timestamp('status')->default('available');
             $table->rememberToken();
             $table->timestamps();
         });

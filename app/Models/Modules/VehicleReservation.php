@@ -3,6 +3,8 @@
 namespace App\Models\Modules;
 
 use App\Models\Fuel;
+use App\Models\shipments;
+use App\Models\TripTicket;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
@@ -32,5 +34,15 @@ class VehicleReservation extends Model
     public function fuel()
     {
         return $this->belongsToMany(Fuel::class, 'reservation_fuel');
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    public function tripTicket()
+    {
+        return $this->belongsTo(TripTicket::class);
     }
 }

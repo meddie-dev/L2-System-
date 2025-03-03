@@ -62,7 +62,7 @@ class adminApprovalRequest extends Notification
                 $message = "Vehicle reservation Review by {$approvable->user->firstName} {$approvable->user->lastName} on Request Date and Time: {$approvable->reservationDate}, {$approvable->reservationTime} is awaiting for review and approval.";
                 break;
 
-                // Add more cases for other types if needed
+
         }
 
         return (new MailMessage)
