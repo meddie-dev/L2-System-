@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
+use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\MFA\TwoFactorController;
 use App\Http\Controllers\Modules\AuditController;
 use App\Http\Controllers\Modules\DocumentController;
@@ -19,12 +20,16 @@ use App\Http\Controllers\Modules\FleetController;
 use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TripTicketController;
 use App\Models\Modules\Audit;
 use App\Models\Modules\VehicleReservation;
+use App\Models\TripTicket;
 use App\Models\Vehicle;
 use Barryvdh\DomPDF\Facade\Pdf;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 
 /*-------------------------------------------------------------- 
 # Default Route
@@ -33,9 +38,6 @@ use Illuminate\Notifications\DatabaseNotification;
 Route::get('/', function () {
     return view('pages.auth.portal.login');
 });
-
-
-Route::view('/tripTicket', 'pdf.tripTicket')->name('tripTicket');
 
 /*--------------------------------------------------------------
 # Super Admin Route
@@ -214,6 +216,22 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
         ->name('vendorPortal.vehicleReservation.update');
     Route::get('/portal/vendor/dashboard/vehicleReservation/details/{vehicleReservation}', [VehicleReservationController::class, 'vendorDetails'])
         ->name('vendorPortal.vehicleReservation.details');
+
+    // Card Management
+    Route::get('/portal/vendor/dashboard/card/in-transit', [TripTicketController::class, 'vendorInTransitIndex'])
+        ->name('vendorPortal.card.inTransit');
+    Route::get('/portal/vendor/dashboard/card/scheduled', [TripTicketController::class, 'vendorScheduledIndex'])
+        ->name('vendorPortal.card.scheduled');
+    Route::get('/portal/vendor/dashboard/card/delivered', [TripTicketController::class, 'vendorDeliveredIndex'])
+        ->name('vendorPortal.card.delivered');
+    Route::get('/portal/vendor/dashboard/card/details/{id}', [TripTicketController::class, 'vendorInTransitDetails'])
+        ->name('vendorPortal.card.details');
+
+    // Driver Rate Management
+    Route::get('/portal/vendor/dashboard/card/details/{id}/make-rate', [TripTicketController::class, 'makeRate'])
+        ->name('vendorPortal.card.makeRate');
+    Route::post('/portal/vendor/dashboard/card/details/{id}/rate', [TripTicketController::class, 'rateTrip'])
+        ->name('tripTicket.rate');
 });
 
 /*--------------------------------------------------------------
@@ -221,14 +239,34 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
 --------------------------------------------------------------*/
 Route::middleware('role:Driver', 'active')->group(function () {
     // Driver Dashboard
-    Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])->name('driver.dashboard');
+    Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])
+        ->name('driver.dashboard');
 
     // Pdf 
-    Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])->name('driver.tripTicket.pdf');
+    Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])
+        ->name('driver.tripTicket.pdf');
 
     // Task Management
-    Route::get('/driver/dashboard/task', [FleetController::class, 'driverTask'])->name('driver.task');
-    Route::get('/driver/dashboard/task/{vehicleReservation}', [FleetController::class, 'driverTaskDetails'])->name('driver.task.details');
+    Route::get('/driver/dashboard/task', [FleetController::class, 'driverTask'])
+        ->name('driver.task');
+    Route::get('/driver/dashboard/task/{vehicleReservation}', [FleetController::class, 'driverTaskDetails'])
+        ->name('driver.task.details');
+
+    // Trip Management
+    Route::get('/driver/dashboard/fleet/ticket', [FleetController::class, 'driverTrip'])
+        ->name('driver.trip');
+    Route::get('/driver/dashboard/fleet/ticket/{tripTicket}', [FleetController::class, 'driverTripDetails'])
+        ->name('driver.trip.details');
+    Route::patch('/driver/dashboard/fleet/ticket/{id}/inTransit', [TripTicketController::class, 'markAsInTransit'])
+        ->name('driver.trip.inTransit');
+    Route::patch('/driver/dashboard/fleet/ticket/{id}/deliver', [TripTicketController::class, 'markAsDelivered'])
+        ->name('driver.trip.deliver');
+
+    // Card Management
+    Route::get('/driver/dashboard/fleet/card', [FleetController::class, 'driverCard'])
+        ->name('driver.card');
+    Route::get('/driver/dashboard/fleet/card/{fleetCard}', [FleetController::class, 'driverCardDetails'])
+        ->name('driver.card.details');
     
 });
 
@@ -323,3 +361,8 @@ Route::view('/terms-and-conditions', 'pages.legal.termsAndConditions')->name('te
 Route::view('/401', 'components.errors.401')->name('401');
 Route::view('/404', 'components.errors.404')->name('404');
 Route::view('/500', 'components.errors.500')->name('500');
+
+/*--------------------------------------------------------------
+# Geocode Route
+--------------------------------------------------------------*/
+Route::get('/geocode/autocomplete/{query}', [GeocodeController::class, 'getAutocomplete']);

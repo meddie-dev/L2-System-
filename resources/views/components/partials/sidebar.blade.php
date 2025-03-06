@@ -260,10 +260,12 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/driver/dashboard/fleet/ticket">Trip Ticket</a>
-              <a class="nav-link" href="/driver/dashboard/fleet/card">Fleet Card</a>
+              <a class="nav-link" href="/driver/dashboard/fleet/ticket">Ticket Managament</a>
+              <a class="nav-link" href="/driver/dashboard/fleet/card">Card Management</a>
             </nav>
           </div>
+
+
         </div>
         @endif
 
@@ -284,8 +286,8 @@
         <!-- Addons or Features -->
         <div class="sb-sidenav-menu-heading">Addons</div>
         <a class="nav-link" href="">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
-          Activity Log
+          <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar"></i></div>
+          Calendar and Schedule
         </a>
         @endif
 

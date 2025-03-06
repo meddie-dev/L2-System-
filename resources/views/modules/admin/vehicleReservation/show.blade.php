@@ -1,6 +1,6 @@
 <x-layout.mainTemplate>
-  <nav class="tw-flex tw-justify-between | max-md:tw-hidden" aria-label="Breadcrumb">
-    <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
+  <nav class="tw-flex tw-justify-between " aria-label="Breadcrumb">
+    <ol class="tw-inline-flex tw-items-center tw-space-x-1 | max-md:tw-hidden md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
       <x-partials.breadcrumb class="tw-bg-white " href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon "><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
@@ -16,13 +16,18 @@
         </div>
       </x-partials.breadcrumb>
     </ol>
+    <x-partials.breadcrumb :active="true" :isLast="true">
+        <div class="tw-flex tw-items-center tw-justify-center tw-text-xs | sm:tw-hidden">
+          Review Reservation (<span class="tw-font-semibold tw-text-[10px] tw-opacity-20 tw-mt-1 ">{{ $vehicleReservation->reservationNumber }}</span>)
+        </div>
+      </x-partials.breadcrumb>
   </nav>
   
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <div class="tw-flex tw-w-full  tw-gap-6">
         <!-- Reservation Date -->
-        <div class="tw-mb-4 tw-w-full" id="showCalendar"></div>
+        <div class="tw-mb-4 tw-w-full | max-md:tw-hidden" id="showCalendar"></div>
       </div>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-text-sm | max-md:tw-grid-cols-1 max-md:tw-gap-2 ">
         <!-- Reservation Number -->
@@ -88,6 +93,7 @@
       </div>
     </div>
   </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var calendarEl = document.getElementById('showCalendar');

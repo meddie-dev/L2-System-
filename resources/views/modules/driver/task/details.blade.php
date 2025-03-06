@@ -1,12 +1,12 @@
-<x-layout.portal.mainTemplate>
+<x-layout.mainTemplate>
   <nav class="tw-flex tw-justify-between |  max-md:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'driver.dashboard')) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb href="{{ route('vendorPortal.order.document') }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb href="{{ route('driver.task') }}" :active="false" :isLast="false">
         Task Management
       </x-partials.breadcrumb>
 
@@ -20,7 +20,6 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
-
       <!-- Order Information -->
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs ">
@@ -136,13 +135,13 @@
 
       <div class="tw-mt-4">
         <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
-          Please download your trip ticket <a href="{{ route('driver.tripTicket.pdf', $vehicleReservation->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>. <span class="tw-text-xs tw-text-gray-500">("Believe you can and you're halfway there." - Theodore Roosevelt)</span>
+        Please ensure that the document is downloaded. You can Download <a href="{{ route('driver.tripTicket.pdf', $vehicleReservation->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>. <br> <span class="tw-text-xs tw-text-gray-500">("Believe you can and you're halfway there." - Theodore Roosevelt)</span>
         </p>
       </div>
 
       <div>
         <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-          <a href="{{ route('vendorPortal.vehicleReservation') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+          <a href="{{ route('driver.task') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
             <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
             Back
           </a>
@@ -157,5 +156,4 @@
       </div>
     </div>
   </div>
-
-</x-layout.portal.mainTemplate>
+</x-layout.mainTemplate>

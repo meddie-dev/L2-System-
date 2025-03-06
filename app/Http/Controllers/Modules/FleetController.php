@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Modules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
+use App\Models\FleetCard;
+use App\Models\Fuel;
+use App\Models\Modules\Order;
 use App\Models\Modules\VehicleReservation;
 use App\Models\shipments;
 use App\Models\TripTicket;
 use App\Models\User;
 use App\Models\Vehicle;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -42,6 +46,7 @@ class FleetController extends Controller
             'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
             'vehicleCapacity' => 'required|integer|min:1|max:9999',
             'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'fuel_efficiency' => 'required|numeric|min:0.1',
         ]);
 
         // Store vehicle image
@@ -82,6 +87,7 @@ class FleetController extends Controller
             'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
             'vehicleCapacity' => 'required|integer|min:1|max:9999',
             'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'fuel_efficiency' => 'required|numeric|min:0.1',
         ]);
 
         // Store vehicle image
@@ -105,6 +111,7 @@ class FleetController extends Controller
             'vehicleYear' => $request->vehicleYear,
             'vehicleFuelType' => $request->vehicleFuelType,
             'vehicleCapacity' => $request->vehicleCapacity,
+            'fuel_efficiency' => $request->fuel_efficiency
         ]);
 
         ActivityLogs::create([
@@ -166,19 +173,70 @@ class FleetController extends Controller
 
     public function driverTaskDetails(VehicleReservation $vehicleReservation)
     {
-        return view('modules.driver.task.details', compact('vehicleReservation'));
+        $tripTicket = TripTicket::where('user_id', auth()->user()->id)->first();
+
+        return view('modules.driver.task.details', compact('vehicleReservation', 'tripTicket'));
     }
 
     public function driverTripTicketPdf(VehicleReservation $vehicleReservation)
     {   
         $tripTicket = TripTicket::where('user_id', auth()->user()->id)->first();
-     
-        $filename =  $tripTicket->tripNumber . '.pdf';
-        $folderPath = "trip_tickets/{$vehicleReservation->user_id}/";
-        $fullPath = str_replace(['/', '\\'], '_', "{$folderPath}{$filename}");
-        
-        $pdf = Pdf::loadView('pdf.tripTicket', compact('vehicleReservation'));
-        return $pdf->save($fullPath)->stream($filename);
+        $userId = auth()->user()->id;
+
+        $fuel = Fuel::whereHas('fleetCard', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->first();
+
+        if (!$tripTicket) {
+            return response()->json(['error' => 'Trip Ticket not found'], 404);
+        }
+
+        $userId = auth()->id();
+    
+        // Define the filename and storage path
+        $filename = $tripTicket->tripNumber . '.pdf';
+        $folderPath = "trip_tickets/{$userId}/";
+        $fullPath = "public/{$folderPath}{$filename}";
+    
+        // Ensure directory exists
+        Storage::disk('public')->makeDirectory($folderPath);
+    
+        // Check if an existing PDF file needs to be deleted
+        if (Storage::disk('public')->exists($fullPath)) {
+            Storage::disk('public')->delete($fullPath);
+        }
+    
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.tripTicket', compact('vehicleReservation', 'tripTicket', 'fuel'));
+    
+        // Store PDF in public disk
+        Storage::disk('public')->put($fullPath, $pdf->output());
+        return $pdf->stream($filename);
     }
+
+    public function driverTrip()
+    {
+        $tripTicket = TripTicket::where('user_id', auth()->user()->id)->get();
+        return view('modules.driver.trip.index', compact('tripTicket'));
+    }
+
+    public function driverTripDetails(TripTicket $tripTicket, VehicleReservation $vehicleReservation)
+    {
+        return view('modules.driver.trip.details', compact('tripTicket', 'vehicleReservation'));
+    }
+
+    public function driverCard()
+    {
+        $fleetCard = FleetCard::where('user_id', auth()->user()->id)->get();
+        return view('modules.driver.card.index', compact('fleetCard'));
+    }
+
+    public function driverCardDetails(FleetCard $fleetCard)
+    {
+        return view('modules.driver.card.details', compact('fleetCard'));
+    }
+
+
+    
 
 }

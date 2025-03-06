@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 
 class VehicleReservationController extends Controller
 {
+
     public function vendorIndex()
     {
         $vehicleReservation = VehicleReservation::where('user_id', Auth::id())->get();
@@ -34,6 +35,7 @@ class VehicleReservationController extends Controller
 
     public function vendorStore(Request $request, User $user, Order $order)
     {
+        DB::beginTransaction();
         $request->validate([
             'reservationNumber' => 'required|string|max:255',
             'reservationDate' => 'required|date',
@@ -42,8 +44,6 @@ class VehicleReservationController extends Controller
             'pickUpLocation' => 'required|string|max:255',
             'dropOffLocation' => 'required|string|max:255',
         ]);
-
-        DB::beginTransaction();
 
         try {
             $checkReservationNumber = VehicleReservation::where('reservationNumber', $request->reservationNumber)->first();
@@ -62,7 +62,7 @@ class VehicleReservationController extends Controller
                 'reservationTime' => $request->reservationTime,
                 'pickUpLocation' => $request->pickUpLocation,
                 'dropOffLocation' => $request->dropOffLocation,
-                'approval_status' => 'pending',
+                
             ]);
 
             ActivityLogs::create([
@@ -71,10 +71,10 @@ class VehicleReservationController extends Controller
                 'ip_address' => $request->ip(),
             ]);
 
-            DB::commit();
-
             // Dispatch job asynchronously
             SendVehicleReservationNotifications::dispatch($vehicleReservation, $user);
+
+            DB::commit();
 
             return redirect()->route('vendorPortal.vehicleReservation')->with('success', 'Vehicle reservation submitted successfully.');
         } catch (\Exception $e) {
@@ -270,7 +270,7 @@ class VehicleReservationController extends Controller
                 ]);
 
                 $driver->update([
-                    'status' => 'unavailable',
+                    'status' => 'scheduled',
                 ]);
 
                 $order->update([

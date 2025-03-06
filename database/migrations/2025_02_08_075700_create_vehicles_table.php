@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('vehicleImage');
             $table->enum('vehicleStatus', ['available', 'unavailable','maintenance'])->default('available');
             $table->string('vehicleIssue')->nullable();
+            $table->decimal('fuel_efficiency', 8, 2)->nullable();
             $table->string('maintenanceDescription')->nullable();
             $table->string('maintenanceSchedule')->nullable();
             $table->enum('conditionStatus', ['good', 'fair', 'poor', 'damaged'])->default('good');

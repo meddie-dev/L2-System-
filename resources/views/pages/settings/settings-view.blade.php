@@ -68,15 +68,23 @@
 
           @if (Auth::user()->hasRole('Driver'))
           <div>
-            <label for="driverType" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Driver Type<span class="tw-text-red-500">*</span></label>
-            <div style="color: gray">
-              <select id="driverType" name="driverType" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('driverType') is-invalid @enderror" value="{{ Auth::user()->driverType }}" required>
-                <option value="" disabled>Select vehicle type</option>
+            <label for="driverType" class="tw-block tw-text-sm tw-font-medium  | max-md:tw-text-xs"> Driver Type
+              <span class=" {{ Auth::user()->driverType === null ? 'tw-text-red-500' : 'tw-text-green-500' }}">
+                {{ Auth::user()->driverType === null ? '(Required)' : '(Assigned)' }}
+              </span>
+            </label>
+            @if (Auth::user()->driverType === null)
+              <select id="driverType" name="driverType" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('driverType') is-invalid @enderror" required>
+                <option value="">Select vehicle type</option>
                 <option value="light">Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)</option>
                 <option value="medium">Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)</option>
                 <option value="heavy">Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)</option>
               </select>
-            </div>
+            @else
+              <div style="color: gray">
+                 <input type="text" id="driverType" name="driverType" class="tw-pl-4 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('driverType') is-invalid @enderror" value="{{ Auth::user()->driverType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : (Auth::user()->driverType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : (Auth::user()->driverType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}" readonly/>
+              </div>
+            @endif
             @error('driverType')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror

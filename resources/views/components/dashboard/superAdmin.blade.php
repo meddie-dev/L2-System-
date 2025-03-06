@@ -117,7 +117,7 @@
         Users List
       </div>
       <div class="card-body | max-sm:tw-text-sm">
-        <table id="datatablesSimple">
+        <table class="datatable">
           <thead>
             <tr>
               <th>Name</th>

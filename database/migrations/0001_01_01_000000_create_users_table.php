@@ -24,6 +24,10 @@ return new class extends Migration
             $table->timestamp('last_active_at')->nullable();
             $table->timestamp('driverType')->nullable();
             $table->timestamp('status')->default('available');
+            $table->decimal('performance_score', 5, 2)->default(100);
+            $table->integer('on_time_deliveries')->default(0);
+            $table->integer('late_deliveries')->default(0);
+            $table->integer('early_deliveries')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -55,7 +55,7 @@
 
             <td class="tw-px-4 tw-py-2">
 
-              <span class="tw-text-{{ $driver->status === 'Available' ? 'green-500' : ($driver->status === 'Scheduled' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $driver->status === 'available' ? 'green-500' : ($driver->status === 'scheduled' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($driver->status) }}
               </span>
 

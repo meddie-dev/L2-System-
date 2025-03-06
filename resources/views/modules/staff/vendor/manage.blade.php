@@ -42,7 +42,7 @@
               @endif
             </td>
             <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryDeadline)->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryRequestDate)->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : ($order->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($order->approval_status) }}

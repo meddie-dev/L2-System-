@@ -6,8 +6,12 @@
         Dashboard
       </x-partials.breadcrumb>
 
+      <x-partials.breadcrumb :active="true" :isLast="false">
+        Fleet Management
+      </x-partials.breadcrumb>
+
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Task Management
+        Ticket Management
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -18,24 +22,23 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Task (Reservation Number)</th>
+            <th class="tw-px-4 tw-py-2">Ticket Number</th>
             <th class="tw-px-4 tw-py-2">Date</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicleReservation as $vehicleReservations)
+          @foreach($tripTicket as $tripTickets)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.task.details', $vehicleReservations->id) }}">
-                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
-              </a>
-            </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
+              <a href="{{ route('driver.trip.details', $tripTickets->id ?? '') }}">
+                {{ $tripTickets ? $tripTickets->tripNumber : 'N/A' }}
+              </a></td>
+            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicleReservations->approval_status === 'approved' ? 'green-500' : ($vehicleReservations->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($vehicleReservations->approval_status) }}
+              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'pending' ? 'yellow-500' : 'red-500') }}">
+                {{ ucfirst($tripTickets->status) }}
               </span>
             </td>
           </tr>

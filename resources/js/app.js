@@ -1,4 +1,5 @@
 import "./bootstrap";
+import L from 'leaflet';
 
 window.addEventListener("DOMContentLoaded", (event) => {
     // Toggle the side navigation
@@ -117,6 +118,7 @@ const calendar = new Calendar(calendarEl, {
     const reservationModal = new bootstrap.Modal(document.getElementById('reservationModal'));
 
     // Populate modal fields with event data
+    document.getElementById('reservation-dateTitle').textContent = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(eventObj.start);
     document.getElementById('reservation-number').textContent = eventObj.title;
     document.getElementById('vehicle-type').textContent = eventObj.extendedProps.vehicle || 'N/A';
     document.getElementById('reservation-date').textContent = eventObj.start.toISOString().split('T')[0];

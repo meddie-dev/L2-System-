@@ -6,8 +6,12 @@
         Dashboard
       </x-partials.breadcrumb>
 
+      <x-partials.breadcrumb :active="true" :isLast="false">
+        Fleet Management
+      </x-partials.breadcrumb>
+
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Task Management
+        Card Management
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -18,26 +22,20 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Task (Reservation Number)</th>
-            <th class="tw-px-4 tw-py-2">Date</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
+            <th class="tw-px-4 tw-py-2">Card Number</th>
+            <th class="tw-px-4 tw-py-2">Expiry Date</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicleReservation as $vehicleReservations)
+          @foreach($fleetCard as $fleetCards)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.task.details', $vehicleReservations->id) }}">
-                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
+              <a href="{{ route('driver.card.details', $fleetCards->id ?? '') }}">
+                {{ $fleetCards ? $fleetCards->cardNumber ?? '-' : '-' }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicleReservations->approval_status === 'approved' ? 'green-500' : ($vehicleReservations->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($vehicleReservations->approval_status) }}
-              </span>
-            </td>
+            <td class="tw-px-4 tw-py-2">{{ $fleetCards instanceof \App\Models\TripTicket ? $fleetCards->created_at->format('F j, Y') : '-' }}</td>
           </tr>
           @endforeach
         </tbody>

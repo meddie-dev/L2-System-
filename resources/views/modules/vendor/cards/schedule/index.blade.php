@@ -1,44 +1,47 @@
 <x-layout.portal.mainTemplate>
   <nav class="tw-flex tw-justify-between | max-md:tw-justify-self-end" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-md:tw-hidden">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{route('vendorPortal.dashboard') }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Task Management
+        Card (Scheduled)
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
+   
     <div class="tw-overflow-x-auto ">
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Task (Reservation Number)</th>
-            <th class="tw-px-4 tw-py-2">Date</th>
+            <th class="tw-px-4 tw-py-2">Scheduled </th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicleReservation as $vehicleReservations)
-          <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.task.details', $vehicleReservations->id) }}">
-                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
-              </a>
-            </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicleReservations->approval_status === 'approved' ? 'green-500' : ($vehicleReservations->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($vehicleReservations->approval_status) }}
-              </span>
-            </td>
-          </tr>
+          @foreach($tripTickets as $tripTicket)
+            @if($tripTicket->status === 'scheduled')
+            <tr class="hover:tw-bg-gray-100">
+              <td class="tw-px-4 tw-py-2">
+                <a href="{{ route('vendorPortal.card.details', $tripTicket->id ?? '') }}">
+                  {{ $tripTicket->tripNumber }}
+                </a>
+              </td>
+
+              <td class="tw-px-4 tw-py-2">
+                <span class="tw-text-{{ $tripTicket->status === 'delivered' ? 'green-500' : ($tripTicket->status === 'in_transit' ? 'yellow-500' : ($tripTicket->status === 'delayed' ? 'red-500' : 'blue-500')) }}">
+                  {{ str_replace('_', ' ', ucfirst($tripTicket->status)) }}
+                </span>
+              </td>
+
+            </tr>
+            @endif
           @endforeach
         </tbody>
       </table>

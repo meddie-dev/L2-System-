@@ -26,7 +26,7 @@
         <!-- Reservation Number -->
         <div class="tw-mb-4">
           <label for="reservationNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="reservationNumber" name="reservationNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
+          <input type="text" id="reservationNumber" name="reservationNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('reservationNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
           @error('reservationNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -79,13 +79,14 @@
           @error('pickUpLocation')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
+          <div id="suggestions"></div>
         </div>
 
         <!-- Drop Off Location -->
         <div class="tw-mb-4">
           <label for="dropOffLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Drop Off Location<span class="tw-text-red-500">*</span></label>
           <div style="color: gray">
-            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs"placeholder="Enter drop off location" value="{{ $order->deliveryAddress }}" readonly>
+            <input type="text" id="dropOffLocation" name="dropOffLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="Enter drop off location" value="{{ $order->deliveryAddress }}" readonly>
           </div>
           @error('dropOffLocation')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -106,5 +107,42 @@
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      $("#pickUpLocation").on("input", function() {
+        let query = $(this).val();
 
+        if (query.length > 2) { // Start searching after 2 characters
+          $.ajax({
+            url: "/geocode/autocomplete/" + query,
+            type: "GET",
+            success: function(data) {
+              let suggestionsBox = $("#suggestions");
+              suggestionsBox.empty().show();
+
+              if (data.features) {
+                data.features.forEach(function(item) {
+                  let placeName = item.properties.label;
+                  suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
+
+                  $(".suggestion-item").on("click", function() {
+                    $("#pickUpLocation").val($(this).text());
+                    suggestionsBox.hide();
+                  });
+                });
+              }
+            }
+          });
+        } else {
+          $("#suggestions").hide();
+        }
+      });
+
+      $(document).click(function(e) {
+        if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
+          $("#suggestions").hide();
+        }
+      });
+    });
+  </script>
 </x-layout.mainTemplate>

@@ -16,9 +16,9 @@
     </ol>
   </nav>
 
-  <div class="tw-px-4"> 
+  <div class="tw-px-4">
     <p class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs"><span class="tw-font-semibold">Instructions:</span> Please fill out the form below to create a new order request. All fields with an <span class="tw-text-red-500">*</span> are required.</p>
-    <form id="orderForm" action="{{ route('vendorPortal.order.store',  ['user' => auth()->id()]) }}" enctype="multipart/form-data" method="POST"  class="tw-mt-6">
+    <form id="orderForm" action="{{ route('vendorPortal.order.store',  ['user' => auth()->id()]) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
       @csrf
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-text-sm | max-md:tw-grid-cols-1 max-md:tw-gap-2 ">
         <!-- Order Number -->
@@ -56,7 +56,7 @@
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
-        
+
 
         <!-- Delivery Address -->
         <div class="tw-mb-4">
@@ -65,6 +65,8 @@
           @error('deliveryAddress')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
+          <div id="suggestions"></div>
+
         </div>
 
         <!-- Delivery Request Date -->
@@ -101,4 +103,43 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $(document).ready(function() {
+      $("#deliveryAddress").on("input", function() {
+        let query = $(this).val();
+
+        if (query.length > 2) { // Start searching after 2 characters
+          $.ajax({
+            url: "/geocode/autocomplete/" + query,
+            type: "GET",
+            success: function(data) {
+              let suggestionsBox = $("#suggestions");
+              suggestionsBox.empty().show();
+
+              if (data.features) {
+                data.features.forEach(function(item) {
+                  let placeName = item.properties.label;
+                  suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
+
+                  $(".suggestion-item").on("click", function() {
+                    $("#deliveryAddress").val($(this).text());
+                    suggestionsBox.hide();
+                  });
+                });
+              }
+            }
+          });
+        } else {
+          $("#suggestions").hide();
+        }
+      });
+
+      $(document).click(function(e) {
+        if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
+          $("#suggestions").hide();
+        }
+      });
+    });
+  </script>
 </x-layout.portal.mainTemplate>

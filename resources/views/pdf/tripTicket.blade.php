@@ -69,11 +69,9 @@
       width: 27%;
       margin-left: auto;
     }
-
-
-    
   </style>
   <div class="container">
+    <!-- Driver Information -->
     <hr>
     <div class="section">
       <h2>Driver Information</h2>
@@ -84,6 +82,7 @@
       <p>Contact Number: <span style="font-weight: bold;">+639123456789</span></p>
     </div>
 
+    <!-- Vehicle Information -->
     <hr>
     <div class="section">
       <h2>Vehicle Information</h2>
@@ -94,11 +93,63 @@
       <p>Vehicle Color: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->vehicleColor }}</span></p>
       <p>Vehicle Year: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->vehicleYear }}</span></p>
       <p>Fuel Type: <span style="font-weight: bold;">{{ ucfirst($vehicleReservation->vehicle->vehicleFuelType) }}</span></p>
+      <p>Fuel Efficiency: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->fuel_efficiency }} km/l</span></p>
       <p>Vehicle Capacity: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->vehicleCapacity }} kg</span></p>
     </div>
 
+    <!-- Order Information -->
     <hr>
-    <h2 style="margin-bottom: 13px;">Trip Information</h2>
+    <h2 style="margin-bottom: 13px;">Order Information</h2>
+    <table class="table">
+      <tr>
+        <th>Key</th>
+        <th>Information</th>
+      </tr>
+      <tr>
+        <td>Order Number</td>
+        <td>{{ $vehicleReservation->order->orderNumber }}</td>
+      </tr>
+      <tr>
+        <td>Product</td>
+        <td>{{ $vehicleReservation->order->product }}</td>
+      </tr>
+      <tr>
+        <td>Quantity</td>
+        <td>{{ $vehicleReservation->order->quantity }}</td>
+      </tr>
+      <tr>
+        <td>Weight</td>
+        <td>{{ $vehicleReservation->order->weight }} kg</td>
+      </tr>
+      <tr>
+        <td>Delivery Address</td>
+        <td>{{ $vehicleReservation->order->deliveryAddress }}</td>
+      </tr>
+      <tr>
+        <td>Delivery Request Date</td>
+        <td>{{ $vehicleReservation->order->deliveryRequestDate }}</td>
+      </tr>
+      <tr>
+        <td>Special Instructions</td>
+        <td>{{ $vehicleReservation->order->specialInstructions ? $vehicleReservation->order->specialInstructions : '-' }}</td>
+      </tr>
+      <tr>
+        <td>Approval Status</td>
+        <td>{{ ucfirst($vehicleReservation->approval_status) }}</td>
+      </tr>
+      <tr>
+        <td>Reviewed By</td>
+        <td>{{ \App\Models\User::find($vehicleReservation->reviewed_by)->firstName . ' ' . \App\Models\User::find($vehicleReservation->reviewed_by)->lastName }}</td>
+      </tr>
+      <tr>
+        <td>Approved By</td>
+        <td>{{ \App\Models\User::find($vehicleReservation->approved_by)->firstName . ' ' . \App\Models\User::find($vehicleReservation->approved_by)->lastName }}</td>
+      </tr>
+    </table>
+
+    <!-- Reservation Information -->
+    <hr>
+    <h2 style="margin-bottom: 13px;">Reservation Information</h2>
     <table class="table">
       <tr>
         <th>Key</th>
@@ -110,8 +161,7 @@
       </tr>
       <tr>
         <td>Vehicle Type</td>
-        <td>{{ ucfirst($vehicleReservation->vehicle_type) }}</td>
-      </tr>
+        <td>{{ $vehicleReservation->vehicle->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicleReservation->vehicle->vehicleType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicleReservation->vehicle->vehicleType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}</td>
       <tr>
         <td>Reservation Date</td>
         <td>{{ $vehicleReservation->reservationDate }}</td>
@@ -142,32 +192,85 @@
       </tr>
     </table>
 
+    <!-- Trip Information -->
+    <hr>
+    <h2 style="margin-bottom: 13px;">Trip Information</h2>
+    <table class="table">
+      <tr>
+        <th>Key</th>
+        <th>Information</th>
+      </tr>
+      <tr>
+        <td>Trip Number</td>
+        <td>{{ $tripTicket->tripNumber }}</td>
+      </tr>
+      <tr>
+        <td>Destination</td>
+        <td>{{ $tripTicket->destination }}</td>
+      </tr>
+      <tr>
+        <td>Departure Time</td>
+        <td>{{ \Carbon\Carbon::parse($tripTicket->departureTime)->format('g:i A') }}</td>
+      </tr>
+      <tr>
+        <td>Arrival Time</td>
+        <td>{{ \Carbon\Carbon::parse($tripTicket->arrivalTime)->format('g:i A') }}</td>
+      </tr>
+      <tr>
+        <td>Allocated Fuel</td>
+        <td>PHP {{ number_format($tripTicket->allocatedFuel, 2) }}</td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>{{ ucfirst($tripTicket->status) }}</td>
+      </tr>
+      <tr>
+        <td>Distance</td>
+        <td>{{ number_format($tripTicket->distance, 3) }} km</td>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        @php
+        $totalMinutes = $tripTicket->duration;
+        $hours = floor($totalMinutes / 60);
+        $minutes = floor($totalMinutes % 60);
+        $seconds = round(($totalMinutes - floor($totalMinutes)) * 60);
+        @endphp
+        <td>{{ sprintf('%d hour%s %d minute%s %d second%s', $hours, $hours == 1 ? '' : 's', $minutes, $minutes == 1 ? '' : 's', $seconds, $seconds == 1 ? '' : 's') }}</td>
+      </tr>
+
+    </table>
+
     <hr>
     <h2 style="margin-bottom: 13px;">Fuel Information</h2>
     <table class="table">
       <tr>
-        <th>Description</th>
-        <th>Value</th>
+        <th>Key</th>
+        <th>Information</th>
       </tr>
       <tr>
-        <td>Credit Card Number</td>
-        <td>{{ $fleetCard = \App\Models\FleetCard::find($vehicleReservation->fleet_card_id) ? 'XXXX-XXXX-XXXX-' . substr($fleetCard->cardNumber, -4) : '' }}</td>
+        <td>Fuel Number</td>
+        <td>{{ $fuel->fuelNumber }}</td>
       </tr>
       <tr>
-        <td>Credit Limit</td>
-        <td>{{ $fleetCard = \App\Models\FleetCard::find($vehicleReservation->fleet_card_id) ? number_format($fleetCard->credit_limit, 2) : '' }}</td>
+        <td>Fuel Type</td>
+        <td>{{ ucfirst($fuel->fuelType) }}</td>
       </tr>
       <tr>
-        <td>Balance</td>
-        <td>{{ $fleetCard = \App\Models\FleetCard::find($vehicleReservation->fleet_card_id) ? number_format($fleetCard->balance, 2) : '' }}</td>
+        <td>Estimated Fuel Consumption</td>
+        <td>{{ number_format($fuel->estimatedFuelConsumption, 2) . ' L' }}</td>
       </tr>
       <tr>
-        <td>Status</td>
-        <td>{{ $fleetCard = \App\Models\FleetCard::find($vehicleReservation->fleet_card_id) ? ucfirst($fleetCard->status) : '' }}</td>
+        <td>Estimated Cost</td>
+        <td>PHP {{ number_format($fuel->estimatedCost, 2) }}</td>
       </tr>
       <tr>
-        <td>Expiry Date</td>
-        <td>{{ $fleetCard = \App\Models\FleetCard::find($vehicleReservation->fleet_card_id) ? \Carbon\Carbon::parse($fleetCard->expiry_date)->format('F Y') : '' }}</td>
+        <td>Gas Station</td>
+        <td>Phoenix Petroleum Philippines, Inc.</td>
+      </tr>
+      <tr>
+        <td>Fuel Date Schedule</td>
+        <td>{{ \Carbon\Carbon::parse($fuel->fuelDate)->format('F d, Y') }}</td>
       </tr>
     </table>
 

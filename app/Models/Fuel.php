@@ -27,4 +27,9 @@ class Fuel extends Model
     {
         return $this->belongsToMany(VehicleReservation::class);
     }
+
+    public function fleetCard()
+    {
+        return $this->belongsTo(FleetCard::class, 'fleet_card_id');
+    }
 }

@@ -21,31 +21,33 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="tw-text-xs" id="reservationModalTitle">View Reservation Details</h5>
+            <h5 class="tw-text-md tw-font-bold" id="reservationModalTitle">Selected Date: <span id="reservation-dateTitle"></span></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="reservationModalDescription">
             <dl class="row">
-              <dt class="col-sm-3">Reservation Number:</dt>
-              <dd class="col-sm-9" id="reservation-number"></dd>
+              <h5 class="tw-text-md tw-font-bold tw-mb-2" id="reservationModalTitle">Reservation Details</h5>
 
-              <dt class="col-sm-3">Vehicle Type:</dt>
-              <dd class="col-sm-9" id="vehicle-type"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Reservation No:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="reservation-number"></dd>
 
-              <dt class="col-sm-3">Reservation Date:</dt>
-              <dd class="col-sm-9" id="reservation-date"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Vehicle Type:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="vehicle-type"></dd>
 
-              <dt class="col-sm-3">Reservation Time:</dt>
-              <dd class="col-sm-9" id="reservation-time"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Reservation Date:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="reservation-date"></dd>
 
-              <dt class="col-sm-3">Pickup Location:</dt>
-              <dd class="col-sm-9" id="pickup-location"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Reservation Time:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="reservation-time"></dd>
 
-              <dt class="col-sm-3">Dropoff Location:</dt>
-              <dd class="col-sm-9" id="dropoff-location"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Pickup Location:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="pickup-location"></dd>
 
-              <dt class="col-sm-3">Approval Status:</dt>
-              <dd class="col-sm-9" id="approval-status"></dd>
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Dropoff Location:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="dropoff-location"></dd>
+
+              <dt class="col-sm-4 tw-font-semibold tw-text-sm">Approval Status:</dt>
+              <dd class="col-sm-8 tw-text-sm" id="approval-status"></dd>
             </dl>
           </div>
           <div class="modal-footer">

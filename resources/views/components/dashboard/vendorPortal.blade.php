@@ -13,7 +13,7 @@
     @if (Auth::user()->two_factor_enabled === 0)
     <div class="tw-bg-yellow-100 tw-border tw-border-yellow-400 tw-p-4 tw-rounded tw-mb-4 | max-sm:tw-py-2">
       <p class="tw-text-sm tw-text-yellow-700 tw-font-semibold | max-sm:tw-text-[12px]">
-        <i class="fa-solid fa-circle-info tw-mr-1"></i>
+        <i class="fa-solid fa-circle-info"></i>
         <span class="tw-font-bold">Notice:</span> You have not enabled Two-Factor Authentication yet. <a href="{{ route('settings.index') }}" class="tw-underline">Click here</a> to enable it now.
       </p>
     </div>
@@ -29,30 +29,61 @@
       </div>
     </div>
 
-    <div class="row tw-text-center | max-sm:tw-hidden " data-aos="fade">
+    <!-- Cards -->
+    <div class="row " data-aos="fade">
+      <!-- Scheduled -->
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Orders Created: {{ $orders->count() }}</p>
+        <div class="card bg-warning text-white mb-4">
+          <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
+            <div>
+              <i class="fa-solid fa-clock tw-mr-2"></i>
+              Scheduled
+            </div>
+            <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['scheduled'] }}</span>
+          </div>
+          <div class="card-footer d-flex align-items-center justify-content-between ">
+            <a class="small text-white stretched-link" href="{{ route('vendorPortal.card.scheduled') }}">View Details</a>
+            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
           </div>
         </div>
       </div>
+
+      <!-- In Transit -->
       <div class="col-xl-4 col-md-6">
         <div class="card bg-primary text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Documents Uploaded: {{ $documents->count() }}</p>
+          <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
+            <div>
+              <i class="fa-solid fa-truck-fast"></i>
+              In Transit
+            </div>
+            <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['in_transit'] }}</span>
+          </div>
+          <div class="card-footer d-flex align-items-center justify-content-between">
+            <a class="small text-white stretched-link" href="{{ route('vendorPortal.card.inTransit') }}">View Details</a>
+            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
           </div>
         </div>
       </div>
+
+      <!-- Delivered -->
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Payments Completed: {{ $payments->count() }}</p>
+        <div class="card bg-success text-white mb-4">
+          <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
+            <div>
+              <i class="fa-solid fa-circle-check"></i>
+              Delivered
+            </div>
+            <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['delivered'] }}</span>
+          </div>
+          <div class="card-footer d-flex align-items-center justify-content-between">
+            <a class="small text-white stretched-link" href="{{ route('vendorPortal.card.delivered') }}">View Details</a>
+            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Order Statistics -->
     <div class="tw-bg-white tw-rounded-lg tw-mb-4 tw-shadow-lg tw-p-4 | max-sm:tw-p-2">
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Here's a summary of your order statistics over the past 12 months:</p>
       <div>
@@ -84,70 +115,6 @@
             }
           });
         </script>
-      </div>
-    </div>
-
-    <div class="tw-bg-white tw-rounded-lg tw-mb-4  tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
-      <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your order requests that are currently in shipment:</p>
-      <div class="card-body tw-px-4">
-        <div class="tw-overflow-x-auto ">
-          <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  ">
-
-            <thead class="tw-bg-gray-200 tw-text-gray-700 ">
-              <tr>
-                <th class="tw-px-4 tw-py-2">Shipment No. </th>
-                <th class="tw-px-4 tw-py-2">Status</th>
-              </tr>
-            </thead>
-
-            <tbody id="orderRecords" class="tw-bg-white">
-              @foreach($orders as $order)
-              <tr class="hover:tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2">{{ $order->orderNumber }}</td>
-                <td class="tw-px-4 tw-py-2">
-                  <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                    {{ ucfirst($order->approval_status) }}
-                  </span>
-                </td>
-
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
-      <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your order requests that are completed:</p>
-      <div class="card-body tw-px-4">
-        <div class="tw-overflow-x-auto ">
-          <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4  ">
-
-            <thead class="tw-bg-gray-200 tw-text-gray-700 ">
-              <tr>
-                <th class="tw-px-4 tw-py-2">Shipment No. </th>
-                <th class="tw-px-4 tw-py-2">Status</th>
-              </tr>
-            </thead>
-
-            <tbody id="orderRecords" class="tw-bg-white">
-              @foreach($orders as $order)
-              <tr class="hover:tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2">{{ $order->orderNumber }}</td>
-                <td class="tw-px-4 tw-py-2">
-                  <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                    {{ ucfirst($order->approval_status) }}
-                  </span>
-                </td>
-
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-
-        </div>
       </div>
     </div>
   </div>

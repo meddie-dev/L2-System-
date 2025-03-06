@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@import 'leaflet/dist/leaflet.css';
+
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 :root {
@@ -5431,7 +5433,7 @@ textarea.form-control-lg {
 }
 .modal-fullscreen {
   width: 100vw;
-  max-width: none;
+  max-width: 100%;
   height: 100%;
   margin: 0;
 }
@@ -11337,6 +11339,32 @@ body {
     transform: rotate(360deg);
   }
 }
+
+#suggestions {
+  border: 1px solid #ddd;
+  max-width: 300px;
+  display: none;
+  position: absolute;
+  background: white;
+  z-index: 1000;
+}
+
+#suggestions div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#suggestions div:hover {
+  background: #f0f0f0;
+}
+
+#map {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  height: 400px; /* Set to desired height */
+  width: 100%;
+}
+
 
 @tailwind base;
 @tailwind components;

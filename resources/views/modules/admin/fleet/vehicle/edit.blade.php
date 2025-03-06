@@ -105,6 +105,15 @@
 
           </div>
 
+           <!-- Vehicle Fuel Efficiency -->
+        <div class="tw-mb-4">
+          <label for="fuel_efficiency" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Fuel Efficiency (km/l)<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="fuel_efficiency" name="fuel_efficiency" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('fuel_efficiency') is-invalid @enderror" placeholder="Enter fuel efficiency" min="0" required step="0.1" value="{{ $vehicle->fuel_efficiency }}">
+          @error('fuel_efficiency')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
           <!-- Vehicle Capacity -->
           <div class="tw-mb-4">
             <label for="vehicleCapacity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Capacity (kg)<span class="tw-text-red-500">*</span></label>

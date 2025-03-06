@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Document;
 use App\Models\Modules\Order;
+use App\Models\Modules\VehicleReservation;
 use App\Models\Payment;
+use App\Models\TripTicket;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -73,7 +75,16 @@ class DashboardController extends Controller
 
     public function vendorPortalDashboard()
     {
+        $userOrderIds = Auth::user()->order()->pluck('id'); 
+
+        $tripTickets = TripTicket::whereIn('order_id', $userOrderIds)->with('order')->get();
         $orders = Order::where('user_id', Auth::id())->get();
+
+        $statusCounts = [
+            'scheduled' => TripTicket::whereIn('order_id', $userOrderIds)->where('status', 'scheduled')->count(),
+            'in_transit' => TripTicket::whereIn('order_id', $userOrderIds)->where('status', 'in_transit')->count(),
+            'delivered' => TripTicket::whereIn('order_id', $userOrderIds)->where('status', 'delivered')->count(),
+        ];
         $documents = Document::where('user_id', Auth::id())->get();
         $payments = Payment::where('user_id', Auth::id())->get();
         $months = [];
@@ -91,11 +102,17 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        return view('components.dashboard.vendorPortal', compact('orders', 'months', 'orderCounts', 'documents', 'payments'));
+        return view('components.dashboard.vendorPortal', compact('orders','statusCounts', 'tripTickets', 'months', 'orderCounts', 'documents', 'payments'));
     }
 
     public function driverDashboard()
     {
-        return view('components.dashboard.driver');
+        $user = Auth::user();
+        $logs = ActivityLogs::where('user_id', Auth::id())->get();
+        $latestTripTicket = TripTicket::where('user_id', Auth::id())->latest()->first();
+        $latestVehicleReservation = VehicleReservation::where('redirected_to', Auth::id())->latest()->first();        
+    
+        return view('components.dashboard.driver', compact('user', 'latestTripTicket', 'latestVehicleReservation', 'logs'));
     }
+    
 }
