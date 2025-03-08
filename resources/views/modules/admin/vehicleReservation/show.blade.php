@@ -17,12 +17,12 @@
       </x-partials.breadcrumb>
     </ol>
     <x-partials.breadcrumb :active="true" :isLast="true">
-        <div class="tw-flex tw-items-center tw-justify-center tw-text-xs | sm:tw-hidden">
-          Review Reservation (<span class="tw-font-semibold tw-text-[10px] tw-opacity-20 tw-mt-1 ">{{ $vehicleReservation->reservationNumber }}</span>)
-        </div>
-      </x-partials.breadcrumb>
+      <div class="tw-flex tw-items-center tw-justify-center tw-text-xs | sm:tw-hidden">
+        Review Reservation (<span class="tw-font-semibold tw-text-[10px] tw-opacity-20 tw-mt-1 ">{{ $vehicleReservation->reservationNumber }}</span>)
+      </div>
+    </x-partials.breadcrumb>
   </nav>
-  
+
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <div class="tw-flex tw-w-full  tw-gap-6">
@@ -78,6 +78,11 @@
       </div>
     </div>
     <div class="tw-flex tw-justify-end tw-mb-6">
+      <form class="tw-mr-2" action="{{ route('admin.vehicleReservation.reject', $vehicleReservation->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button type="submit" class="tw-text-white tw-bg-red-600 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Reject</button>
+      </form>
       <form action="{{ route('admin.vehicleReservation.approve', $vehicleReservation->id)}}" method="POST">
         @csrf
         @method('PATCH')
@@ -106,10 +111,10 @@
         initialDate: '{{ $vehicleReservation->reservationDate }}',
         initialTime: '{{ $vehicleReservation->reservationTime }}',
         initialView: 'dayGridWeek',
-         aspectRatio: 4,
+        aspectRatio: 4,
         views: {
           timeGrid: {
-            dayMaxEventRows: 5 
+            dayMaxEventRows: 5
           }
         },
         dayMaxEventRows: true, // for all non-TimeGrid views
@@ -117,8 +122,11 @@
           title: '{{ $vehicleReservation->reservationNumber }}', // Display reservation number as title
           start: '{{ $vehicleReservation->reservationDate }}T{{ $vehicleReservation->reservationTime }}',
           end: '{{ $vehicleReservation->reservationDate }}T{{ $vehicleReservation->reservationTime }}',
-          color: '{{ $vehicleReservation->approval_status === 'approved' ? 'green' : 'yellow' }}',
-         
+          color: '{{ $vehicleReservation->approval_status === '
+          approved ' ? '
+          green ' : '
+          yellow ' }}',
+
         }],
         businessHours: [{
             daysOfWeek: [1, 2, 3], // Monday, Tuesday, Wednesday

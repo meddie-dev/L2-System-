@@ -28,16 +28,6 @@
     </div>
     @endif
 
-    <div class="tw-max-w-9xl tw-mx-auto tw-mb-5 tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 | max-sm:tw-p-4 max-sm:tw-my-6"
-      data-aos="fade">
-      <div>
-        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-600 tw-mb-4  | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Announcement:</h3>
-        <p class="tw-text-sm tw-text-gray-500 tw-indent-14 max-sm:tw-text-[12px] max-sm:tw-text-justify max-sm:tw-indent-5">
-          Welcome, {{ Auth::user()->firstName }}!, We're glad you're here! We're excited to announce that we've released a new feature to help you manage your orders more efficiently! You can now view your order statistics over the past 12 months and get insights on how to improve your business. Check it out and let us know what you think!
-        </p>
-      </div>
-    </div>
-
     <div class="tw-bg-white tw-rounded-lg tw-mb-4 tw-shadow-lg tw-p-4 | max-sm:tw-p-2">
       <div class="tw-mb-6 tw-rounded-2xl" id="map"></div>
 
@@ -50,34 +40,34 @@
               <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Trip Number</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ substr($latestTripTicket->tripNumber, 0, 5) }}...</p>
+                  <a class="tw-text-xs tw-font-semibold tw-text-blue-600 | max-sm:tw-text-[12px]" href="{{ $latestTripTicket ? route('driver.trip.details', $latestTripTicket->id) : '#' }}" class="tw-text-xs tw-font-semibold tw-underline | max-sm:tw-text-[12px]">{{ $latestTripTicket ? substr($latestTripTicket->tripNumber, 0, 5) . '...' : '-' }}</a>
                 </div>
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Departure Date</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('F j, Y') }}</p>
+                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('F j, Y') : '-' }}</p>
                 </div>
 
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Departure Time</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('g:i A') }}</p>
+                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('g:i A') : '-' }}</p>
                 </div>
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Arrival Date</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('F j, Y') }}</p>
+                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('F j, Y') : '-' }}</p>
                 </div>
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Arrival Time</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('g:i A') }}</p>
+                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('g:i A') : '-' }}</p>
                 </div>
 
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Distance</p>
-                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ number_format($latestTripTicket->distance, 3) }} km</p>
+                  <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? number_format($latestTripTicket->distance, 3) . ' km' : '-' }}</p>
                 </div>
                 <div>
                   <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Duration</p>
                   @php
-                  $totalMinutes = $latestTripTicket->duration;
+                  $totalMinutes = $latestTripTicket ? $latestTripTicket->duration : 0;
                   $hours = floor($totalMinutes / 60);
                   $minutes = floor($totalMinutes % 60);
                   $seconds = round(($totalMinutes - floor($totalMinutes)) * 60);
@@ -135,15 +125,18 @@
 
         <!-- Activity Logs -->
         <div class="tw-grind tw-grid-cols-3 tw-gap-4">
-          <div class="tw-overflow-x-auto tw-rounded-lg tw-border tw-border-gray-200 tw-p-4 tw-row-span-2 tw-mb-4">
+          <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-12rem)] tw-rounded-lg tw-border tw-border-gray-200 tw-p-4 tw-row-span-2 tw-mb-4">
             <h3 class="tw-text-lg tw-font-semibold tw-text-gray-600 tw-mb-4 | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Activity Logs</h3>
             <div class="tw-container tw-mx-auto tw-p-6">
-              <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-4">
+              <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
                 @foreach ($logs as $log)
                 <div class="tw-mb-6 tw-ml-6">
-                  <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-2"></div>
+                  <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                   <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y H:i') }}</p>
+                    <div class="tw-flex tw-justify-between">
+                      <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
+                      <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                    </div>
                     <p class="tw-text-gray-700">{{ $log->event }}</p>
                   </div>
                 </div>
@@ -156,7 +149,7 @@
           <div class="tw-overflow-x-auto tw-rounded-lg tw-border tw-border-gray-200 tw-p-4 tw-row-span-1">
             <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-mt-3">
               <div class="tw-flex tw-flex-col tw-items-center tw-justify-between">
-                <p class="tw-text-sm tw-font-semibold tw-text-gray-600 tw-flex tw-items-center"><i class="fa-solid fa-clock tw-mr-1"></i>On Time ({{ $user->total_deliveries > 0 ? number_format($user->on_time_deliveries / $user->total_deliveries * 100, 2) : 0 }}%)</p>
+                <p class="tw-text-sm tw-font-semibold tw-text-gray-600 tw-flex tw-items-center"><i class="fa-solid fa-clock tw-mr-1"></i>On Time ({{ $user->total_deliveries > 0 ? number_format($user->on_time_deliveries / $user->total_deliveries * 100, 2) : '0.00' }}%)</p>
                 <p class="tw-text-sm tw-font-semibold tw-text-blue-500 tw-flex tw-items-center"><i class="fa-solid fa-check tw-mr-1"></i>{{$user->on_time_deliveries}} </p>
               </div>
               <div class="tw-flex  tw-flex-col  tw-items-center tw-justify-between">

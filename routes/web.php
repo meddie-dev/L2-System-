@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddOnsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 // Controllers
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
@@ -21,15 +22,9 @@ use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TripTicketController;
-use App\Models\Modules\Audit;
-use App\Models\Modules\VehicleReservation;
-use App\Models\TripTicket;
-use App\Models\Vehicle;
-use Barryvdh\DomPDF\Facade\Pdf;
+
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
 
 /*-------------------------------------------------------------- 
 # Default Route
@@ -70,7 +65,7 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.vehicleReservation.show');
     Route::patch('/admin/dashboard/vendor/approve/{vehicleReservation}', [VehicleReservationController::class, 'approve'])
         ->name('admin.vehicleReservation.approve');
-    Route::post('/vendors/{vendor}/reject', [VehicleReservationController::class, 'reject'])
+    Route::patch('/admin/dashboard/vendor/reject/{vehicleReservation}', [VehicleReservationController::class, 'reject'])
         ->name('admin.vehicleReservation.reject');
 
     // Fleet Management -> Vehicle
@@ -86,16 +81,21 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.fleet.update');
     Route::get('/admin/dashboard/fleet/vehicle/details/{vehicle }', [FleetController::class, 'details'])
         ->name('admin.fleet.details');
+    Route::delete('/admin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'destroy'])
+        ->name('admin.fleet.destroy');
 
     // Fleet Management -> Driver
     Route::get('/admin/dashboard/fleet/driver', [FleetController::class, 'driverIndex'])
         ->name('admin.fleet.driver.index');
+    Route::get('/admin/dashboard/fleet/driver/details/{user}', [FleetController::class, 'driverDetails'])
+        ->name('admin.fleet.driver.details');
+    Route::patch('/admin/dashboard/fleet/driver/{user}', [FleetController::class, 'driverUpdate'])
+        ->name('admin.fleet.driver.update');
 
-    // Fleet Management -> Shipment
-    Route::get('/admin/dashboard/fleet/shipment', [FleetController::class, 'shipmentIndex'])
-        ->name('admin.fleet.shipment.manage');
-    Route::get('/admin/dashboard/fleet/shipment/{shipment}', [FleetController::class, 'shipmentCreate'])
-        ->name('admin.fleet.shipment.edit');
+    // Fleet Management -> Fuel
+    Route::get('/admin/dashboard/fleet/fuel', [FleetController::class, 'fuelIndex'])
+        ->name('admin.fleet.fuel.index');
+
 });
 
 /*--------------------------------------------------------------
@@ -113,7 +113,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.vendors.show');
     Route::patch('/staff/dashboard/vendor/approve/{order}', [OrderController::class, 'approve'])
         ->name('staff.vendors.approve');
-    Route::post('/vendors/{vendor}/reject', [OrderController::class, 'reject'])
+    Route::patch('/staff/dashboard/vendor/reject/{order}', [OrderController::class, 'reject'])
         ->name('staff.vendors.reject');
 
     // Document Management
@@ -123,7 +123,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.document.show');
     Route::patch('/staff/dashboard/document/approve/{document}', [DocumentController::class, 'approve'])
         ->name('staff.document.approve');
-    Route::post('/documents/{document}/reject', [DocumentController::class, 'reject'])
+    Route::patch('/staff/dashboard/document/reject/{document}', [DocumentController::class, 'reject'])
         ->name('staff.document.reject');
 
     // Payment Management
@@ -133,7 +133,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.payment.show');
     Route::patch('/staff/dashboard/payment/approve/{payment}', [PaymentController::class, 'approve'])
         ->name('staff.payment.approve');
-    Route::post('/payments/{payment}/reject', [PaymentController::class, 'reject'])
+    Route::patch('/staff/dashboard/payment/reject/{payment}', [PaymentController::class, 'reject'])
         ->name('staff.payment.reject');
 
     // Vehicle Management

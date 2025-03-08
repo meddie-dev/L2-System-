@@ -20,9 +20,16 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-mb-6" id="map"></div>
-
-    <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Trip Ticket</h3>
-    <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
+    <div class='tw-flex tw-justify-between tw-items-center tw-my-2'>
+      <h3 class="tw-text-md tw-font-bold  | max-md:tw-text-sm">Trip Ticket</h3>
+      <div class="tw-flex">
+        <a href="{{ route('driver.trip') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-white  tw-bg-red-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-red-600 hover:tw-bg-white  hover:tw-text-red-600 | max-md:tw-p-3 ">
+          <i class="fa-solid fa-exclamation-circle tw-mr-2 | max-md:tw-text-xs"></i>
+          Report Incident
+        </a>
+      </div>
+    </div>
+    <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm tw-mb-4 | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
       <!-- Trip Number -->
       <div>
         <label for="tripNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Trip Number:</label>
@@ -86,28 +93,54 @@
       </div>
     </div>
 
+    @if($tripTicket->status === 'delivered')
+    <!-- Feedback and Rating  -->
+    <h3 class="tw-text-md tw-font-bold tw-my-2 | max-md:tw-text-sm">Feedback and Rating</h3>
+    <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
+      <!-- Rating -->
+      <div>
+        <label for="rating" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Rating:</label>
+        <div class="tw-flex tw-items-center">
+          @for ($i = 0; $i < 5; $i++)
+            <svg class="tw-w-5 tw-h-5 tw-mr-1 tw-fill-current{{ $i < $tripTicket->rating ? ' tw-text-yellow-500' : ' tw-text-gray-300' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.959a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.36 2.44a1 1 0 00-.36 1.118l1.286 3.96c.3.92-.755 1.688-1.54 1.118l-3.36-2.44a1 1 0 00-1.176 0l-3.36 2.44c-.785.57-1.838-.197-1.54-1.118l1.286-3.96a1 1 0 00-.36-1.118L2.103 9.386c-.782-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.286-3.959z" />
+            </svg>
+            @endfor
+            <span class="tw-text-sm tw-font-bold tw-text-gray-500 | max-md:tw-text-xs">({{ $tripTicket->rating }} / 5)</span>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div>
+        <label for="feedback" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="4" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" readonly>{{ $tripTicket->order->user->firstName }} {{ $tripTicket->order->user->lastName }}:
+        {{ $tripTicket->feedback }}</textarea>
+      </div>
+    </div>
+    @endif
+
   </div>
   <div class="tw-flex tw-justify-end tw-mb-6">
-      @if($tripTicket->status === 'scheduled')
-      <form action="{{ route('driver.trip.inTransit', $tripTicket->id) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as In Transit</button>
-      </form>
-      @elseif($tripTicket->status === 'in_transit')
-      <form action="{{ route('driver.trip.deliver', $tripTicket->id) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Delivered</button>
-      </form>
-      @endif
-    </div>
-    <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-      <a href="{{ route('driver.trip') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
-        <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
-        Back
-      </a>
-    </div>
+    @if($tripTicket->status === 'scheduled')
+    <form action="{{ route('driver.trip.inTransit', $tripTicket->id) }}" method="POST">
+      @csrf
+      @method('PATCH')
+      <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as In Transit</button>
+    </form>
+    @elseif($tripTicket->status === 'in_transit')
+    <form action="{{ route('driver.trip.deliver', $tripTicket->id) }}" method="POST">
+      @csrf
+      @method('PATCH')
+      <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Delivered</button>
+    </form>
+    @endif
+  </div>
+  <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+    <a href="{{ route('driver.trip') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+      <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+      Back
+    </a>
+  </div>
   <hr>
   <div>
     <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Review After Submission</h3>
@@ -116,24 +149,18 @@
     </div>
   </div>
 
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const map = L.map('map').setView([51.505, -0.09], 13);
+      const map = L.map('map').setView([{{ $tripTicket->pickUpLat ?? 51.505 }}, {{ $tripTicket->pickUpLng ?? -0.09 }}], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      const pickUpMarker = L.marker([
-        {{ $tripTicket->pickUpLat ?? 51.505 }},
-        {{ $tripTicket->pickUpLng ?? -0.09 }}
-      ]).addTo(map);
+      const pickUpMarker = L.marker([{{ $tripTicket->pickUpLat ?? 51.505 }}, {{ $tripTicket->pickUpLng ?? -0.09 }}]).addTo(map);
       pickUpMarker.bindPopup("<b>Pick Up Location</b><br>{{ $vehicleReservation->pickUpLocation }}");
 
-      const dropOffMarker = L.marker([
-        {{ $tripTicket->dropOffLat ?? 51.515 }},
-        {{ $tripTicket->dropOffLng ?? -0.1 }}
-      ]).addTo(map);
+      const dropOffMarker = L.marker([{{ $tripTicket->dropOffLat ?? 51.515 }}, {{ $tripTicket->dropOffLng ?? -0.1 }}]).addTo(map);
       dropOffMarker.bindPopup("<b>Drop Off Location</b><br>{{ $vehicleReservation->dropOffLocation }}");
 
       const bounds = new L.LatLngBounds([
@@ -150,7 +177,7 @@
         if (this.readyState === 4 && this.status === 200) {
           const routeCoordinates = JSON.parse(this.responseText).features[0].geometry.coordinates;
           const routeLine = L.polyline(routeCoordinates.map(coord => [coord[1], coord[0]]), {
-            color: 'red',
+            color: '{{ $tripTicket->status === 'scheduled' ? '#F7DC6F' : ($tripTicket->status === 'in_transit' ? '#3498DB' : ($tripTicket->status === 'delay' ? '#E74C3C' : '#2ECC71')) }}',
             weight: 5,
             opacity: 0.7
           }).addTo(map);
@@ -161,6 +188,6 @@
       };
       request.send();
     });
-  </script>
+  </script> -->
 
 </x-layout.mainTemplate>

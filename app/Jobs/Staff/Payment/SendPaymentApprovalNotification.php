@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Jobs\Staff;
+namespace App\Jobs\Staff\Payment;
 
 use App\Models\Payment;
 use App\Models\User;
 use App\Notifications\admin\adminApprovalRequest;
-use App\Notifications\admin\adminApprovalStatus;
 use App\Notifications\NewNotification;
-use App\Notifications\staffApprovalStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,9 +29,12 @@ class SendPaymentApprovalNotification implements ShouldQueue
         if ($admin) {
             $this->payment->redirected_to = $admin->id;
             $this->payment->save();
+        }
 
-            $admin->notify(new adminApprovalRequest('Payment', $this->payment));
-            $admin->notify(new NewNotification("Reviewed Payment from {$this->payment->user->firstName} {$this->payment->user->lastName} with Payment Number: ({$this->payment->paymentNumber}). Waiting for your approval."));
+        $creator = User::find($this->payment->user_id);
+        if ($creator) {
+            $creator->notify(new adminApprovalRequest('Payment', $this->payment));
+            $creator->notify(new NewNotification("Your payment ({$this->payment->paymentNumber}) has been reviewed. Please wait for approval."));
         }
     }
 }

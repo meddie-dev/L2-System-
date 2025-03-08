@@ -11,33 +11,43 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Shipments
+        Fuel Management
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">ID</th>
-            <th class="tw-px-4 tw-py-2">Tracking Number</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
-
+            <th class="tw-px-4 tw-py-2">Fuel Number</th>
+            <th class="tw-px-4 tw-py-2">Fuel Type</th>
+            <th class="tw-px-4 tw-py-2">Estimated Fuel Consumption</th>
+            <th class="tw-px-4 tw-py-2">Estimated Cost</th>
+            <th class="tw-px-4 tw-py-2">Fuel Date</th>
+            <th class="tw-px-4 tw-py-2">Fuel Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($shipments as $shipment)
+          @foreach($fuel as $fuels)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $shipment->id }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('admin.fleet.shipment.edit', ['shipment' => $shipment]) }}">{{ $shipment->trackingNumber }}</a></td>
+            <td class="tw-px-4 tw-py-2"> {{ $fuels->fuelNumber }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $fuels->fuelType }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $fuels->estimatedFuelConsumption }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $fuels->estimatedCost }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $fuels->fuelDate }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $shipment->approval_status === 'approved' ? 'green-500' : ($shipment->approval_status === 'pending' ? 'yellow-500' : ($shipment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
-                {{ ucfirst($shipment->approval_status) }}
-              </span>
+              @switch($fuels->fuelStatus)
+              @case('scheduled')
+              <span class="tw-text-yellow-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+              @break
+              @case('completed')
+              <span class="tw-text-green-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+              @break
+              @endswitch
             </td>
           </tr>
           @endforeach

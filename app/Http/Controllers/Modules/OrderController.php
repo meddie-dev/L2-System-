@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Jobs\Staff\SendOrderApprovalNotification;
+use App\Jobs\Staff\Order\SendOrderApprovalNotification;
+use App\Jobs\Staff\Order\SendRejectionNotification;
 use App\Jobs\Vendor\SendOrderNotifications;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Order;
 use App\Models\User;
-use App\Notifications\NewNotification;
-use App\Notifications\staff\staffApprovalRequest;
-use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +65,7 @@ class OrderController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Submitted Order Request: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Order Submitted with Order Number: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
                 'ip_address' => $request->ip(),
             ]);
 
@@ -153,12 +151,19 @@ class OrderController extends Controller
             $order->update([
                 'approval_status' => 'reviewed',
                 'reviewed_by' => auth()->id(),
+                'rejected_by' => null
             ]);
     
             DB::commit();
     
             // Dispatch job asynchronously
             SendOrderApprovalNotification::dispatch($order);
+
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Reviewed Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
     
             return redirect()->route('staff.vendors.manage')->with('success', 'Order reviewed successfully.');
         } catch (\Exception $e) {
@@ -169,10 +174,29 @@ class OrderController extends Controller
 
     public function reject(Order $order)
     {
-        $order->update(['approval_status' => 'rejected']);
+        DB::beginTransaction();
 
-        $order->creator->notify(new staffApprovalStatus($order, 'rejected'));
+        try {
+            $order->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => auth()->id(),
+            ]);
 
-        return redirect()->route('orders.index')->with('error', 'order rejected.');
+            SendRejectionNotification::dispatch($order);
+
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Rejected Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('staff.vendors.manage')->with('success', 'Order rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
+
 }

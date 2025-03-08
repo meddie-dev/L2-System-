@@ -31,6 +31,7 @@ return new class extends Migration
             $table->decimal('dropOffLat', 10, 7)->nullable();
             $table->decimal('dropOffLng', 10, 7)->nullable();
             $table->timestamp('delivered_at')->nullable();
+            $table->integer('delay_minutes')->nullable();
             $table->integer('rating')->nullable();
             $table->text('feedback')->nullable();
 

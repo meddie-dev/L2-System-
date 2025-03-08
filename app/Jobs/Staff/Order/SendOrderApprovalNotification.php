@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Jobs\Staff;
+namespace App\Jobs\Staff\Order;
 
 use App\Models\Modules\Order;
 use App\Models\User;
 use App\Notifications\admin\adminApprovalRequest;
+use App\Notifications\admin\adminApprovalStatus;
 use App\Notifications\NewNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,9 +31,10 @@ class SendOrderApprovalNotification implements ShouldQueue
         if ($admin) {
             $this->order->redirected_to = $admin->id;
             $this->order->save();
-
-            $admin->notify(new adminApprovalRequest('Order', $this->order));
-            $admin->notify(new NewNotification("Reviewed Order from {$this->order->user->firstName} {$this->order->user->lastName} with Order Number: ({$this->order->orderNumber}). Waiting for your approval."));
         }
+
+        $orderCreator = $this->order->user->user_id;
+        $orderCreator->notify(new adminApprovalStatus('Order', $this->order->orderNumber));
+        $orderCreator->notify(new NewNotification("Your order ({$this->order->orderNumber}) has been reviewed. Please wait for approval."));
     }
 }

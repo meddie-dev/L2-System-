@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Modules;
 use App\Events\VehicleReservationApproved;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Jobs\Admin\GenerateTripTicketPDF;
-use App\Jobs\Admin\SendApprovalNotification;
-use App\Jobs\Staff\SendVehicleReservationNotification;
+use App\Jobs\Admin\VehicleReservation\SendApprovalNotification;
+use App\Jobs\Admin\VehicleReservation\SendVehicleReservationRejectionNotification;
+use App\Jobs\Staff\VehicleReservation\SendVehicleReservationNotification;
 use App\Jobs\Vendor\SendVehicleReservationNotifications;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Order;
@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 class VehicleReservationController extends Controller
 {
 
+    // Vendor
     public function vendorIndex()
     {
         $vehicleReservation = VehicleReservation::where('user_id', Auth::id())->get();
@@ -253,9 +254,9 @@ class VehicleReservationController extends Controller
                 })
                 ->where('driverType', $vehicleReservation->vehicle_type)
                 ->where('status', 'available')
-                ->orderBy('last_active_at', 'desc')
+                ->orderByRaw('CASE WHEN performance_score > 60 THEN 1 ELSE 2 END, last_active_at DESC')
                 ->limit(1)
-                ->first();;
+                ->first();
 
             if ($vehicle && $driver) {
                 $vehicleReservation->update([
@@ -308,5 +309,50 @@ class VehicleReservationController extends Controller
         event(new VehicleReservationApproved($vehicleReservation));
 
         return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Reservation approved successfully.');
+    }
+
+    public function reject(VehicleReservation $vehicleReservation)
+    {
+        DB::beginTransaction();
+
+        try {
+            $vehicleReservation->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => Auth::id(),
+            ]);
+
+            $vehicleReservation->order->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => Auth::id(),
+            ]);
+
+            $order = $vehicleReservation->order;
+
+            $order->payment->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => Auth::id(),
+            ]);
+
+            $order->document->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => Auth::id(),
+            ]);
+
+            SendVehicleReservationRejectionNotification::dispatch($vehicleReservation);
+
+
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Vehicle reservation rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
 }

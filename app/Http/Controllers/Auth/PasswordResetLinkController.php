@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLogs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
 class PasswordResetLinkController extends Controller
@@ -35,5 +37,11 @@ class PasswordResetLinkController extends Controller
         } else {
             return back()->withErrors(['email' => trans($status)]);
         }
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Password reset link sent at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
     }
 }

@@ -80,7 +80,7 @@
           <label for="feedback" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Feedback</label>
           <textarea name="feedback" id="feedback" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 | max-md:tw-text-xs" rows="4" placeholder="Write your feedback here..."></textarea>
         </div>
-        <button type="submit" class="tw-bg-blue-500 hover:tw-bg-blue-600 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded tw-opacity-50 tw-float-right">Submit Rating</button>
+        <button type="submit" class=" tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 tw-float-right">Submit Rating</button>
       </form>
     </div>
 

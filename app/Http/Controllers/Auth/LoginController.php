@@ -41,7 +41,7 @@ class LoginController extends Controller
             $user = Auth::user();
 
             // Update the last active time for the authenticated user
-            $user->last_active_at = Carbon::now('Asia/Manila')->format('Y-m-d H:i');
+            $user->last_active_at = Carbon::now('Asia/Manila')->format('Y-m-d h:i A');
             $user->save();
 
             // Check if the user has 2FA enabled (0 = false, 1 = true)
@@ -52,7 +52,7 @@ class LoginController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Logged in at: " . now()->format('Y-m-d H:i:s'),
+                'event' => "Logged in at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
 
@@ -89,7 +89,14 @@ class LoginController extends Controller
      */
     public function destroy(Request $request)
     {
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Logged out at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
+
         Auth::logout();
+
         return redirect('/login');
     }
 }

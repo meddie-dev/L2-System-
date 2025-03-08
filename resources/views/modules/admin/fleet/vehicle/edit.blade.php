@@ -142,11 +142,16 @@
         </div>
         <!-- Submit Registration Button -->
         <div class="tw-flex tw-justify-end">
-          <button type="submit" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Update</button>
+        <button form="deleteVehicleForm" type="submit" class="tw-text-white tw-bg-red-600  tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md  tw-mr-2 | max-md:tw-text-xs">Delete Vehicle</button>
+          <button type="submit" class=" tw-bg-indigo-600  tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Update</button>
         </div>
       </form>
+     
     </div>
-
+    <form class="tw-mr-2 tw-hidden" id="deleteVehicleForm"  action="{{ route('admin.fleet.destroy', $vehicle->id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+      </form>
     <!-- Maintenance Tracking -->
     <div class="card-body">
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">

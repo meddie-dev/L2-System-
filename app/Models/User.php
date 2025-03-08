@@ -96,37 +96,27 @@ class User extends Authenticatable
 
     public function calculatePerformance()
     {
-
         $totalDeliveries = $this->tripTickets()->count();
         $onTime = $this->on_time_deliveries ?? 0;
         $late = $this->late_deliveries ?? 0;
         $early = $this->early_deliveries ?? 0;
-
+    
         // Handle ratings better
-        $rating = $this->tripTickets()->whereNotNull('rating')->avg('rating');
-        if (is_null($rating)) {
-            $rating = 3.5; // Default to a neutral score instead of max rating
-        }
-
+        $rating = $this->tripTickets()->whereNotNull('rating')->avg('rating') ?? 3.5; // Default to neutral score
+    
         // Scoring calculation
-        $ratingScore = ($rating / 5) * 50; // 50% weight for rating
-
+        $ratingScore = ($rating / 5) * 50; // 50% weight
+    
         if ($totalDeliveries > 0) {
-            $onTimeScore = ($onTime / $totalDeliveries) * 30; // 30% weight for on-time
-            $lateScore = (1 - ($late / $totalDeliveries)) * 20; // 20% weight for lateness
+            $onTimeScore = ($onTime / $totalDeliveries) * 30; // 30% weight
+            $lateScore = max(0, (1 - ($late / $totalDeliveries)) * 20); // 20% weight
+            $earlyScore = min(($early / $totalDeliveries) * 10, 10); // 10% weight
         } else {
-            $onTimeScore = 15; // Neutral score for new drivers
-            $lateScore = 5; // Neutral but slightly penalizing
-        }
-
-        // Adjust for early deliveries (if applicable)
-        if ($early > 0) {
-            $earlyScore = min(($early / $totalDeliveries) * 5, 5); // Cap at 5 bonus points
-        } else {
+            $onTimeScore = 15; // Neutral
+            $lateScore = 5; // Slight penalty
             $earlyScore = 0;
         }
-
-        // Final performance score
+    
         $this->performance_score = round($ratingScore + $onTimeScore + $lateScore + $earlyScore, 2);
         $this->save();
     }

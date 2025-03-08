@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Jobs\Staff\SendDocumentApprovalNotification;
+use App\Jobs\Staff\Document\SendDocumentApprovalNotification;
 use App\Jobs\Vendor\SendDocumentNotifications;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Document;
@@ -69,7 +69,7 @@ class DocumentController extends Controller
     
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Uploaded Document: {$document->documentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Document Submitted with Document Number: {$document->documentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
                 'ip_address' => $request->ip(),
             ]);
     
@@ -161,6 +161,7 @@ class DocumentController extends Controller
             $document->update([
                 'approval_status' => 'reviewed',
                 'reviewed_by' => auth()->id(),
+                'rejected_by' => null
             ]);
 
             DB::commit();
@@ -174,13 +175,30 @@ class DocumentController extends Controller
             return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
         }
     }
-    public function reject(Order $order)
+    public function reject(Document $document)
     {
-        $order->update(['approval_status' => 'rejected']);
+        DB::beginTransaction();
 
-        $order->creator->notify(new staffApprovalStatus($order, 'rejected'));
+        try {
+            $document->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => auth()->id(),
+                'redirected_to' => null
+            ]);
 
-        return redirect()->route('orders.index')->with('error', 'order rejected.');
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Rejected Document Request: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('staff.document.manage')->with('success', 'Document rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
 
     // Admin

@@ -2,67 +2,99 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Admin\TripTicket\SendTripDeliveredNotification;
+use App\Jobs\Vendor\SendTripRatingNotification;
+use App\Models\ActivityLogs;
 use App\Models\Modules\Order;
 use App\Models\TripTicket;
+use App\Models\User;
+use App\Notifications\NewNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TripTicketController extends Controller
 {
+
+    // Driver
     public function markAsInTransit(Request $request, $id)
     {
         $trip = TripTicket::findOrFail($id);
         $trip->status = 'in_transit';
         $trip->save();
+
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Trip marked as in transit at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        $creator = User::find($trip->order->user_id);
+
+        if ($creator) {
+            $creator->notify(new NewNotification("Your trip ({$trip->tripNumber}) has been marked as in transit. Check trip details."));
+        }
+
         return redirect()->back()->with(['success' => 'Trip marked as in transit.']);
     }
 
     public function markAsDelivered(Request $request, $id)
     {
-
         $trip = TripTicket::findOrFail($id);
 
         if ($trip->status !== 'in_transit') {
             return redirect()->back()->with(['success' => false, 'message' => 'Trip must be in transit before marking as delivered.']);
         }
 
-        $now = Carbon::now();
-
-        // Ensure arrivalTime is valid before parsing
         if (!$trip->arrivalTime) {
             return redirect()->back()->with(['success' => false, 'message' => 'Arrival time is missing.']);
         }
 
-        $scheduledArrival = Carbon::parse($trip->arrivalTime);
-        $actualArrival = $now;
-        $delayMinutes = $actualArrival->diffInMinutes($scheduledArrival, false); // false keeps the sign (negative if early)
+        $now = Carbon::now( 'Asia/Manila' );
+        $scheduledArrival = $trip->arrivalTime;
+        $delayMinutes = - $now->diffInMinutes($scheduledArrival, false);
 
-        // Update trip details
         $trip->status = 'delivered';
         $trip->delivered_at = $now;
-        $trip->delay_minutes = $delayMinutes; // Store delay for reporting
+        $trip->delay_minutes = $delayMinutes;
         $trip->save();
 
-        // Update driver performance
         $driver = $trip->user;
         if ($driver) {
-            if ($delayMinutes > 15) {
+            if ($delayMinutes > 15) {  
                 $driver->late_deliveries += 1;
-            } elseif ($delayMinutes < -10) { // Consider early deliveries as well
+            } elseif ($delayMinutes < -10) {  
                 $driver->early_deliveries += 1;
-            } else {
+            } else {  
                 $driver->on_time_deliveries += 1;
             }
-
-            $driver->calculatePerformance(); // Ensure this method properly recalculates scores
             $driver->save();
         }
 
+
+        $vehicle = $trip->vehicle;
+        if ($vehicle) {
+            $vehicle->status = 'available';
+            $vehicle->save();
+        }
+
+        if ($driver) {
+            $driver->status = 'available';
+            $driver->save();
+        }
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Trip marked as delivered at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        SendTripDeliveredNotification::dispatch($trip);
+
         return redirect()->back()->with([
-            'success' => true,
-            'message' => 'Trip marked as delivered.',
-            'performance_score' => $driver->performance_score ?? 'N/A'
+            'success' => 'Trip marked as delivered.',
         ]);
     }
 
@@ -74,20 +106,42 @@ class TripTicketController extends Controller
 
     public function rateTrip(Request $request, $id)
     {
-        $trip = TripTicket::findOrFail($id);
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'feedback' => 'nullable|string'
-        ]);
+        DB::beginTransaction();
 
-        $trip->rating = $request->rating;
-        $trip->feedback = $request->feedback;
-        $trip->save();
+        try {
+            $trip = TripTicket::findOrFail($id);
 
-        $trip->user->calculatePerformance();
+            $validated = $request->validate([
+                'rating' => 'required|integer|min:1|max:5',
+                'feedback' => 'nullable|string|max:1000'
+            ]);
 
-        return redirect()->back()->with(['success' => 'Trip rated successfully.', 'new_performance_score' => $trip->user->performance_score]);
+            $trip->update([
+                'rating' => $validated['rating'],
+                'feedback' => $validated['feedback'],
+            ]);
+
+            // Update driver's performance score
+            if ($trip->user) {
+                $trip->user->calculatePerformance();
+                $trip->user->save();
+            }
+
+            DB::commit();
+
+            // Dispatch Notification to Driver
+            SendTripRatingNotification::dispatch($trip);
+
+            return redirect()->route('vendorPortal.dashboard')->with([
+                'success' => 'Trip rated successfully.',
+                'new_performance_score' => $trip->user->performance_score ?? 'N/A'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
+
     // Vendor
 
     public function vendorInTransitIndex()

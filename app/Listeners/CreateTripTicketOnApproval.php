@@ -115,6 +115,7 @@ class CreateTripTicketOnApproval
                 'dropOffLng' => $dropOffCoords[0],
                 'rating' => null,
                 'feedback' => null,
+                'approved_by' => auth()->user()->id,
             ]);
 
             // Create Fuel entry

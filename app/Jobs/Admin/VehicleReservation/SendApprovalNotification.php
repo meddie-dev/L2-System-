@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Jobs\Admin;
+namespace App\Jobs\Admin\VehicleReservation;
 
 use App\Models\Modules\VehicleReservation;
-use App\Notifications\admin\adminApprovalRequest;
 use App\Notifications\admin\adminApprovalStatus;
-use App\Notifications\driver\TripTicketNotification;
 use App\Notifications\NewNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,8 +26,13 @@ class SendApprovalNotification implements ShouldQueue
 
     public function handle()
     {
-        $this->driver->notify(new NewNotification("You have been assigned to a new vehicle reservation: {$this->vehicleReservation->reservationNumber}. Please check the system for details."));
+        $notifications = [
+            new NewNotification("You have been assigned to a new vehicle reservation: {$this->vehicleReservation->reservationNumber}. Please check the system for details."),
+            new adminApprovalStatus('Reservation', $this->vehicleReservation->reservationNumber)
+        ];
 
-        $this->driver->notify(new adminApprovalStatus('Reservation', $this->vehicleReservation->reservationNumber));
+        foreach ($notifications as $notification) {
+            $this->driver->notify($notification);
+        }
     }
 }

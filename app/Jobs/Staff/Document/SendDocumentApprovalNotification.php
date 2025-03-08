@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Staff;
+namespace App\Jobs\Staff\Document;
 
 use App\Models\Modules\Document;
 use App\Models\User;
@@ -29,9 +29,12 @@ class SendDocumentApprovalNotification implements ShouldQueue
         if ($admin) {
             $this->document->redirected_to = $admin->id;
             $this->document->save();
+        }
 
-            $admin->notify(new adminApprovalRequest('Document', $this->document));
-            $admin->notify(new NewNotification("Reviewed Document from {$this->document->user->firstName} {$this->document->user->lastName} with Document Number: ({$this->document->documentNumber}). Waiting for your approval."));
+        $creator = User::find($this->document->user_id);
+        if ($creator) {
+            $creator->notify(new adminApprovalRequest('Document', $this->document));
+            $creator->notify(new NewNotification("Your document ({$this->document->documentNumber}) has been reviewed. Please wait for approval."));
         }
     }
 }

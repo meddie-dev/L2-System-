@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs\Staff;
+namespace App\Jobs\Staff\VehicleReservation;
 
 use App\Models\User;
 use App\Models\Modules\VehicleReservation;
-use App\Notifications\staff\staffApprovalRequest;
+use App\Notifications\admin\adminApprovalRequest;
 use App\Notifications\NewNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,11 +31,10 @@ class SendVehicleReservationNotification implements ShouldQueue
             ->where('last_active_at', '>=', now()->subMinutes(5))
             ->orderBy('last_active_at', 'desc')
             ->limit(1)
-            ->get();
+            ->first();
 
-        foreach ($activeAdmins as $admin) {
-            $admin->notify(new staffApprovalRequest('VehicleReservation', $this->vehicleReservation));
-            $admin->notify(new NewNotification("Vehicle Reservation from {$this->user->firstName} {$this->user->lastName} with Reservation Number: ({$this->vehicleReservation->reservationNumber}). Waiting for your approval."));
-        }
+
+        $activeAdmins->notify(new adminApprovalRequest('VehicleReservation', $this->vehicleReservation));
+        $activeAdmins->notify(new NewNotification("Vehicle Reservation by {$this->user->firstName} {$this->user->lastName} with Reservation Number: ({$this->vehicleReservation->reservationNumber}). Waiting for your approval."));
     }
 }

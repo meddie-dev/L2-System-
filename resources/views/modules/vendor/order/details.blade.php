@@ -53,11 +53,11 @@
       </div>
 
       <!-- Approved By -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Approved By</h3>
+      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Reviewed By</h3>
       <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
-          <input type="text" id="approvedByName" name="approvedByName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="APPROVED BY NAME" value="{{ optional(App\Models\User::find($order->approved_by))->firstName }} {{ optional(App\Models\User::find($order->approved_by))->lastName }}" readonly>
+          <input type="text" id="approvedByName" name="approvedByName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="APPROVED BY NAME" value="{{ optional(App\Models\User::find($order->reviewed_by))->firstName }} {{ optional(App\Models\User::find($order->reviewed_by))->lastName }}" readonly>
         </div>
         <div>
           <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Approved At</label>
@@ -65,7 +65,7 @@
         </div>
         <div>
           <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Role</label>
-          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ optional(App\Models\User::find($order->approved_by))->roles->pluck('name')->first() }}" readonly>
+          <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs"     value="{{ optional(App\Models\User::find($order->reviewed_by))->roles->pluck('name')->first() ?? 'N/A' }}"  readonly>
         </div>
 
       </div>

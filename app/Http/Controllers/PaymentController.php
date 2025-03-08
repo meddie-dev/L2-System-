@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\Staff\SendPaymentApprovalNotification;
+use App\Jobs\Staff\Payment\SendPaymentRejectionNotification;
+use App\Jobs\Staff\Payment\SendPaymentApprovalNotification;
 use App\Jobs\Vendor\SendPaymentNotifications;
 use App\Models\ActivityLogs;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use App\Models\Modules\Order;
 use App\Models\Payment;
 use App\Models\User;
 use App\Notifications\NewNotification;
-use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -153,6 +153,7 @@ class PaymentController extends Controller
             $payment->update([
                 'approval_status' => 'reviewed',
                 'reviewed_by' => auth()->id(),
+                'rejected_by' => null
             ]);
 
             DB::commit();
@@ -167,12 +168,31 @@ class PaymentController extends Controller
         }
     }
 
-    public function reject(Order $order)
+    public function reject(Payment $payment)
     {
-        $order->update(['approval_status' => 'rejected']);
+        DB::beginTransaction();
 
-        $order->creator->notify(new staffApprovalStatus($order, 'rejected'));
+        try {
+            $payment->update([
+                'approval_status' => 'rejected',
+                'rejected_by' => auth()->id(),
+                redirected_to => null
+            ]);
 
-        return redirect()->route('orders.index')->with('error', 'order rejected.');
+            SendPaymentRejectionNotification::dispatch($payment);
+
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Rejected Payment Request: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('staff.payment.manage')->with('success', 'Payment rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
     }
 }

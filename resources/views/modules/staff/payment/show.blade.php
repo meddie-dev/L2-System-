@@ -85,6 +85,11 @@
       </div>
     </div>
     <div class="tw-flex tw-justify-end tw-mb-6">
+      <form class="tw-mr-2" action="{{ route('staff.payment.reject', $order->payment->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button type="submit" class="tw-text-white tw-bg-red-600 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Reject</button>
+      </form>
       <form action="{{ route('staff.payment.approve', $order->payment->id) }}" method="POST">
         @csrf
         @method('PATCH')

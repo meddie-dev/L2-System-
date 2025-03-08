@@ -66,6 +66,12 @@ class RegisterController extends Controller
         // Log the user in
         Auth::login($user);
 
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Registered and logged in at: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
         switch ($user->roles->first()->name) {
             case 'Super Admin':
                 return redirect()->route('superadmin.dashboard')

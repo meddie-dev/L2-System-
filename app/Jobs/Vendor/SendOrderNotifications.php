@@ -44,7 +44,7 @@ class SendOrderNotifications implements ShouldQueue
             $this->order->save();
 
             $staff->notify(new staffApprovalRequest('Order', $this->order));
-            $staff->notify(new NewNotification("Order request from {$this->user->firstName} {$this->user->lastName} with Order Number: ({$this->order->orderNumber}). Waiting for your approval."));
+            $staff->notify(new NewNotification("Order Request by {$this->user->firstName} {$this->user->lastName} with Order Number: ({$this->order->orderNumber}). Waiting for your approval."));
         }
     }
 }

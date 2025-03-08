@@ -47,19 +47,19 @@ class staffApprovalStatus extends Notification
         // Customize further based on the approval type
         switch ($type) {
             case 'Order':
-                $message = "Order Number: ({$approvable->orderNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Order number ({$approvable->orderNumber}) is " . strtolower($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'our monitoring team, please wait for rechecking') . ".";
                 break;
 
             case 'Document':
-                $message = "Document Number: ({$approvable->documentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Document Number: ({$approvable->documentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'Our Monitoring Team, Please wait for rechecking');
                 break;
 
             case 'Payment':
-                $message = "Payment Number: ({$approvable->paymentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Payment Number: ({$approvable->paymentNumber}) is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'Our Monitoring Team, Please wait for rechecking');
                 break;
 
             case 'Vehicle Reservation':
-                $message = "Reservation Number: {$approvable->reservationNumber} is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : '');
+                $message = "Reservation Number: {$approvable->reservationNumber} is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'Our Monitoring Team, Please wait for rechecking');
                 break;
 
 

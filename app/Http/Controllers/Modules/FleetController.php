@@ -7,23 +7,21 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLogs;
 use App\Models\FleetCard;
 use App\Models\Fuel;
-use App\Models\Modules\Order;
 use App\Models\Modules\VehicleReservation;
 use App\Models\shipments;
 use App\Models\TripTicket;
 use App\Models\User;
 use App\Models\Vehicle;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\ValidationException;
 
 
 class FleetController extends Controller
 {
-    // Admin - Fleet - Vehicles
-
+    // Admin
+    
+    // Fleet - Vehicles
     public function index()
     {
         $vehicles = Vehicle::all();
@@ -130,11 +128,16 @@ class FleetController extends Controller
 
     public function destroy(Vehicle $vehicle)
     {
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Deleted Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => request()->ip(),
+        ]);
+        
         $vehicle->delete();
+
         return redirect()->route('admin.fleet.index')->with('success', 'Vehicle deleted successfully.');
     }
-
-    // Admin
 
     // Fleet - Driver
     public function driverIndex()
@@ -144,26 +147,43 @@ class FleetController extends Controller
     }
 
 
-    public function driverCreate(User $user)
+    public function driverDetails(User $user)
     {
-        return view('modules.admin.fleet.driver.create', compact('user'));
+        $tripTicket = TripTicket::where('user_id', $user->id)->get();
+        $vehicle = Vehicle::where('user_id', $user->id)->get();
+        return view('modules.admin.fleet.driver.details', compact('user','tripTicket','vehicle'));
     }
 
-    // Fleet - Shipment
-    public function shipmentIndex()
+    public function driverUpdate(User $user)
     {
-        $shipments = Shipments::all();
+        try {
+            $user->update([
+                'firstName' => request()->firstName,
+                'lastName' => request()->lastName,
+                'email' => request()->email,
+                'driverType' => request()->driverType,
+            ]);
 
-        return view('modules.admin.fleet.shipment.manage', compact('shipments'));
+            ActivityLogs::create([
+                'user_id' => Auth::id(),
+                'event' => "Updated Driver: {$user->firstName} {$user->lastName} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'ip_address' => request()->ip(),
+            ]);
+
+            return redirect()->route('admin.fleet.driver.index')->with('success', 'Driver updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.fleet.driver.index')->with('error', 'Failed to update driver: ' . $e->getMessage());
+        }
     }
 
-    public function shipmentCreate( Shipments $shipment)
+    // Fleet - Fuel
+    public function fuelIndex() 
     {
-        
-        return view('modules.admin.fleet.shipment.edit', compact('shipment'));
+        $fuel = Fuel::all();
+        return view('modules.admin.fleet.fuel.index', compact('fuel'));
     }
 
-    // Driver
+    //  Driver
 
     public function driverTask()
     {
