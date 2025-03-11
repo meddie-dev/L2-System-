@@ -17,7 +17,12 @@ class TripTicket extends Model
     }
 
     public function order()
-{
-    return $this->belongsTo(Order::class);
-}
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function incidentReport()
+    {
+        return $this->hasOne(IncidentReport::class);
+    }
 }

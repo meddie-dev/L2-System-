@@ -34,18 +34,22 @@
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($fuel as $fuels)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2"> {{ $fuels->fuelNumber }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $fuels->fuelType }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $fuels->estimatedFuelConsumption }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $fuels->estimatedCost }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $fuels->fuelDate }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <a href="{{ route('admin.fleet.fuel.details', $fuels->id) }}" class="tw-text-blue-600 hover:tw-underline">
+                {{ $fuels->fuelNumber }}
+              </a>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ucfirst( $fuels->fuelType) }}</td>
+            <td class="tw-px-4 tw-py-2">{{ number_format($fuels->estimatedFuelConsumption, 2) . ' L' }}</td>
+            <td class="tw-px-4 tw-py-2">PHP {{ number_format($fuels->estimatedCost, 2) }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($fuels->fuelDate)->format('F d, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
               @switch($fuels->fuelStatus)
               @case('scheduled')
-              <span class="tw-text-yellow-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+              <span class="tw-text-yellow-500">{{ ucfirst($fuels->fuelStatus) }}</span>
               @break
               @case('completed')
-              <span class="tw-text-green-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+              <span class="tw-text-green-500">{{ ucfirst($fuels->fuelStatus) }}</span>
               @break
               @endswitch
             </td>

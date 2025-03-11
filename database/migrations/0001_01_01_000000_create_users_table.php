@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('on_time_deliveries')->default(0);
             $table->integer('late_deliveries')->default(0);
             $table->integer('early_deliveries')->default(0);
+            $table->timestamp('restricted_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

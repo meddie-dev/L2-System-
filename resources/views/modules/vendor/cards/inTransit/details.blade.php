@@ -153,7 +153,7 @@
       </div>
       @endif
 
-      @if($tripTicket->status === 'delivered' || $tripTicket->rating !== null)
+      @if($tripTicket->rating !== null)
         <!-- Rate and Feedback Details -->
       <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Feedback and Rating</h3>
       <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">

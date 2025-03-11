@@ -6,7 +6,7 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb  :active="true" :isLast="false">
+      <x-partials.breadcrumb :active="true" :isLast="false">
         Vehicle Reservation
       </x-partials.breadcrumb>
 
@@ -33,16 +33,18 @@
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->id }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if($vehicleReservation->approval_status === 'approved')
+              <div class="tw-flex tw-justify-between">
+                @if($vehicleReservation->approval_status === 'approved')
                 {{ $vehicleReservation->reservationNumber }}
-              @else
+                @else
                 <a href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">
                   {{ $vehicleReservation->reservationNumber }}
                 </a>
-              @endif
-              <span class="tw-text-gray-400 tw-text-sm">
-                (Assigned to and Reviewed By: {{ \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->firstName . ' ' . \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->lastName }})
-              </span>
+                @endif
+                <span class="tw-text-gray-400 tw-text-sm">
+                  (Assigned and Reviewed By: {{ \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->firstName . ' ' . \App\Models\User::where('id', $vehicleReservation->reviewed_by)->first()->lastName }})
+                </span>
+              </div>
             </td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">

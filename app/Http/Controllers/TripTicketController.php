@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\Admin\TripTicket\SendTripDeliveredNotification;
 use App\Jobs\Vendor\SendTripRatingNotification;
 use App\Models\ActivityLogs;
-use App\Models\Modules\Order;
+use App\Models\IncidentReport;
 use App\Models\TripTicket;
 use App\Models\User;
 use App\Notifications\NewNotification;
@@ -52,9 +52,19 @@ class TripTicketController extends Controller
             return redirect()->back()->with(['success' => false, 'message' => 'Arrival time is missing.']);
         }
 
-        $now = Carbon::now( 'Asia/Manila' );
+        $now = Carbon::now('Asia/Manila');
         $scheduledArrival = $trip->arrivalTime;
-        $delayMinutes = - $now->diffInMinutes($scheduledArrival, false);
+        $delayMinutes = -$now->diffInMinutes($scheduledArrival, false);
+
+        // Check for valid incident reports
+        $incidentReport = IncidentReport::where('trip_ticket_id', $trip->id)
+            ->where('approval_status', 'approved')
+            ->first();
+
+        $isLate = ($delayMinutes > 15);
+        if ($incidentReport && $isLate) {
+            $isLate = false; // Do not penalize if there's a valid incident report
+        }
 
         $trip->status = 'delivered';
         $trip->delivered_at = $now;
@@ -63,16 +73,17 @@ class TripTicketController extends Controller
 
         $driver = $trip->user;
         if ($driver) {
-            if ($delayMinutes > 15) {  
+            if ($isLate) {
                 $driver->late_deliveries += 1;
-            } elseif ($delayMinutes < -10) {  
+                $driver->applyLateDeliveryPenalty(); // Apply restriction separately
+            } elseif ($delayMinutes < -10) {
                 $driver->early_deliveries += 1;
-            } else {  
+            } else {
                 $driver->on_time_deliveries += 1;
             }
+
             $driver->save();
         }
-
 
         $vehicle = $trip->vehicle;
         if ($vehicle) {

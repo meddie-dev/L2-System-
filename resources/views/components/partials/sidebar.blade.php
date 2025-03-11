@@ -110,9 +110,8 @@
           </a>
           <div class="collapse" id="collapseAudit" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/admin/audit/generate-report">Generate Report</a>
-              <a class="nav-link" href="/admin/audit/risk-assessment">Risk Assessment</a>
-              <a class="nav-link" href="/admin/audit/review-staff">Review Staff Activities</a>
+              <a class="nav-link" href="/admin/dashboard/audit/assessment">Risk Assessment</a>
+              <a class="nav-link" href="/admin/dashboard/audit/review">Review Activities</a>
             </nav>
           </div>
 
@@ -137,7 +136,6 @@
           <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
               <a class="nav-link" href="/admin/dashboard/document/manage">Manage Documents</a>
-              <a class="nav-link" href="/admin/dashboard/document/complianceAndLegal">Compliance & Legal</a>
             </nav>
           </div>
 
@@ -168,7 +166,7 @@
           </a>
           <div class="collapse" id="collapseAudit" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/audit/risk">Risk Assessment Report</a>
+              <a class="nav-link" href="/staff/dashboard/audit/report">Report Managament</a>
             </nav>
           </div>
 
@@ -252,6 +250,18 @@
             Task Management
           </a>
 
+          <!-- Audit Management -->
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAudit" aria-expanded="false" aria-controls="collapseAudit">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+            Audit Management
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapseAudit" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/driver/dashboard/audit/report">Report Managament</a>
+            </nav>
+          </div>
+
           <!-- Fleet Management -->
           <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFleet" aria-expanded="false" aria-controls="collapseFleet">
             <div class="sb-nav-link-icon"><i class="fa-solid fa-truck"></i></div>
@@ -264,8 +274,6 @@
               <a class="nav-link" href="/driver/dashboard/fleet/card">Card Management</a>
             </nav>
           </div>
-
-
         </div>
         @endif
 
@@ -285,7 +293,7 @@
         @if(Auth::user()->hasRole('Vendor') || Auth::user()->hasRole('Driver'))
         <!-- Addons or Features -->
         <div class="sb-sidenav-menu-heading">Addons</div>
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route('calendarDriver') }}">
           <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar"></i></div>
           Calendar and Schedule
         </a>

@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\GeocodeController;
+use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\MFA\TwoFactorController;
 use App\Http\Controllers\Modules\AuditController;
 use App\Http\Controllers\Modules\DocumentController;
@@ -53,6 +54,55 @@ Route::middleware('role:Admin', 'active')->group(function () {
     // Vendor Management
     Route::get('/admin/dashboard/vendors', [AuditController::class, 'indexAdmin'])
         ->name('admin.vendors.manage');
+    Route::get('/admin/dashboard/vendor/{user}', [AuditController::class, 'showVendor'])
+        ->name('admin.vendors.show');
+
+    Route::get('/admin/dashboard/vendor/{user}/order/{order}', [AuditController::class, 'showOrder'])
+        ->name('admin.vendors.order.show');
+    Route::patch('/admin/dashboard/vendor/{user}/order/{order}/approved', [AuditController::class, 'approvedOrder'])
+        ->name('admin.vendors.order.approved');
+    Route::patch('/admin/dashboard/vendor/{user}/order/{order}/rejected', [AuditController::class, 'rejectedOrder'])
+        ->name('admin.vendors.order.rejected');
+
+    Route::get('/admin/dashboard/vendor/{user}/document/{document}', [AuditController::class, 'showDocument'])
+        ->name('admin.vendors.document.show');
+    Route::patch('/admin/dashboard/vendor/{user}/document/{document}/approved', [AuditController::class, 'approvedDocument'])
+        ->name('admin.vendors.document.approved');
+    Route::patch('/admin/dashboard/vendor/{user}/document/{document}/rejected', [AuditController::class, 'rejectedDocument'])
+        ->name('admin.vendors.document.rejected');
+    
+    Route::get('/admin/dashboard/vendor/{user}/payment/{payment}', [AuditController::class, 'showPayment'])
+        ->name('admin.vendors.payment.show');
+    Route::patch('/admin/dashboard/vendor/{user}/payment/{payment}/approved', [AuditController::class, 'approvedPayment'])
+        ->name('admin.vendors.payment.approved');
+    Route::patch('/admin/dashboard/vendor/{user}/payment/{payment}/rejected', [AuditController::class, 'rejectedPayment'])
+        ->name('admin.vendors.payment.rejected');
+    
+    Route::get('/admin/dashboard/vendor/{user}/reservation/{reservation}', [AuditController::class, 'showVehicleReservation'])
+        ->name('admin.vendors.reservation.show');
+    Route::patch('/admin/dashboard/vendor/{user}/reservation/{vehicleReservation}/approved', [AuditController::class, 'approvedVehicleReservation'])
+        ->name('admin.vendors.vehicleReservation.approved');
+    Route::patch('/admin/dashboard/vendor/{user}/reservation/{vehicleReservation}/rejected', [AuditController::class, 'rejectedVehicleReservation'])
+        ->name('admin.vendors.vehicleReservation.rejected');
+
+
+    // Audit Management
+    Route::get('/admin/dashboard/audit/assessment', [AuditController::class, 'indexReportAdmin'])
+        ->name('admin.audit.index');
+    Route::get('/admin/dashboard/audit/assessment/details/{incidentReport}', [AuditController::class, 'detailsAdmin'])
+        ->name('admin.audit.details');
+    Route::post('/admin/dashboard/audit/assessment/{incidentReport}/approved', [AuditController::class, 'approved'])
+        ->name('admin.audit.report.approved');
+    Route::post('/admin/dashboard/audit/assessment/{incidentReport}/rejected', [AuditController::class, 'rejectedAdmin'])
+        ->name('admin.audit.report.rejected');
+
+    Route::get('/admin/dashboard/audit/review', [AuditController::class, 'indexActivity'])
+        ->name('admin.audit.activity.index');
+    Route::get('/admin/dashboard/audit/staff/{user}', [AuditController::class, 'staffActivity'])
+        ->name('admin.audit.staff.activity');
+    Route::get('/admin/dashboard/audit/driver/{user}', [AuditController::class, 'driverActivity'])
+        ->name('admin.audit.driver.activity');
+
 
     // Document Management
     Route::get('/admin/dashboard/document/manage', [DocumentController::class, 'manageAdmin'])
@@ -95,6 +145,11 @@ Route::middleware('role:Admin', 'active')->group(function () {
     // Fleet Management -> Fuel
     Route::get('/admin/dashboard/fleet/fuel', [FleetController::class, 'fuelIndex'])
         ->name('admin.fleet.fuel.index');
+    Route::get('/admin/dashboard/fleet/fuel/details/{fuel}', [FleetController::class, 'fuelDetails'])
+        ->name('admin.fleet.fuel.details');
+    Route::patch('/admin/dashboard/fleet/fuel/{fuel}', [FleetController::class, 'fuelUpdate'])
+        ->name('admin.fleet.fuel.update');
+
 
 });
 
@@ -115,6 +170,16 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.vendors.approve');
     Route::patch('/staff/dashboard/vendor/reject/{order}', [OrderController::class, 'reject'])
         ->name('staff.vendors.reject');
+
+    // Audit Management
+    Route::get('/staff/dashboard/audit/report', [AuditController::class, 'indexStaff'])
+        ->name('staff.audit.index');
+    Route::get('/staff/dashboard/audit/report/details/{incidentReport}', [AuditController::class, 'detailsStaff'])
+        ->name('staff.audit.details');
+    Route::patch('/staff/dashboard/audit/report/{incidentReport}/reviewed', [AuditController::class, 'reviewed'])
+        ->name('staff.audit.report.reviewed');
+    Route::patch('/staff/dashboard/audit/report/{incidentReport}/rejected', [AuditController::class, 'rejected'])
+        ->name('staff.audit.report.rejected');
 
     // Document Management
     Route::get('/staff/dashboard/document/submission', [DocumentController::class, 'manage'])
@@ -242,6 +307,9 @@ Route::middleware('role:Driver', 'active')->group(function () {
     Route::get('/driver/dashboard', [DashboardController::class, 'driverDashboard'])
         ->name('driver.dashboard');
 
+    // Calendar
+    Route::get('/calendarDriver', [AddOnsController::class, 'calendarDriver'])->name('calendarDriver');
+
     // Pdf 
     Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])
         ->name('driver.tripTicket.pdf');
@@ -252,7 +320,13 @@ Route::middleware('role:Driver', 'active')->group(function () {
     Route::get('/driver/dashboard/task/{vehicleReservation}', [FleetController::class, 'driverTaskDetails'])
         ->name('driver.task.details');
 
-    // Trip Management
+    // Audit Management
+    Route::get('/driver/dashboard/audit/report', [IncidentReportController::class, 'index'])
+        ->name('driver.audit.report');
+    Route::get('/driver/dashboard/audit/report/details/{incidentReport}', [IncidentReportController::class, 'details'])
+        ->name('driver.audit.report.details');
+
+    // Fleet - Trip Management
     Route::get('/driver/dashboard/fleet/ticket', [FleetController::class, 'driverTrip'])
         ->name('driver.trip');
     Route::get('/driver/dashboard/fleet/ticket/{tripTicket}', [FleetController::class, 'driverTripDetails'])
@@ -261,8 +335,13 @@ Route::middleware('role:Driver', 'active')->group(function () {
         ->name('driver.trip.inTransit');
     Route::patch('/driver/dashboard/fleet/ticket/{id}/deliver', [TripTicketController::class, 'markAsDelivered'])
         ->name('driver.trip.deliver');
+    Route::get('/driver/dashboard/fleet/ticket/{tripTicket}/report', [IncidentReportController::class, 'create'])
+        ->name('driver.trip.report');
+    Route::post('/driver/dashboard/fleet/ticket/{id}', [IncidentReportController::class, 'store'])
+        ->name('driver.trip.report.store');
+    
 
-    // Card Management
+    // Fleet - Card Management
     Route::get('/driver/dashboard/fleet/card', [FleetController::class, 'driverCard'])
         ->name('driver.card');
     Route::get('/driver/dashboard/fleet/card/{fleetCard}', [FleetController::class, 'driverCardDetails'])

@@ -63,9 +63,11 @@ class adminApprovalStatus extends Notification
                 break;
 
             case 'Reservation':
-                $message = "You are Assigned to Reservation Number: {$approvable->reservationNumber} is " . ucfirst($approvable->approval_status) . "Prepare for your Journey, please check the system for details.";
+                $message = "You are Assigned to Reservation Number: {$approvable->reservationNumber} has been {$approvable->approval_status}. Prepare for your Journey, please check the system for details.";
                 break;
-
+            case 'Incident':
+                $message = "Report Number: ({$approvable->reportNumber}) has been {$approvable->approval_status}.";
+                break;
         }
 
         return (new MailMessage)

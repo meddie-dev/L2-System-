@@ -35,22 +35,18 @@
           @foreach($users as $user)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $user->firstName }} {{ $user->lastName }}</td>
+            <td class="tw-px-4 tw-py-2">
+              <a href="{{ route('admin.vendors.show', $user->id) }}" class="hover:tw-underline tw-text-blue-700">
+                {{ $user->firstName }} {{ $user->lastName }}
+              </a>
+            </td>
             <td class="tw-px-4 tw-py-2">{{ $user->email }}</td>
             <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($user->created_at)->format('F j, Y')  }}</td>
             <td class="tw-px-4 tw-py-2">
-              @php
-              $currentDate = now();
-              $lastLoginDate = $user->last_active_at;
-              $daysSinceLastLogin = $lastLoginDate ? (int) $currentDate->diffInDays($lastLoginDate) : null;
-              @endphp
-
-              @if (!is_null($daysSinceLastLogin))
-              <span class="tw-text-{{ $daysSinceLastLogin === 0 ? 'green-500' : ($daysSinceLastLogin < 0 ? 'yellow-500' : 'red-500') }}">
-              {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
-              </span>
+              @if(\Carbon\Carbon::parse($user->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
+              <span class="tw-bg-green-500 tw-text-white tw-rounded-full tw-px-2 tw-py-1 tw-text-[12px]">Active</span>
               @else
-              <span class="tw-text-gray-500">Last Login: N/A</span>
+              <span>{{ \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() }}</span>
               @endif
             </td>
 

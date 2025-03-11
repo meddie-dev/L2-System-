@@ -248,15 +248,20 @@ class VehicleReservationController extends Controller
 
             // Find an available driver that matches all conditions
             $driver = User::role('Driver')
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'Driver')
-                        ->where('last_active_at', '>=', now()->subMinutes(5));
-                })
-                ->where('driverType', $vehicleReservation->vehicle_type)
-                ->where('status', 'available')
-                ->orderByRaw('CASE WHEN performance_score > 60 THEN 1 ELSE 2 END, last_active_at DESC')
-                ->limit(1)
-                ->first();
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'Driver')
+                    ->where('last_active_at', '>=', now()->subMinutes(5));
+            })
+            ->where('driverType', $vehicleReservation->vehicle_type)
+            ->where('status', 'available')
+            ->where(function ($query) {
+                $query->whereNull('restricted_until')
+                    ->orWhere('restricted_until', '<', now());
+            })
+            ->orderByRaw('CASE WHEN performance_score > 60 THEN 1 ELSE 2 END, last_active_at DESC')
+            ->limit(1)
+            ->first();
+
 
             if ($vehicle && $driver) {
                 $vehicleReservation->update([
@@ -275,15 +280,22 @@ class VehicleReservationController extends Controller
                 ]);
 
                 $order->update([
-                    'approval_status' => 'approved'
+                    'approval_status' => 'approved',
+                    'approved_by' => Auth::id(),
+                    'redirected_to' => Auth::id()
+
                 ]);
 
                 $order->payment()->update([
-                    'approval_status' => 'approved'
+                    'approval_status' => 'approved',
+                    'approved_by' => Auth::id(),
+                    'redirected_to' => Auth::id()
                 ]);
 
                 $order->document()->update([
-                    'approval_status' => 'approved'
+                    'approval_status' => 'approved',
+                    'approved_by' => Auth::id(),
+                    'redirected_to' => Auth::id()
                 ]);
 
             } else {
@@ -299,7 +311,7 @@ class VehicleReservationController extends Controller
                 'approval_status' => 'approved',
                 'vehicle_id' => $vehicleReservation->vehicle_id,
                 'approved_by' => Auth::id(),
-            ]);   
+            ]);
         }
 
         // Dispatch Notification to the assigned driver

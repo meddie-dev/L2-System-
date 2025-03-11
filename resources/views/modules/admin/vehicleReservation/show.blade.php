@@ -77,7 +77,32 @@
         </div>
       </div>
     </div>
-    <div class="tw-flex tw-justify-end tw-mb-6">
+
+    <!-- Custom Divider -->
+    <div class="tw-flex tw-items-center tw-justify-center tw-my-4">
+      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
+      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+    </div>
+
+    <!-- Review By -->
+    <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Review By</h3>
+    <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
+      <div>
+        <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
+        <input type="text" id="approvedByName" name="approvedByName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="APPROVED BY NAME" value="{{ optional(App\Models\User::find($vehicleReservation->reviewed_by))->firstName }} {{ optional(App\Models\User::find($vehicleReservation->reviewed_by))->lastName }}" readonly>
+      </div>
+      <div>
+        <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Reviewed At</label>
+        <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $vehicleReservation->updated_at->format('Y-m-d') }}" readonly>
+      </div>
+      <div>
+        <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Role</label>
+        <input type="text" id="deliveryLocation" name="deliveryLocation" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ optional(App\Models\User::find($vehicleReservation->reviewed_by))->roles->pluck('name')->first() }}" readonly>
+      </div>
+    </div>
+
+    <div class="tw-flex tw-justify-end tw-my-6">
       <form class="tw-mr-2" action="{{ route('admin.vehicleReservation.reject', $vehicleReservation->id) }}" method="POST">
         @csrf
         @method('PATCH')
@@ -89,6 +114,14 @@
         <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Reservation</button>
       </form>
     </div>
+    <div>
+        <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+          <a href="{{ route('admin.vehicleReservation.manage') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+            <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+            Back
+          </a>
+        </div>
+      </div>
     <hr>
     <div>
       <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Order Table Instructions</h3>

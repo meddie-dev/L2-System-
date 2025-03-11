@@ -6,12 +6,12 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb :active="true" :isLast="false">
-        Fleet Management
+      <x-partials.breadcrumb class="tw-bg-white" :active="true" :isLast="false">
+        Audit Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Ticket Management
+        Report Management
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -22,23 +22,24 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Ticket Number</th>
+            <th class="tw-px-4 tw-py-2">Report Number</th>
             <th class="tw-px-4 tw-py-2">Date</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($tripTicket as $tripTickets)
+          @foreach($report as $reports)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.trip.details', $tripTickets->id ?? '') }}">
-                {{ $tripTickets ? $tripTickets->tripNumber : 'N/A' }}
-              </a></td>
-            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
+              <a href="{{ route('staff.audit.details', $reports->id) }}">
+                {{ $reports ? $reports->reportNumber : 'N/A' }}
+              </a>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ $reports->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($tripTickets->status) }}
+              <span class="tw-text-{{ $reports->approval_status === 'approved' ? 'green-500' : ($reports->approval_status === 'pending' ? 'yellow-500' : ($reports->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
+                {{ ucfirst($reports->approval_status) }}
               </span>
             </td>
           </tr>

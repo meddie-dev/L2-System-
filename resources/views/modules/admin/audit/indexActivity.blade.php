@@ -1,17 +1,17 @@
 <x-layout.mainTemplate>
-  <nav class="tw-flex tw-justify-between | max-md:tw-justify-self-end" aria-label="Breadcrumb">
+  <nav class="tw-flex tw-justify-between | max-md:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-md:tw-hidden">
       <x-partials.breadcrumb class="tw-bg-white" href="{{ route((Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Staff') ? 'staff.dashboard' : 'driver.dashboard')))) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb :active="true" :isLast="false">
-        Fleet Management
+      <x-partials.breadcrumb class="tw-bg-white" :active="true" :isLast="false">
+        Audit Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Ticket Management
+        Review Activities
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -22,24 +22,32 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Ticket Number</th>
-            <th class="tw-px-4 tw-py-2">Date</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
+            <th class="tw-px-4 tw-py-2">ID</th>
+            <th class="tw-px-4 tw-py-2">Name</th>
+            <th class="tw-px-4 tw-py-2">Date Created</th>
+            <th class="tw-px-4 tw-py-2">Role</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($tripTicket as $tripTickets)
+          @foreach($users as $user)
           <tr class="hover:tw-bg-gray-100">
+            <td class="tw-px-4 tw-py-2">{{$user->id}}</td>
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.trip.details', $tripTickets->id ?? '') }}">
-                {{ $tripTickets ? $tripTickets->tripNumber : 'N/A' }}
-              </a></td>
-            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
+              <div class="tw-flex tw-justify-between">
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ $user->hasRole('Staff') ? route('admin.audit.staff.activity', $user->id) : route('admin.audit.driver.activity', $user->id) }}">
+                  {{ $user ? $user->firstName . ' ' . $user->lastName : 'N/A' }}
+                </a>
+
+              </div>
+            </td>
+            <td class="tw-px-4 tw-py-2">{{ $user->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($tripTickets->status) }}
-              </span>
+              <div class="tw-flex tw-justify-between">
+                <a href="">
+                  {{ $user->hasRole('Super Admin') ? 'Super Admin' : ($user->hasRole('Admin') ? 'Admin' : ($user->hasRole('Staff') ? 'Staff' : 'Driver')) }}
+                </a>
+              </div>
             </td>
           </tr>
           @endforeach

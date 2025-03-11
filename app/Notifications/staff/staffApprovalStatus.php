@@ -62,6 +62,8 @@ class staffApprovalStatus extends Notification
                 $message = "Reservation Number: {$approvable->reservationNumber} is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'Our Monitoring Team, Please wait for rechecking');
                 break;
 
+            case 'Incident':
+                $message = "Incident Number: {$approvable->incidentNumber} is " . strtoupper($approvable->approval_status) . " by " . ($approvable->assigned_to == $approvable->user->id ? $approvable->user->firstName . ' ' . $approvable->user->lastName : 'Our Monitoring Team, Please wait for rechecking');
 
                 // Add more cases for other types if needed
         }

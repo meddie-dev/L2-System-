@@ -14,13 +14,14 @@ use App\Models\User;
 use App\Models\Vehicle;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
 class FleetController extends Controller
 {
     // Admin
-    
+
     // Fleet - Vehicles
     public function index()
     {
@@ -28,7 +29,8 @@ class FleetController extends Controller
         return view('modules.admin.fleet.vehicle.index', compact('vehicles'));
     }
 
-    public function create(User $user) {
+    public function create(User $user)
+    {
         return view('modules.admin.fleet.vehicle.create', compact('user'));
     }
 
@@ -66,7 +68,7 @@ class FleetController extends Controller
 
         return redirect()->route('admin.fleet.index')->with('success', 'Vehicle added successfully.');
     }
-    
+
 
     public function edit(Vehicle $vehicle)
     {
@@ -133,7 +135,7 @@ class FleetController extends Controller
             'event' => "Deleted Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
             'ip_address' => request()->ip(),
         ]);
-        
+
         $vehicle->delete();
 
         return redirect()->route('admin.fleet.index')->with('success', 'Vehicle deleted successfully.');
@@ -151,7 +153,7 @@ class FleetController extends Controller
     {
         $tripTicket = TripTicket::where('user_id', $user->id)->get();
         $vehicle = Vehicle::where('user_id', $user->id)->get();
-        return view('modules.admin.fleet.driver.details', compact('user','tripTicket','vehicle'));
+        return view('modules.admin.fleet.driver.details', compact('user', 'tripTicket', 'vehicle'));
     }
 
     public function driverUpdate(User $user)
@@ -177,10 +179,15 @@ class FleetController extends Controller
     }
 
     // Fleet - Fuel
-    public function fuelIndex() 
+    public function fuelIndex()
     {
         $fuel = Fuel::all();
         return view('modules.admin.fleet.fuel.index', compact('fuel'));
+    }
+
+    public function fuelDetails(Fuel $fuel)
+    {
+        return view('modules.admin.fleet.fuel.details', compact('fuel',));
     }
 
     //  Driver
@@ -199,7 +206,7 @@ class FleetController extends Controller
     }
 
     public function driverTripTicketPdf(VehicleReservation $vehicleReservation)
-    {   
+    {
         $tripTicket = TripTicket::where('user_id', auth()->user()->id)->first();
         $userId = auth()->user()->id;
 
@@ -211,28 +218,31 @@ class FleetController extends Controller
             return response()->json(['error' => 'Trip Ticket not found'], 404);
         }
 
-        $userId = auth()->id();
-    
         // Define the filename and storage path
         $filename = $tripTicket->tripNumber . '.pdf';
         $folderPath = "trip_tickets/{$userId}/";
         $fullPath = "public/{$folderPath}{$filename}";
-    
+
         // Ensure directory exists
         Storage::disk('public')->makeDirectory($folderPath);
-    
+
         // Check if an existing PDF file needs to be deleted
-        if (Storage::disk('public')->exists($fullPath)) {
-            Storage::disk('public')->delete($fullPath);
+        if (Storage::disk('public')->exists($folderPath . $filename)) {
+            Storage::disk('public')->delete($folderPath . $filename);
         }
-    
+
         // Generate PDF
         $pdf = Pdf::loadView('pdf.tripTicket', compact('vehicleReservation', 'tripTicket', 'fuel'));
-    
+
         // Store PDF in public disk
-        Storage::disk('public')->put($fullPath, $pdf->output());
+        Storage::disk('public')->put($folderPath . $filename, $pdf->output());
+
+        // Log for debugging
+        Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
+
         return $pdf->stream($filename);
     }
+
 
     public function driverTrip()
     {
@@ -255,8 +265,4 @@ class FleetController extends Controller
     {
         return view('modules.driver.card.details', compact('fleetCard'));
     }
-
-
-    
-
 }

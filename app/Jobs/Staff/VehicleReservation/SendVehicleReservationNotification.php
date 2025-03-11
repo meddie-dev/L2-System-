@@ -27,14 +27,10 @@ class SendVehicleReservationNotification implements ShouldQueue
 
     public function handle()
     {
-        $activeAdmins = User::role('Admin')
-            ->where('last_active_at', '>=', now()->subMinutes(5))
-            ->orderBy('last_active_at', 'desc')
-            ->limit(1)
-            ->first();
-
-
-        $activeAdmins->notify(new adminApprovalRequest('VehicleReservation', $this->vehicleReservation));
-        $activeAdmins->notify(new NewNotification("Vehicle Reservation by {$this->user->firstName} {$this->user->lastName} with Reservation Number: ({$this->vehicleReservation->reservationNumber}). Waiting for your approval."));
+        $activeAdmins = User::role('Admin')->get();
+        foreach ($activeAdmins as $admin) {
+            $admin->notify(new adminApprovalRequest('VehicleReservation', $this->vehicleReservation));
+            $admin->notify(new NewNotification("Vehicle Reservation by {$this->user->firstName} {$this->user->lastName} with Reservation Number: ({$this->vehicleReservation->reservationNumber}). Waiting for your approval."));
+        }
     }
 }

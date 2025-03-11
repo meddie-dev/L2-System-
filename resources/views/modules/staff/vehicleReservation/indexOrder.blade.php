@@ -22,27 +22,17 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">&nbsp;</th>
             <th class="tw-px-4 tw-py-2">Reservation For</th>
             <th class="tw-px-4 tw-py-2">Order Number </th>
             <th class="tw-px-4 tw-py-2">Approved Date</th>
+            <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($orders as $order)
           <tr>
-            <td class="tw-px-4 tw-py-2">
-              @if($order->vehicleReservation !== null)
-                <span class="tw-text-green-500 tw-ml-5">
-                  <i class="fa-solid fa-circle"></i>
-                </span>
-              @else
-                <span class="tw-text-red-500  tw-ml-5">
-                  <i class="fa-solid fa-circle"></i>
-                </span>
-              @endif
-            </td>
+           
             <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
               @if($order->vehicleReservation !== null)
@@ -55,6 +45,17 @@
             </td>
             <td class="tw-px-4 tw-py-2">
              {{ $order->updated_at->format('F j, Y') }}
+            </td>
+            <td class="tw-px-4 tw-py-2">
+              @if($order->vehicleReservation !== null)
+                <span class="tw-text-green-500 tw-ml-5">
+                  Scheduled
+                </span>
+              @else
+                <span class="tw-text-red-500  tw-ml-5">
+                  Not Scheduled
+                </span>
+              @endif
             </td>
           @endforeach
         </tbody>

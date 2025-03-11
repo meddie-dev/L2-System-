@@ -20,15 +20,24 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-mb-6" id="map"></div>
+    <!-- Report Incident -->
     <div class='tw-flex tw-justify-between tw-items-center tw-my-2'>
       <h3 class="tw-text-md tw-font-bold  | max-md:tw-text-sm">Trip Ticket</h3>
       <div class="tw-flex">
-        <a href="{{ route('driver.trip') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-white  tw-bg-red-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-red-600 hover:tw-bg-white  hover:tw-text-red-600 | max-md:tw-p-3 ">
+        @if($tripTicket->incidentReport)
+        <a href="{{ route('driver.audit.report.details', $tripTicket->incidentReport->id) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-white  tw-bg-red-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-red-600 hover:tw-bg-white  hover:tw-text-red-600 | max-md:tw-p-2 max-md:tw-text-xs ">
+          <i class="fa-solid fa-exclamation-circle tw-mr-2 | max-md:tw-text-xs"></i>
+          View Report Incident
+        </a>
+        @else
+        <a href="{{ route('driver.trip.report', $tripTicket->id) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-white  tw-bg-red-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-red-600 hover:tw-bg-white  hover:tw-text-red-600 | max-md:tw-p-3 ">
           <i class="fa-solid fa-exclamation-circle tw-mr-2 | max-md:tw-text-xs"></i>
           Report Incident
         </a>
+        @endif
       </div>
     </div>
+
     <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm tw-mb-4 | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
       <!-- Trip Number -->
       <div>

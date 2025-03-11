@@ -62,6 +62,10 @@ class staffApprovalRequest extends Notification
                 $message = "Vehicle reservation request by {$approvable->user->firstName} {$approvable->user->lastName} on Request Date and Time: {$approvable->reservationDate}, {$approvable->reservationTime} is awaiting for review and approval.";
                 break;
 
+            case 'Incident':
+                $message = "Incident Report from {$approvable->user->firstName} {$approvable->user->lastName} with Report Number: ({$approvable->reportNumber}) is awaiting for review and approval.";
+                break;
+
                 // Add more cases for other types if needed
         }
 

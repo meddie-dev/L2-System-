@@ -84,6 +84,7 @@
         </div>
       </div>
     </div>
+    @if($order->payment->first()->approval_status !== 'approved')
     <div class="tw-flex tw-justify-end tw-mb-6">
       <form class="tw-mr-2" action="{{ route('staff.payment.reject', $order->payment->id) }}" method="POST">
         @csrf
@@ -95,6 +96,15 @@
         @method('PATCH')
         <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Reviewed</button>
       </form>
+    </div>
+    @endif
+    <div>
+      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+        <a href="{{ route('staff.payment.manage') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+          <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+          Back
+        </a>
+      </div>
     </div>
     <hr>
     <div>

@@ -31,23 +31,23 @@
 
     <div class="row tw-text-center | max-sm:tw-hidden " data-aos="fade">
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card bg-warning text-white mb-4">
           <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Orders Created: </p>
+            <p class="tw-text-sm tw-font-semibold">Total Assigned Pending: {{ $pendingCounts }}</p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
         <div class="card bg-primary text-white mb-4">
           <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Documents Uploaded: </p>
+            <p class="tw-text-sm tw-font-semibold">Total Assigned Reviewed: {{ $reviewedCounts }}</p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card bg-danger text-white mb-4">
           <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Payments Completed: </p>
+            <p class="tw-text-sm tw-font-semibold">Total Assigned Completed: {{ $rejectedCounts }}</p>
           </div>
         </div>
       </div>
@@ -56,43 +56,112 @@
     <div class="tw-bg-white tw-rounded-lg tw-mb-4 tw-shadow-lg tw-p-4 | max-sm:tw-p-2">
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Here's a summary of your order statistics over the past 12 months:</p>
       <div>
-        <canvas id="orderRoleChart" width="400" height="200"></canvas>
+        <canvas id="orderRoleChart" width="500" height="100"></canvas>
         <script>
-          const months = @json($months);
-          const orderCounts = @json($orderCounts);
-          const ctx = document.getElementById('orderRoleChart').getContext('2d');
-          const orderRoleChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: months,
-              datasets: [{
-                label: 'Orders',
-                data: orderCounts,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
+          document.addEventListener("DOMContentLoaded", function() {
+            const months = @json($months);
+            const reviewCounts = @json($reviewCounts);
+
+            const ctx = document.getElementById('orderRoleChart');
+            if (ctx) {
+              const datasets = [{
+                  label: 'Orders Reviewed',
+                  data: reviewCounts.map(item => item.orders),
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderWidth: 2,
+                  tension: 0.4
                 },
-              },
+                {
+                  label: 'Payments Reviewed',
+                  data: reviewCounts.map(item => item.payments),
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderWidth: 2,
+                  tension: 0.4
+                },
+                {
+                  label: 'Documents Reviewed',
+                  data: reviewCounts.map(item => item.documents),
+                  borderColor: 'rgba(255, 206, 86, 1)',
+                  backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                  borderWidth: 2,
+                  tension: 0.4
+                },
+                {
+                  label: 'Vehicle Reservations',
+                  data: reviewCounts.map(item => item.vehicleReservations),
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderWidth: 2,
+                  tension: 0.4
+                },
+                {
+                  label: 'Incident Reports',
+                  data: reviewCounts.map(item => item.incidentReports),
+                  borderColor: 'rgba(153, 102, 255, 1)',
+                  backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                  borderWidth: 2,
+                  tension: 0.4
+                }
+              ];
+
+              new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                  labels: months,
+                  datasets: datasets
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                    },
+                    title: {
+                      display: true,
+                      text: 'Monthly Review Trends'
+                    }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        stepSize: 1
+                      }
+                    }
+                  }
+                }
+              });
+            } else {
+              console.error("Canvas element with ID 'orderRoleChart' not found!");
             }
           });
         </script>
       </div>
     </div>
 
-    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm">
+    <!-- Activity Logs -->
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-4 | max-sm:tw-p-2 max-sm:tw-text-sm ">
       <p class="tw-text-sm tw-text-gray-500 tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Below is a list of your Activity logs:</p>
-      <div class="card-body tw-px-4">
-        <div class="tw-overflow-x-auto ">
-         
-
+      <div class="card-body tw-px-4 tw-max-h-[calc(100vh-23rem)]">
+        <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-23rem)] tw-rounded-lg  tw-mb-4">
+          <div class="tw-container tw-mx-auto tw-p-6">
+            <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
+              @foreach ($logs as $log)
+              <div class="tw-mb-6 tw-ml-6">
+                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
+                <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
+                  <div class="tw-flex tw-justify-between">
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                  </div>
+                  <p class="tw-text-gray-700">{{ $log->event }}</p>
+                </div>
+              </div>
+              @endforeach
+            </div>
+          </div>
         </div>
       </div>
     </div>
