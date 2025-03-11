@@ -14,29 +14,11 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
-    private function token()
-    {
-        $client_id=Config::get('services.google.client_id');
-        $client_secret=Config::get('services.google.client_secret');
-        $refresh_token=Config::get('services.google.refresh_token');
-        $response=Http::post('https://oauth2.googleapis.com/token', [
-            'client_id' => $client_id,
-            'client_secret' => $client_secret,
-            'refresh_token' => $refresh_token,
-            'grant_type' => 'refresh_token',
-        ]);
-
-        $access_token=json_decode((string)$response->body(), true)['access_token'];
-
-        return $access_token;
-    }
     // Vendor
     public function index()
     {

@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
+            'root' => storage_path('app'),
             'serve' => true,
             'throw' => false,
         ],
@@ -62,7 +62,7 @@ return [
             'client_id' => env('GOOGLE_DRIVE_CLIENT_ID'),
             'client_secret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
             'refresh_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-            'folder' => env('GOOGLE_DRIVE_FOLDER_ID'),
+            'folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
         ],
 
     ],
