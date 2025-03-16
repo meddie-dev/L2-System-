@@ -19,7 +19,10 @@
   </nav>
 
   <div class="card-body tw-px-4">
-    <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Fleet Card</h3>
+    <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+      <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Card Information</h2>
+      <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this card.</p>
+    </div>
     <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-py-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
       <!-- Card Number -->
       <div>
@@ -57,6 +60,12 @@
         <input type="text" id="createdAt" name="createdAt" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ \Carbon\Carbon::parse($fleetCard->createdAt)->format('F j, Y') }}" readonly>
       </div>
     </div>
+    <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+    <a href="{{ route('driver.card') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+      <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+      Back
+    </a>
+  </div>
     <hr>
     <div>
       <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Review After Submission</h3>

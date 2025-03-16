@@ -29,14 +29,14 @@
           @foreach($documents as $document)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('vendorPortal.document.details', $document->id) }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('vendorPortal.document.details', $document->id) }}">
                 {{ $document->documentNumber }}
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $document->documentName }}</td>
             <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($document->approval_status) }}
               </span>
             </td>

@@ -32,12 +32,12 @@
           @foreach($tripTicket as $tripTickets)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.trip.details', $tripTickets->id ?? '') }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('driver.trip.details', $tripTickets->id ?? '') }}">
                 {{ $tripTickets ? $tripTickets->tripNumber : 'N/A' }}
               </a></td>
             <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'pending' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'scheduled' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($tripTickets->status) }}
               </span>
             </td>

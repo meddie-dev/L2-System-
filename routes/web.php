@@ -419,6 +419,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 Route::view('/maps', 'pages.addOns.map')->name('map');
 Route::get('/calendar', [AddOnsController::class, 'calendar'])->name('calendar');
 
+
 /*--------------------------------------------------------------
 # Vendor Portal Auth Route
 --------------------------------------------------------------*/
@@ -431,6 +432,11 @@ Route::middleware(['web'])->group(function () {
 });
 
 
+/*--------------------------------------------------------------
+# Gas Station Route
+--------------------------------------------------------------*/
+Route::get('/gasStation', [FleetController::class, 'gasStationIndex'])->name('gasStation');
+Route::post('/gasStation/verify', [FleetController::class, 'gasStationVerify'])->name('gasStation.verify');
 
 /*--------------------------------------------------------------
 # Legal Route

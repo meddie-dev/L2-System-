@@ -21,7 +21,10 @@
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <!-- Order Information -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Order Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this order.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs ">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Order Number:</label>
@@ -30,7 +33,10 @@
       </div>
 
       <!-- Reservation Information -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Reservation Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Reservation Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this reservation.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="reservationNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Reservation Number:</label>
@@ -63,7 +69,10 @@
       </div>
 
       <!-- Vehicle Information -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Vehicle Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Vehicle Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this vehicle.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="plateNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Plate Number:</label>
@@ -100,7 +109,10 @@
       </div>
 
       <!-- Reviewed By -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Reviewed By</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Reviewed By</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">Information about the reviewer of this order.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="plateNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Name</label>
@@ -117,7 +129,10 @@
       </div>
 
       <!-- Approved By -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Approved By</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Approved By</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">Information about the approver of this order.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-3 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="plateNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Name</label>

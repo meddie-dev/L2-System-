@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessFuelTransaction;
 use App\Models\ActivityLogs;
 use App\Models\FleetCard;
 use App\Models\Fuel;
@@ -264,5 +265,49 @@ class FleetController extends Controller
     public function driverCardDetails(FleetCard $fleetCard)
     {
         return view('modules.driver.card.details', compact('fleetCard'));
+    }
+
+    // Gas Station
+    public function gasStationIndex()
+    {
+        return view('pages.gasStation.index');
+    }
+
+    public function gasStationVerify(Request $request)
+    {
+        if (!is_array($request->cardNumber)) {
+            return back()->with('error', 'Invalid input.');
+        }
+    
+        $cardNumber = implode('', $request->cardNumber);
+        $fleetCard = FleetCard::where('cardNumber', $cardNumber)->first();
+    
+        if (!$fleetCard) {
+            return back()->with('error', 'Invalid Fleet Card Number.');
+        }
+    
+        $fuel = Fuel::where('fleet_card_id', $fleetCard->id)
+            ->where('fuelStatus', 'scheduled')
+            ->first();
+    
+        if (!$fuel) {
+            return back()->with('error', 'No scheduled fuel transaction found.');
+        }
+    
+        if ($fleetCard->credit_limit < $fuel->estimatedCost) {
+            return back()->with('error', 'Insufficient Credit Limit.');
+        }
+    
+        // Update fuel status and deduct credit
+        $fuel->update(['fuelStatus' => 'completed']);
+        $fleetCard->update([
+            'credit_limit' => $fleetCard->credit_limit - $fuel->estimatedCost,
+            'balance' => $fleetCard->balance - $fuel->estimatedCost
+        ]);
+    
+        // Dispatch job to generate PDF asynchronously
+        ProcessFuelTransaction::dispatch($fleetCard, $fuel);
+    
+        return back()->with('success', 'Transaction completed successfully. PDF will be available soon.');
     }
 }

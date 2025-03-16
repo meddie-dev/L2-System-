@@ -21,7 +21,10 @@
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
       <!-- Report Information -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Report Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Report Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this report.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm tw-mb-4 | max-md:tw-grid-cols-1 max-md:tw-text-xs ">
         <div>
           <label for="reportNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Report Number:</label>

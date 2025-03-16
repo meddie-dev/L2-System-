@@ -165,10 +165,10 @@
         <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-23rem)] tw-rounded-lg tw-border tw-border-gray-200 tw-p-4 tw-row-span-2 tw-mb-4">
           <h3 class="tw-text-lg tw-font-semibold tw-text-gray-600 tw-mb-4 | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Activity Logs</h3>
           <div class="tw-container tw-mx-auto tw-p-6">
-            <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
+            <div class="tw-relative tw-border-l-4 tw-border-[#212529] tw-ml-1">
               @foreach ($logs as $log)
               <div class="tw-mb-6 tw-ml-6">
-                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
+                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#212529] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
                   <div class="tw-flex tw-justify-between">
                     <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
@@ -208,8 +208,8 @@
             datasets: [{
               label: 'Driver Performance',
               data: [performanceScore, 100 - performanceScore],
-              backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-              borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+              backgroundColor: ['rgba(33, 37, 41, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(33, 37, 41, 1)', 'rgba(255, 99, 132, 1)'],
               borderWidth: 1
             }]
           },

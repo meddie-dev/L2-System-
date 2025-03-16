@@ -74,15 +74,13 @@
       </div>
 
       <!-- Submit Registration Button -->
-      <div class="tw-my-6 tw-flex tw-justify-end | max-md:tw-my-2">
+      <div class="tw-my-6 tw-flex tw-justify-between | max-md:tw-my-2">
+        <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mt-2 | max-md:tw-text-[11px]">
+          Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.payment.pdf', $order->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>.
+        </p>
         <button type="submit" id="submitBtn" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700 | max-md:tw-text-sm">Proceed</button>
       </div>
     </form>
-    <div class="tw-mt-4">
-      <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
-        Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.order.pdf', $order->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>. <br> <span class="tw-text-xs tw-text-gray-500">("Believe you can and you're halfway there." - Theodore Roosevelt)</span>
-      </p>
-    </div>
     <hr>
     <div>
       <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Review After Submission</h3>

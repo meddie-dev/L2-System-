@@ -1,7 +1,7 @@
 <x-layout.portal.mainTemplate>
   <nav class="tw-flex tw-justify-between | max-md:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Vendor') ? 'vendorPortal.dashboard' : 'staff.dashboard'))) }}"  :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Vendor') ? 'vendorPortal.dashboard' : 'staff.dashboard'))) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
@@ -31,26 +31,26 @@
           <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $payment->order->orderNumber }}" readonly>
         </div>
 
-      <table class="datatable tw-w-full tw-table-auto tw-bg-white tw-my-6 ">
-        <thead>
-          <tr>
-            <th class="tw-p-2 tw-text-left tw-font-semibold">Product</th>
-            <th class="tw-p-2 tw-text-left tw-font-semibold">Quantity</th>
-            <th class="tw-p-2 tw-text-left tw-font-semibold">Price</th>
-            <th class="tw-p-2 tw-text-left tw-font-semibold">Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach (json_decode($payment->order->products) as $product)
-          <tr>
-            <td class="tw-p-2 tw-text-left">{{ $product->name }}</td>
-            <td class="tw-p-2 tw-text-left">{{ $product->quantity }}</td>
-            <td class="tw-p-2 tw-text-left">{{ $product->price }}</td>
-            <td class="tw-p-2 tw-text-left">{{ $product->weight }}</td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
+        <table class="datatable tw-w-full tw-table-auto tw-bg-white tw-my-6 ">
+          <thead>
+            <tr>
+              <th class="tw-p-2 tw-text-left tw-font-semibold">Product</th>
+              <th class="tw-p-2 tw-text-left tw-font-semibold">Quantity</th>
+              <th class="tw-p-2 tw-text-left tw-font-semibold">Price</th>
+              <th class="tw-p-2 tw-text-left tw-font-semibold">Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (json_decode($payment->order->products) as $product)
+            <tr>
+              <td class="tw-p-2 tw-text-left">{{ $product->name }}</td>
+              <td class="tw-p-2 tw-text-left">{{ $product->quantity }}</td>
+              <td class="tw-p-2 tw-text-left">{{ $product->price }}</td>
+              <td class="tw-p-2 tw-text-left">{{ $product->weight }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
       </div>
 
       <!-- Payment -->
@@ -88,15 +88,14 @@
           <input type="text" id="approval_status" name="approval_status" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER PAYMENT STATUS" value="{{ ucfirst($payment->approval_status) }}" readonly>
         </div>
       </div>
-      <div class="tw-mt-4">
-      <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
-        Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.payment.pdf', $payment->order->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>
-      </p>
-    </div>
+     
 
       @if ($payment->approval_status === 'reviewed')
-      <!-- Approved By -->
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Approved By</h3>
+      <!-- Reviewed By -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Reviewed By</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this report.</p>
+      </div>
       <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
@@ -113,6 +112,12 @@
 
       </div>
       @endif
+
+      <div class="tw-mt-4">
+        <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
+          Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.payment.pdf', $payment->order->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>
+        </p>
+      </div>
 
       <div>
         <div class="tw-flex tw-items-center tw-justify-start tw-my-6">

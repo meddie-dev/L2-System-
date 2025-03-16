@@ -28,7 +28,7 @@
           @foreach($vehicleReservation as $vehicleReservations)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.task.details', $vehicleReservations->id) }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('driver.task.details', $vehicleReservations->id) }}">
                 {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
               </a>
             </td>

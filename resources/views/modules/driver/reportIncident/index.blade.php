@@ -32,7 +32,7 @@
           @foreach($report as $reports)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.audit.report.details', $reports->id) }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('driver.audit.report.details', $reports->id) }}">
                 {{ $reports ? $reports->reportNumber : 'N/A' }}
               </a>
             </td>

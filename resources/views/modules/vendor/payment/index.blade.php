@@ -28,13 +28,13 @@
           @foreach($payments as $payment)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('vendorPortal.payment.details', $payment->id) }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('vendorPortal.payment.details', $payment->id) }}">
                 {{ $payment->paymentNumber }}
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $payment->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $payment->approval_status === 'approved' ? 'green-500' : ($payment->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $payment->approval_status === 'approved' ? 'green-500' : ($payment->approval_status === 'pending' ? 'yellow-500' : ($payment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($payment->approval_status) }}
               </span>
             </td>

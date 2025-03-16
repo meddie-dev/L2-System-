@@ -31,7 +31,7 @@
           @foreach($fleetCard as $fleetCards)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('driver.card.details', $fleetCards->id ?? '') }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('driver.card.details', $fleetCards->id ?? '') }}">
                 {{ $fleetCards ? $fleetCards->cardNumber ?? '-' : '-' }}
               </a>
             </td>
