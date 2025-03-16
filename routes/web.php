@@ -23,7 +23,7 @@ use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TripTicketController;
-
+use App\Models\Payment;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -224,6 +224,10 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     // Vendor Portal Dashboard
     Route::get('/portal/vendor/dashboard', [DashboardController::class, 'vendorPortalDashboard'])
         ->name('vendorPortal.dashboard');
+
+    // Pdf 
+    Route::get('/portal/vendor/dashboard/pdf/{order}', [PaymentController::class, 'paymentPdf'])
+        ->name('vendorPortal.payment.pdf');
 
     // Order Management
     Route::resource('vendors', OrderController::class);

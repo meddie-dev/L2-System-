@@ -1,7 +1,7 @@
 <x-layout.portal.mainTemplate>
   <nav class="tw-flex | max-sm:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Vendor') ? 'vendorPortal.dashboard' : 'staff.dashboard'))) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
@@ -23,39 +23,59 @@
     <form action="{{ route('vendorPortal.order.payment.update', $order->id) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
       @csrf
       @method('PATCH')
-      <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-text-sm | max-sm:tw-text-[13px] ">
+      <div class="tw-text-sm">
         <!-- Payment Number -->
         <div class="tw-mb-4">
-          <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500">Payment Number<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed @error('paymentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $order->payment->first()->paymentNumber ?? '' }}" readonly>
+          <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Payment Number<span class="tw-text-red-500">*</span></label>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('paymentNumber') is-invalid @enderror" placeholder="ENTER ORDER NUMBER" value="{{ $order->payment->paymentNumber }}" readonly>
           @error('paymentNumber')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
 
-        <!-- Payment Upload -->
+        <!-- Date -->
         <div class="tw-mb-4">
-          <label for="paymentUrl" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">
-            payment Upload <span class="tw-text-red-500">*</span>
-          </label>
-          <div>
-            <input type="file" id="paymentUrl" name="paymentUrl" required class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-sm-text-sm @error('paymentUrl') is-invalid @enderror" value="{{ $order->payment->first()->paymentUrl ?? '' }}">
-          </div>
-          @error('paymentUrl')
+          <label for="date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Date<span class="tw-text-red-500">*</span></label>
+          <input type="date" id="date" name="date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm | max-md:tw-text-xs @error('date') is-invalid @enderror" value="{{ old('date', $order->payment->date) }}" required>
+          @error('date')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
-          <div class="tw-mt-2 tw-bg-gray-50 tw-p-3 tw-rounded-md">
-            <p class="tw-text-sm tw-text-gray-600">View the uploaded payment:
-              <a href="{{ asset('storage/' . $order->payment->first()->paymentUrl ?? '') }}" target="_blank" class="tw-text-blue-500 hover:tw-text-blue-700 hover:tw-underline">
-                click here
-              </a>
-            </p>
-          </div>
         </div>
+
+        <!-- Due Date -->
+        <div class="tw-mb-4">
+          <label for="due_date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Due Date<span class="tw-text-red-500">*</span></label>
+          <input type="date" id="due_date" name="due_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('due_date') is-invalid @enderror" value="{{ old('due_date', date('Y-m-d', strtotime('+1 month', strtotime(request()->input('date', date('Y-m-d')))))) }}" readonly>
+          @error('due_date')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Account Number -->
+        <div class="tw-mb-4">
+          <label for="account_number" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Account Number<span class="tw-text-red-500">*</span></label>
+          <input type="text" id="account_number" name="account_number" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm | max-md:tw-text-xs @error('account_number') is-invalid @enderror" placeholder="Enter Account Number" min="17" max="17" value="{{  $order->payment->account_number }}" required>
+          @error('account_number')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Total Amount Due -->
+        <div class="tw-mb-2">
+          <label for="total_amount_due" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Total Amount Due<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed  | max-md:tw-text-xs @error('total_amount_due') is-invalid @enderror" value="{{ old('total_amount_due', $order->payment->total_amount_due) }}" readonly>
+          @error('total_amount_due')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
       </div>
 
       <!-- Submit Registration Button -->
-      <div class="tw-my-6 tw-flex tw-justify-end">
+      <div class="tw-my-6 tw-flex tw-justify-between">
+        <p class="tw-text-sm tw-font-medium tw-text-gray-600 | max-md:tw-text-[11px]">
+          Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.payment.pdf', $order->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>.
+        </p>
         <button type="submit" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Submit</button>
       </div>
     </form>
@@ -68,5 +88,22 @@
     </div>
   </div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dateInput = document.getElementById("date");
+      const dueDateInput = document.getElementById("due_date");
 
+      function updateDueDate() {
+        let selectedDate = new Date(dateInput.value);
+        if (!isNaN(selectedDate.getTime())) {
+          selectedDate.setMonth(selectedDate.getMonth() + 1);
+          let formattedDate = selectedDate.toISOString().split("T")[0];
+          dueDateInput.value = formattedDate;
+        }
+      }
+
+      dateInput.addEventListener("change", updateDueDate);
+      updateDueDate(); // Initial call to set the default value
+    });
+  </script>
 </x-layout.portal.mainTemplate>

@@ -33,8 +33,10 @@ class SendOrderApprovalNotification implements ShouldQueue
             $this->order->save();
         }
 
-        $orderCreator = $this->order->user->user_id;
-        $orderCreator->notify(new adminApprovalStatus('Order', $this->order->orderNumber));
-        $orderCreator->notify(new NewNotification("Your order ({$this->order->orderNumber}) has been reviewed. Please wait for approval."));
+        $creator = User::find($this->order->user_id);
+        if ($creator) {
+            $creator->notify(new adminApprovalRequest('Order', $this->order));
+            $creator->notify(new NewNotification("Your order ({$this->order->orderNumber}) has been reviewed. Please wait for approval."));
+        }
     }
 }

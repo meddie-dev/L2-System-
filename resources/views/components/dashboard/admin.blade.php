@@ -31,21 +31,21 @@
 
     <div class="row tw-text-center | max-sm:tw-hidden " data-aos="fade">
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Orders Created: </p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Documents Uploaded: </p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Payments Completed: </p>
           </div>

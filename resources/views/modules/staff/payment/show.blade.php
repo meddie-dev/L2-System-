@@ -20,7 +20,10 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Vendor Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Vendor Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this vendor.</p>
+      </div>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
           <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
@@ -40,14 +43,11 @@
         </div>
       </div>
 
-      <!-- Custom Divider -->
-      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      <!-- Order Information -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this order.</p>
       </div>
-
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-flex tw-flex-col tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
@@ -55,24 +55,31 @@
         </div>
       </div>
 
-      <!-- Custom Divider -->
-      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      </div>
-
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Payment</h3>
-      <div class="tw-flex tw-items-center tw-justify-center tw-relative tw-mb-4">
-        <img src="{{ asset('storage/' . $order->payment->first()->paymentUrl) }}" alt="Payment Image" class="tw-max-w-[500px]  tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
-        <div style="font-size: 2rem; left: 50%; top: 50%; transform: translate(-50%, -50%);" class="tw-absolute tw-z-10 tw-text-gray-700 tw-opacity-10 tw-font-bold">
-          {{ $order->payment->first()->paymentNumber ?? 'N/A' }}
-        </div>
+      <!-- Payment Information  -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Payment Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this payment.</p>
       </div>
       <div class="tw-grid tw-grid-cols-2 tw-gap-2 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Number</label>
           <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->paymentNumber }}" readonly>
+        </div>
+        <div>
+          <label for="date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Date</label>
+          <input type="text" id="date" name="date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->date }}" readonly>
+        </div>
+        <div>
+          <label for="due_date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Due Date</label>
+          <input type="text" id="due_date" name="due_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->due_date }}" readonly>
+        </div>
+        <div>
+          <label for="account_number" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Account Number</label>
+          <input type="text" id="account_number" name="account_number" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->account_number }}" readonly>
+        </div>
+        <div>
+          <label for="total_amount_due" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Total Amount Due</label>
+          <input type="text" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ number_format($order->payment->first()->total_amount_due, 2) }}" readonly>
         </div>
         <div>
           <label for="paymentStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Status</label>
@@ -84,6 +91,7 @@
         </div>
       </div>
     </div>
+
     @if($order->payment->first()->approval_status !== 'approved')
     <div class="tw-flex tw-justify-end tw-mb-6">
       <form class="tw-mr-2" action="{{ route('staff.payment.reject', $order->payment->id) }}" method="POST">

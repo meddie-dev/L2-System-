@@ -16,7 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('paymentNumber')->unique();
-            $table->string('paymentUrl');
+            $table->date('date');
+            $table->date('due_date');
+            $table->string('account_number');
+            $table->decimal('total_amount_due', 10, 2);
 
             $table->enum('approval_status', ['pending','reviewed', 'approved', 'rejected'])->default('pending');
             $table->foreignId('reviewed_by')->nullable()->constrained('users')->onDelete('set null');

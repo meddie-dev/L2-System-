@@ -10,9 +10,12 @@ use Illuminate\Http\Request;
 use App\Models\Modules\Order;
 use App\Models\Payment;
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Notifications\NewNotification;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
@@ -36,46 +39,39 @@ class PaymentController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'paymentNumber' => 'required|string|max:255|unique:payments',
-            'paymentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
+            'paymentNumber' => 'required|string|max:255|unique:payments,paymentNumber',
+            'date' => 'required|date',
+            'due_date' => 'required|date',
+            'account_number' => 'required|string|max:255',
+            'total_amount_due' => 'required|numeric|between:0,9999999999.99',
         ]);
-    
-        DB::beginTransaction();
-    
-        try {
-            $paymentNumber = $request->paymentNumber;
-            $file = $request->file('paymentUrl');
-            $path = $file->storeAs("payment/{$user->id}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
-    
-            $payment = Payment::create([
-                'order_id' => $order->id,
-                'user_id' => $user->id,
-                'paymentNumber' => $paymentNumber,
-                'paymentUrl' => $path,
-                'approval_status' => 'pending',
-                'reviewed_by' => null,
-                'approved_by' => null,
-                'rejected_by' => null,
-                'assigned_to' => null,
-                'redirected_to' => null,
-            ]);
-    
-            ActivityLogs::create([
-                'user_id' => $user->id,
-                'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
-                'ip_address' => $request->ip(),
-            ]);
-    
-            DB::commit();
-    
-            // Dispatch job asynchronously
-            SendPaymentNotifications::dispatch($payment, $user);
-    
-            return redirect()->route('vendorPortal.order')->with('success', 'Order Request submitted successfully.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
-        }
+
+        $paymentNumber = Payment::where('paymentNumber', $request->paymentNumber)->exists()
+            ? strtoupper(Str::random(20))
+            : $request->paymentNumber;
+
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'user_id' => $user->id,
+            'paymentNumber' => $paymentNumber,
+            'date' => $request->date,
+            'due_date' => $request->due_date,
+            'account_number' => $request->account_number,
+            'total_amount_due' => $request->total_amount_due,
+            'approval_status' => 'pending',
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => $user->id,
+            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+
+        // Dispatch job asynchronously
+        SendPaymentNotifications::dispatch($payment, $user);
+
+        return redirect()->route('vendorPortal.order')->with('success', 'Order Request submitted successfully.');
     }
 
     public function edit(Order $order)
@@ -85,27 +81,22 @@ class PaymentController extends Controller
 
     public function update(Request $request, Payment $payment, Order $order)
     {
+        $user = auth()->user();
+        
         $request->validate([
             'paymentNumber' => 'required|string|max:255',
-            'paymentUrl' => 'required|mimes:pdf,doc,docx,png,jpg,jpeg',
+            'date' => 'required|date',
+            'due_date' => 'required|date',
+            'account_number' => 'required|string|max:255',
+            'total_amount_due' => 'required|numeric|between:0,9999999999.99',
         ]);
-
-        $userId = auth()->user()->id;
-        $paymentNumber = $request->paymentNumber;
-
-        if ($request->hasFile('paymentUrl')) {
-            $file = $request->file('paymentUrl');
-            $path = $file->storeAs("payment/{$userId}", $paymentNumber . '.' . $file->getClientOriginalExtension(), 'public');
-
-            if ($payment->paymentUrl) {
-                Storage::disk('public')->delete($payment->paymentUrl);
-            }
-
-            $payment->paymentUrl = $path;
-        }
 
         $payment->update([
             'paymentNumber' => $request->paymentNumber,
+            'date' => $request->date,
+            'due_date' => $request->due_date,
+            'account_number' => $request->account_number,
+            'total_amount_due' => $request->total_amount_due,
         ]);
 
         ActivityLogs::create([
@@ -119,6 +110,35 @@ class PaymentController extends Controller
         $user->notify(new NewNotification("Order No.({$order->orderNumber}) has been updated. Please wait for approval."));
 
         return redirect()->route('vendorPortal.order')->with('success', 'Order Request updated successfully.');
+    }
+
+    public function paymentPdf(Order $order)
+    {
+        $order = Order::findOrFail($order->id);
+
+        // Define the filename and storage path
+        $filename = "invoice-{$order->payment->paymentNumber}.pdf";
+        $folderPath = "payments/invoices/{$order->payment->id}/";
+        $fullPath = "public/{$folderPath}{$filename}";
+
+        // Ensure directory exists
+        Storage::disk('public')->makeDirectory($folderPath, 0755, true, true);
+
+        // Check if an existing PDF file needs to be deleted
+        if (Storage::disk('public')->exists($folderPath . $filename)) {
+            Storage::disk('public')->delete($folderPath . $filename);
+        }
+
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.invoice', compact('order'));
+
+        // Store PDF in public disk
+        Storage::disk('public')->put($folderPath . $filename, $pdf->output());
+
+        // Log for debugging
+        Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
+
+        return $pdf->stream($filename);
     }
 
     public function details(Payment $payment)

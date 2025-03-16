@@ -37,7 +37,7 @@
             <td class="tw-px-4 tw-py-2">{{ $document->user->firstName }} {{ $document->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
               @if($document->approval_status !== 'reviewed')
-                <a href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a>
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a>
               @else
                 {{ $document->documentNumber }}
               @endif

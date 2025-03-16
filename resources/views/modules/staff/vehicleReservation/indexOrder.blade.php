@@ -38,7 +38,7 @@
               @if($order->vehicleReservation !== null)
                 {{ $order->orderNumber }}
               @else
-                <a href="{{ route('staff.vehicleReservation.createOrder', $order->id) }}">
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.vehicleReservation.createOrder', $order->id) }}">
                   {{ $order->orderNumber }}
                 </a>
               @endif

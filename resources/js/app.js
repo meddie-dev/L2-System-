@@ -1,4 +1,5 @@
 import "./bootstrap";
+import AOS from 'aos';
 import L from 'leaflet';
 
 window.addEventListener("DOMContentLoaded", (event) => {
@@ -69,6 +70,8 @@ window.addEventListener('load', toggleScrollTop);
 document.addEventListener('scroll', toggleScrollTop);
 
 // Animation on scroll
+
+AOS.init();
 function aosInit() {
     AOS.init({
         duration: 600,

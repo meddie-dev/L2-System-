@@ -34,7 +34,7 @@
           @foreach($drivers as $driver)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2"> {{ $driver->id }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('admin.fleet.driver.details', $driver->id) }}">{{ $driver->firstName }} {{ $driver->lastName }}</a></td>
+            <td class="tw-px-4 tw-py-2"><a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.fleet.driver.details', $driver->id) }}">{{ $driver->firstName }} {{ $driver->lastName }}</a></td>
             <td>{{ $driver->email}}</td>
 
             <td class="tw-px-4 tw-py-2">

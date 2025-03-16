@@ -37,7 +37,7 @@
                 @if($vehicleReservation->approval_status === 'approved')
                 {{ $vehicleReservation->reservationNumber }}
                 @else
-                <a href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">
                   {{ $vehicleReservation->reservationNumber }}
                 </a>
                 @endif

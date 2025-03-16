@@ -78,15 +78,11 @@
       </div>
     </div>
 
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-my-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-    </div>
-
     <!-- Review By -->
-    <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Review By</h3>
+    <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+      <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Review By</h2>
+      <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this report.</p>
+    </div>
     <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-gap-2">
       <div>
         <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Name</label>
@@ -155,10 +151,7 @@
           title: '{{ $vehicleReservation->reservationNumber }}', // Display reservation number as title
           start: '{{ $vehicleReservation->reservationDate }}T{{ $vehicleReservation->reservationTime }}',
           end: '{{ $vehicleReservation->reservationDate }}T{{ $vehicleReservation->reservationTime }}',
-          color: '{{ $vehicleReservation->approval_status === '
-          approved ' ? '
-          green ' : '
-          yellow ' }}',
+          color: '{{ $vehicleReservation->approval_status === 'approved ' ? 'green ' : 'yellow ' }}',
 
         }],
         businessHours: [{

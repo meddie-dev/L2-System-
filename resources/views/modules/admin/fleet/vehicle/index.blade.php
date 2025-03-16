@@ -40,7 +40,7 @@
           @foreach($vehicles as $vehicle)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2"> {{ $vehicle->id }}</td>
-            <td class="tw-px-4 tw-py-2"><a href="{{ route('admin.fleet.edit', $vehicle->id) }}">{{ $vehicle->plateNumber }}</a></td>
+            <td class="tw-px-4 tw-py-2"><a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.fleet.edit', $vehicle->id) }}">{{ $vehicle->plateNumber }}</a></td>
             <td class="tw-px-4 tw-py-2">
               {{ $vehicle->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicle->vehicle_type === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicle->vehicle_type === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}
             </td>

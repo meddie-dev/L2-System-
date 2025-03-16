@@ -36,7 +36,7 @@
             <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
               @if($order->approval_status !== 'reviewed')
-              <a href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a>
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a>
               @else
               {{ $order->orderNumber }}
               @endif

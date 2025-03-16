@@ -31,21 +31,21 @@
 
     <div class="row tw-text-center | max-sm:tw-hidden " data-aos="fade">
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-warning text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Assigned Pending: {{ $pendingCounts }}</p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Assigned Reviewed: {{ $reviewedCounts }}</p>
           </div>
         </div>
       </div>
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-danger text-white mb-4">
+        <div class="card tw-bg-[#212529] text-white mb-4">
           <div class="card-body">
             <p class="tw-text-sm tw-font-semibold">Total Assigned Completed: {{ $rejectedCounts }}</p>
           </div>
@@ -147,10 +147,10 @@
       <div class="card-body tw-px-4 tw-max-h-[calc(100vh-23rem)]">
         <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-23rem)] tw-rounded-lg  tw-mb-4">
           <div class="tw-container tw-mx-auto tw-p-6">
-            <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
+            <div class="tw-relative tw-border-l-4 tw-border-[#212529] tw-ml-1">
               @foreach ($logs as $log)
               <div class="tw-mb-6 tw-ml-6">
-                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
+                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#212529] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
                   <div class="tw-flex tw-justify-between">
                     <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>

@@ -1,7 +1,7 @@
 <x-layout.portal.mainTemplate>
   <nav class="tw-flex | max-sm:tw-hidden" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : 'staff.dashboard')) }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Vendor') ? 'vendorPortal.dashboard' : 'staff.dashboard'))) }}"  :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
@@ -23,6 +23,64 @@
     <form action="{{ route('vendorPortal.order.update', $order->id) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
       @csrf
       @method('PATCH')
+
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Price (PHP)</th>
+            <th>Stocks</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($products as $product)
+          <tr>
+            <td>
+              <input type="checkbox" class="product-checkbox" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-weight="{{ $product->weight }}"
+                {{ $selectedProducts->pluck('id')->contains($product->id) ? 'checked' : '' }}>
+            </td>
+            <td>{{ $product->name }}</td>
+            <td>{{ $product->description }}</td>
+            <td>PHP {{ number_format($product->price, 2) }}</td>
+            <td>{{ $product->stock }}</td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+
+      <input type="hidden" name="products" id="products-input" value="{{ json_encode($selectedProducts) }}">
+
+      <div id="selected-products-list" class="tw-mt-4 tw-py-4 tw-bg-white tw-rounded">
+        <h2 class="tw-text-md tw-font-semibold">Selected Products</h2>
+        <table class="datatable tw-w-full tw-text-sm tw-text-gray-600">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Weight (Kg)</th>
+            </tr>
+          </thead>
+          <tbody id="product-list">
+            @foreach ($selectedProducts as $product)
+            <tr>
+              <td>
+                {{ $product['name'] }}
+              <td>
+                <input type="number" class="quantity-input" data-id="{{ $product['id'] }}" value="{{ $product['quantity'] }}" min="1">
+              </td>
+              <td>PHP {{ number_format($product['price'], 2) }}</td>
+              <td>{{ number_format($product['weight'] * $product['quantity'], 2) }} kg</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+
+
+      </div>
+
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-text-sm | max-sm:tw-grid-cols-1 max-sm:tw-text-[13px] ">
         <!-- Order Number -->
         <div class="tw-mb-4">
@@ -33,19 +91,10 @@
           @enderror
         </div>
 
-        <!-- Product -->
-        <div class="tw-mb-4">
-          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Product<span class="tw-text-red-500">*</span></label>
-          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('product') is-invalid @enderror" value="{{ $order->product }}" placeholder="Enter product" required>
-          @error('product')
-          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-          @enderror
-        </div>
-
         <!-- Quantity -->
         <div class="tw-mb-4">
           <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Quantity<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('quantity') is-invalid @enderror" value="{{ $order->quantity }}" placeholder="Enter quantity" required max="255">
+          <input type="number" id="total_quantity" name="quantity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('quantity') is-invalid @enderror" value="{{ $order->quantity }}" placeholder="Enter quantity" readonly max="255">
           @error('quantity')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
@@ -54,12 +103,20 @@
         <!-- Weight -->
         <div class="tw-mb-4">
           <label for="weight" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Weight (Kg)<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('weight') is-invalid @enderror" value="{{ $order->weight }}" placeholder="Enter weight" required>
+          <input type="number" id="total_weight" name="weight" step="0.01" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed tw-focus:ring-indigo-500 tw-focus:border-indigo-500 @error('weight') is-invalid @enderror" value="{{ $order->weight }}" placeholder="Enter weight" readonly>
           @error('weight')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
 
+        <!-- Amount -->
+        <div class="tw-mb-4">
+          <label for="amount" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Amount<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="amount" name="amount" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('amount') is-invalid @enderror" placeholder="Enter amount" value="{{ $order->amount }}" readonly>
+          @error('amount')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
 
         <!-- Delivery Address -->
         <div class="tw-mb-4">
@@ -105,13 +162,100 @@
     </div>
   </div>
 
+
   <script>
-    const inputElement = document.getElementById("total_amount");
-    inputElement.addEventListener("input", function(e) {
-      let value = e.target.value;
-      value = value.replace(/[^\d]/g, "");
-      value = parseInt(value).toLocaleString("en-US");
-      e.target.value = value;
+    document.addEventListener("DOMContentLoaded", function() {
+      let selectedProducts = [];
+      let totalWeight = 0;
+      let totalPrice = 0;
+      let totalQuantity = 0;
+
+      const productList = document.getElementById("product-list");
+      const totalWeightInput = document.getElementById("total_weight");
+      const totalQuantityInput = document.getElementById("total_quantity");
+      const productsInput = document.getElementById("products-input");
+      const amountInput = document.getElementById("amount");
+
+      document.addEventListener("change", function(event) {
+        if (event.target.classList.contains("product-checkbox")) {
+          handleProductSelection(event.target);
+        } else if (event.target.classList.contains("quantity-input")) {
+          updateProductQuantity(event.target);
+        }
+      });
+
+      function handleProductSelection(checkbox) {
+        const productId = checkbox.dataset.id;
+        const productName = checkbox.dataset.name;
+        const productPrice = parseFloat(checkbox.dataset.price) || 0;
+        const productWeight = parseFloat(checkbox.dataset.weight) || 0;
+
+        if (checkbox.checked) {
+          selectedProducts.push({
+            id: productId,
+            name: productName,
+            quantity: 1,
+            price: productPrice,
+            weight: productWeight
+          });
+        } else {
+          selectedProducts = selectedProducts.filter(p => p.id !== productId);
+        }
+        updateOrderDetails();
+      }
+
+      function updateProductQuantity(input) {
+        const productId = input.dataset.id;
+        const quantity = parseInt(input.value) || 1;
+
+        let product = selectedProducts.find(p => p.id === productId);
+        if (product) {
+          product.quantity = quantity;
+        }
+        updateOrderDetails();
+      }
+
+      function updateOrderDetails() {
+        totalWeight = selectedProducts.reduce((sum, p) => sum + p.weight * p.quantity, 0);
+        totalPrice = selectedProducts.reduce((sum, p) => sum + p.price * p.quantity, 0);
+        totalQuantity = selectedProducts.reduce((sum, p) => sum + p.quantity, 0);
+
+        // Update hidden input
+        productsInput.value = JSON.stringify(selectedProducts);
+
+        // Update quantity display
+        totalQuantityInput.value = totalQuantity;
+
+        // Update amount display
+        amountInput.value = totalPrice.toFixed(2);
+
+        // Update weight display
+        totalWeightInput.value = totalWeight.toFixed(2);
+
+        // Refresh product list in UI
+        renderSelectedProducts();
+      }
+
+      function renderSelectedProducts() {
+        productList.innerHTML = "";
+        selectedProducts.forEach(product => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                <td>${product.name}</td>
+                <td><input type="number" class="quantity-input tw-w-16" data-id="${product.id}" value="${product.quantity}" min="1"></td>
+                <td>PHP ${product.price.toFixed(2)}</td>
+                <td>${(product.weight * product.quantity).toFixed(2)} kg</td>
+            `;
+          productList.appendChild(row);
+        });
+
+        // Add total quantity row
+        const totalRow = document.createElement("tr");
+        totalRow.innerHTML = `
+            <td colspan="4" class="tw-text-right tw-font-bold">Total: PHP ${totalPrice.toFixed(2)}</td>
+        `;
+        productList.appendChild(totalRow);
+      }
     });
   </script>
 </x-layout.portal.mainTemplate>

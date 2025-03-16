@@ -122,6 +122,12 @@ class DashboardController extends Controller
 
     public function vendorPortalDashboard()
     {
+        $logs = ActivityLogs::where('user_id', Auth::id())
+        ->where('event', 'NOT LIKE', 'Unauthorized access attempt at:%')
+        ->where('event', 'NOT LIKE', 'Logged in at%')
+        ->where('event', 'NOT LIKE', 'Logged out at%') // Fixed exclusion condition
+        ->get();
+
         $userOrderIds = Auth::user()->order()->pluck('id'); 
 
         $tripTickets = TripTicket::whereIn('order_id', $userOrderIds)->with('order')->get();
@@ -149,7 +155,7 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        return view('components.dashboard.vendorPortal', compact('orders','statusCounts', 'tripTickets', 'months', 'orderCounts', 'documents', 'payments'));
+        return view('components.dashboard.vendorPortal', compact('orders','logs', 'statusCounts', 'tripTickets', 'months', 'orderCounts', 'documents', 'payments'));
     }
 
     public function driverDashboard()

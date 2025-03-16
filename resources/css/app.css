@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import 'leaflet/dist/leaflet.css';
+@import 'aos/dist/aos.css';
 
 @import "bootstrap/dist/css/bootstrap.min.css";
 

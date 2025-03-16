@@ -3,6 +3,7 @@
 namespace App\Models\Modules;
 
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\Shipments;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,9 +15,10 @@ class Order extends Model
 {
     use HasFactory, Notifiable, HasRoles;
     
-    protected $title = 'orders';
+    protected $table = 'orders';
     
     protected $guarded = [];
+   
 
     public function user()
     {
@@ -49,9 +51,11 @@ class Order extends Model
         return $this->hasOne(VehicleReservation::class);
     }
 
-    public function shipment()
+    public function products()
     {
-        return $this->hasOne(Shipments::class);
+        return $this->belongsToMany(Product::class, 'order_products')
+                    ->withPivot('id','name','quantity', 'price', 'weight')
+                    ->withTimestamps();
     }
 
     public function isPending()

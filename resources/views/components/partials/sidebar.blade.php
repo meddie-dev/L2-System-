@@ -205,7 +205,6 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/fleet/issue">Report Vehicle Issues</a>
               <a class="nav-link" href="/staff/dashboard/fleet/request">Request Vehicle Maintenance</a>
             </nav>
           </div>
@@ -290,7 +289,7 @@
         </a>
         @endif
 
-        @if(Auth::user()->hasRole('Vendor') || Auth::user()->hasRole('Driver'))
+        @if (Auth::user()->hasRole('Driver'))
         <!-- Addons or Features -->
         <div class="sb-sidenav-menu-heading">Addons</div>
         <a class="nav-link" href="{{ route('calendarDriver') }}">

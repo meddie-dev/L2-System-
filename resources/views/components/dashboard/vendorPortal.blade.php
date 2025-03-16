@@ -33,10 +33,9 @@
     <div class="row " data-aos="fade">
       <!-- Scheduled -->
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-warning text-white mb-4">
+        <div class="card bg-primary text-white mb-4">
           <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
             <div>
-              <i class="fa-solid fa-clock tw-mr-2"></i>
               Scheduled
             </div>
             <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['scheduled'] }}</span>
@@ -53,7 +52,6 @@
         <div class="card bg-primary text-white mb-4">
           <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
             <div>
-              <i class="fa-solid fa-truck-fast"></i>
               In Transit
             </div>
             <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['in_transit'] }}</span>
@@ -67,10 +65,9 @@
 
       <!-- Delivered -->
       <div class="col-xl-4 col-md-6">
-        <div class="card bg-success text-white mb-4">
+        <div class="card bg-primary text-white mb-4">
           <div class="card-body d-flex align-items-center justify-content-between tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">
             <div>
-              <i class="fa-solid fa-circle-check"></i>
               Delivered
             </div>
             <span class="tw-font-bold tw-text-2xl tw-opacity-50 | max-md:tw-text-sm ">{{ $statusCounts['delivered'] }}</span>
@@ -115,6 +112,29 @@
             }
           });
         </script>
+      </div>
+    </div>
+
+    <div class="tw-bg-white tw-rounded-lg tw-mb-4 tw-shadow-lg tw-p-4 | max-sm:tw-p-2">
+      <!-- Activity Logs -->
+      <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-23rem)]  tw-row-span-2 tw-mb-4">
+        <p class="tw-text-sm tw-text-gray-500 tw-font-semibold | max-sm:tw-text-[12px]  max-sm:tw-text-center max-sm:tw-my-2">Here's a summary of your activity logs:</p>
+        <div class="tw-container tw-mx-auto tw-p-6">
+          <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
+            @foreach ($logs as $log)
+            <div class="tw-mb-6 tw-ml-6">
+              <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
+              <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
+                <div class="tw-flex tw-justify-between">
+                  <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
+                  <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                </div>
+                <p class="tw-text-gray-700">{{ $log->event }}</p>
+              </div>
+            </div>
+            @endforeach
+          </div>
+        </div>
       </div>
     </div>
   </div>

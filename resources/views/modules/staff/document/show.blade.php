@@ -20,7 +20,11 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto tw-mb-6">
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Vendor Information</h3>
+      <!-- Vendor Information -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Vendor Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this vendor.</p>
+      </div>
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
           <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
@@ -40,14 +44,11 @@
         </div>
       </div>
 
-      <!-- Custom Divider -->
-      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      <!-- Order Information -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this order.</p>
       </div>
-
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Order Information</h3>
       <div class="tw-flex tw-flex-col tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
@@ -55,14 +56,11 @@
         </div>
       </div>
 
-      <!-- Custom Divider -->
-      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-        <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-        <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
+      <!-- Document Submissions -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Document Submissions</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this document submission.</p>
       </div>
-
-      <h3 class="tw-text-md tw-font-bold tw-my-4 tw-text-gray-400 | max-md:tw-text-sm">Document Submissions</h3>
       <div class="tw-flex tw-flex-col tw-gap-2 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div class="tw-flex tw-items-center tw-justify-center tw-relative tw-mb-4">
           <img src="{{ asset('storage/' . $document->documentUrl) }}" alt="Document Image" class="tw-max-w-[500px]  tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
@@ -91,6 +89,7 @@
         </div>
       </div>
     </div>
+
     @if($document->approval_status !== 'approved')
     <div class="tw-flex tw-justify-end tw-mb-6">
       <form class="tw-mr-2" action="{{ route('staff.document.reject', $document->id) }}" method="POST">
@@ -105,6 +104,7 @@
       </form>
     </div>
     @endif
+    
     <div>
       <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
         <a href="{{ route('staff.document.manage') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">

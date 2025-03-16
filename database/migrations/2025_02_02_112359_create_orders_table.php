@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('orderNumber')->nullable();
-            $table->string('product')->nullable();
+            $table->json('products')->nullable(); 
             $table->integer('quantity')->nullable();
             $table->decimal('weight', 8, 2)->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
             $table->string('deliveryAddress')->nullable();
             $table->string('deliveryRequestDate')->nullable();
             $table->string('specialInstructions')->nullable();
