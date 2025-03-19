@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Admin;
 
+use App\Models\InventoryRecord;
 use App\Models\User;
 use App\Models\Product;
 use App\Notifications\NewNotification;
@@ -32,12 +33,25 @@ class SendRestockNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        // Step 1: Update Stock
-        $this->product->update([
-            'stock' => $this->product->stock + $this->stock,
+        // Step 1: Get the original stock before update
+        $originalStock = $this->product->stock;
+
+        // Step 2: Update the stock
+        $newStock = $originalStock + $this->stock;
+        $this->product->update(['stock' => $newStock]);
+
+        // Step 3: Calculate how much was actually added
+        $quantityAdded = $newStock - $originalStock;
+
+        // Step 4: Log the inventory change in database
+        InventoryRecord::create([
+            'product_id' => $this->product->id,
+            'product_name' => $this->product->name,
+            'quantity_added' => $quantityAdded,
+            'updated_at' => now(),
         ]);
 
-        // Step 2: Notify Admins & Staff
+        // Step 5: Notify Admins & Staff
         $admins = User::whereHas('roles', function ($query) {
             $query->where('name', 'Admin');
         })->get();
@@ -46,7 +60,7 @@ class SendRestockNotification implements ShouldQueue
             $query->where('name', 'Staff');
         })->get();
 
-        $message = "Product inventory for {$this->product->name} has been updated with an additional {$this->stock} units.";
+        $message = "Product inventory for {$this->product->name} has been updated with an additional {$quantityAdded} units.";
 
         foreach ($admins as $admin) {
             $admin->notify(new NewNotification($message));

@@ -51,6 +51,7 @@ class WarehouseController extends Controller
             'price' => $request->price,
             'weight' => $request->weight,
             'description' => $request->description,
+            'updated_at' => now(),
         ]);
     
         // Schedule stock update + notification for 1 day later

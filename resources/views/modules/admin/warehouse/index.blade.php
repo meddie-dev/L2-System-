@@ -36,7 +36,7 @@
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">{{ $product->id }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if ($product->demand > 0 || $product->stock <= 50)
+              @if ($product->demand > 0 || $product->stock <= 50 && $product->updated_at->format('Y-m-d') != date('Y-m-d'))
                 <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.warehouse.request', $product->id) }}">{{ $product->name }}</a>
               @else
                 <span class="tw-text-gray-600">{{ $product->name }}</span>
@@ -52,8 +52,12 @@
               <span class="tw-text-green-500">In Demand</span>
               @endif
               @if ($product->stock <= 50)
-                <span class="tw-text-red-500">Needs Restock</span>
+                @if ($product->updated_at->format('Y-m-d') == date('Y-m-d'))
+                  <span class="tw-text-blue-500 tw-cursor-default">On Process</span>
+                @else
+                  <span class="tw-text-red-500">Needs Restock</span>
                 @endif
+              @endif
             </td>
           </tr>
           @endforeach

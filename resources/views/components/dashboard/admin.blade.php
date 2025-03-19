@@ -1,5 +1,5 @@
 <x-layout.dashboardTemplate>
-<div class="container-fluid tw-my-10 tw-px-4 | max-sm:tw-px-0 max-sm:tw-my-5">
+  <div class="container-fluid tw-my-10 tw-px-4 | max-sm:tw-px-0 max-sm:tw-my-5">
     <nav class="tw-flex tw-mb-5 | max-sm:flex-start" aria-label="Breadcrumb">
       <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse">
         <x-partials.breadcrumb href="{{ (Auth::user()->hasRole('Super Admin')) ? '/superadmin/dashboard' : ((Auth::user()->hasRole('Admin')) ? '/admin/dashboard' : '/staff/dashboard') }}" :active="true" :isLast="true">
@@ -19,7 +19,7 @@
     </div>
     @endif
 
-    <div class="tw-max-w-9xl tw-mx-auto tw-mb-10 tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 | max-sm:tw-p-4 max-sm:tw-my-6"
+    <div class="tw-max-w-9xl tw-mx-auto tw-my-6 tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 | max-sm:tw-p-4"
       data-aos="fade">
       <div>
         <h3 class="tw-text-lg tw-font-semibold tw-text-gray-600 tw-mb-4  | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Announcement:</h3>
@@ -29,27 +29,58 @@
       </div>
     </div>
 
-    <div class="row tw-text-center | max-sm:tw-hidden " data-aos="fade">
-      <div class="col-xl-4 col-md-6">
-        <div class="card tw-bg-[#212529] text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Orders Created: </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4 col-md-6">
-        <div class="card tw-bg-[#212529] text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Documents Uploaded: </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4 col-md-6">
-        <div class="card tw-bg-[#212529] text-white mb-4">
-          <div class="card-body">
-            <p class="tw-text-sm tw-font-semibold">Total Payments Completed: </p>
-          </div>
-        </div>
+    <div class="tw-bg-[#212529] tw-rounded-lg tw-my-6 tw-shadow-lg tw-p-4 | max-sm:tw-p-2">
+      <p class="tw-text-sm tw-text-white tw-mb-4 tw-font-semibold | max-sm:tw-text-[12px] max-sm:tw-text-center max-sm:tw-my-2">
+        Top 5 Most Ordered Products This Month:
+      </p>
+      <div>
+        <canvas id="demandProductChart" width="500" height="100"></canvas>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const productNames = @json($productNames);
+            const orderCounts = @json($orderCounts);
+
+            function getRandomLightColor() {
+              const r = Math.floor(Math.random() * 156) + 100;
+              const g = Math.floor(Math.random() * 156) + 100;
+              const b = Math.floor(Math.random() * 156) + 100;
+              return `rgba(${r}, ${g}, ${b}, 0.7)`;
+            }
+
+            const backgroundColors = productNames.map(() => getRandomLightColor());
+
+            const ctx = document.getElementById('demandProductChart');
+            if (ctx) {
+              const data = {
+                labels: productNames,
+                datasets: [{
+                  label: 'Product Order Count',
+                  data: orderCounts,
+                  borderColor: "white",
+                  backgroundColor: backgroundColors,
+                }]
+              };
+
+              const config = {
+                type: 'line',
+                data: data,
+                options: {
+                  responsive: true,
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Product Order Chart'
+                    }
+                  },
+                }
+              };
+
+              new Chart(ctx.getContext('2d'), config);
+            } else {
+              console.error("Canvas element with ID 'demandProductChart' not found!");
+            }
+          });
+        </script>
       </div>
     </div>
 
@@ -67,7 +98,7 @@
             </thead>
 
             <tbody id="orderRecords" class="tw-bg-white">
-             
+
             </tbody>
           </table>
 
