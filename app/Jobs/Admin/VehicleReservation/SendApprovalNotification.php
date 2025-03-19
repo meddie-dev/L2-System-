@@ -21,13 +21,13 @@ class SendApprovalNotification implements ShouldQueue
 
     public function __construct(VehicleReservation $vehicleReservation, $driver)
     {
-        $this->vehicleReservation = $vehicleReservation;
+        $this->vehicleReservation = $vehicleReservation->fresh();
         $this->driver = $driver;
     }
 
     public function handle()
     {
-       $creator = User::find($this->vehicleReservation->redirected_to);
+       $creator = User::find($this->vehicleReservation->order->user_id);
        if ($creator) {
             $creator->notify(new NewNotification("You have been assigned to a new vehicle reservation: {$this->vehicleReservation->reservationNumber}. Please check the system for details."));
             $creator->notify(new adminApprovalStatus('Reservation', $this->vehicleReservation->reservationNumber));

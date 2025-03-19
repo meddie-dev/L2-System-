@@ -32,7 +32,6 @@
         <tbody id="reportRecords" class="tw-bg-white">
           @foreach($orders as $order)
           <tr>
-           
             <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
               @if($order->vehicleReservation !== null)
@@ -57,6 +56,7 @@
                 </span>
               @endif
             </td>
+          </tr>
           @endforeach
         </tbody>
       </table>

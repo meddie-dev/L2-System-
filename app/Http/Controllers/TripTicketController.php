@@ -85,10 +85,8 @@ class TripTicketController extends Controller
             $driver->save();
         }
 
-        $vehicle = $trip->vehicle;
-        if ($vehicle) {
-            $vehicle->status = 'available';
-            $vehicle->save();
+        if ($vehicle = $trip->vehicle) {
+            $vehicle->update(['vehicleStatus' => 'available']);
         }
 
         if ($driver) {

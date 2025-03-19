@@ -152,6 +152,17 @@
               <a class="nav-link" href="/admin/dashboard/fleet/fuel">Fuel Management</a>
             </nav>
           </div>
+
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseWarehouse" aria-expanded="false" aria-controls="collapseWarehouse">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-warehouse"></i></div>
+            Warehouse
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapseWarehouse" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/admin/dashboard/warehouse/inventory">Inventory</a>
+            </nav>
+          </div>
         </div>
         @endif
 

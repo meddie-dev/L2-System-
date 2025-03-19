@@ -90,7 +90,7 @@
       </div>
     </div>
 
-    @if($document->approval_status !== 'approved')
+    @if($document->approval_status !== 'approved' || $document->approval_status !== 'reviewed' && $document->reviewed_by === null)
     <div class="tw-flex tw-justify-end tw-mb-6">
       <form class="tw-mr-2" action="{{ route('staff.document.reject', $document->id) }}" method="POST">
         @csrf

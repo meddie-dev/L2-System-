@@ -78,26 +78,26 @@
     <hr>
     <div class="section">
       <h2>Driver Information</h2>
-      <p>Name: <span style="font-weight: bold;"></span></p>
+      <p>Name: <span style="font-weight: bold;">{{ (\App\Models\User::find($fleetCard->user_id))->firstName }} {{ (\App\Models\User::find($fleetCard->user_id))->lastName }}</span></p>
       <p>License Number: <span style="font-weight: bold;">ABC123</span></p>
-      <p>Email: <span style="font-weight: bold;"></span></p>
-      <p>Driver Type: <span style="font-weight: bold;"></span></p>
+      <p>Email: <span style="font-weight: bold;">{{ (\App\Models\User::find($fleetCard->user_id))->email }}</span></p>
+      <p>Driver Type: <span style="font-weight: bold;">{{ (\App\Models\User::find($fleetCard->user_id))->driverType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ((\App\Models\User::find($fleetCard->user_id))->driverType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ((\App\Models\User::find($fleetCard->user_id))->driverType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}</span></p>
       <p>Contact Number: <span style="font-weight: bold;">+639123456789</span></p>
     </div>
 
-   <!-- Vehicle Information -->
-   <hr>
+    <!-- Vehicle Information -->
+    <hr>
     <div class="section">
       <h2>Vehicle Information</h2>
-      <p>Vehicle Type: <span style="font-weight: bold;"></span></p>
-      <p>Plate Number: <span style="font-weight: bold;"></span></p>
-      <p>Vehicle Model: <span style="font-weight: bold;"></span></p>
-      <p>Vehicle Make: <span style="font-weight: bold;"></span></p>
-      <p>Vehicle Color: <span style="font-weight: bold;"></span></p>
-      <p>Vehicle Year: <span style="font-weight: bold;"></span></p>
-      <p>Fuel Type: <span style="font-weight: bold;"></span></p>
-      <p>Fuel Efficiency: <span style="font-weight: bold;"> km/l</span></p>
-      <p>Vehicle Capacity: <span style="font-weight: bold;"> kg</span></p>
+      <p>Vehicle Type: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($fuel->vehicle->vehicleType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($fuel->vehicle->vehicleType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}</span></p>
+      <p>Plate Number: <span style="font-weight: bold;">{{ $fuel->vehicle->plateNumber }}</span></p>
+      <p>Vehicle Model: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleModel }}</span></p>
+      <p>Vehicle Make: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleMake }}</span></p>
+      <p>Vehicle Color: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleColor }}</span></p>
+      <p>Vehicle Year: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleYear }}</span></p>
+      <p>Fuel Type: <span style="font-weight: bold;">{{ ucfirst($fuel->vehicle->vehicleFuelType) }}</span></p>
+      <p>Fuel Efficiency: <span style="font-weight: bold;">{{ $fuel->vehicle->fuel_efficiency }} km/l</span></p>
+      <p>Vehicle Capacity: <span style="font-weight: bold;">{{ $fuel->vehicle->vehicleCapacity }} kg</span></p>
     </div>
 
     <hr>

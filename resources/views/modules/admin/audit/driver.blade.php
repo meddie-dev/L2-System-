@@ -33,7 +33,10 @@
 
   <div class="card-body tw-px-4">
     <!-- Driver Information -->
-    <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Driver Information</h3>
+    <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+      <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Driver Information</h2>
+      <p class="tw-text-xs | max-md:tw-text-xs">View and manage your driver information.</p>
+    </div>
     <div>
       <table class="datatable  tw-mb-4 tw-w-full">
         <thead>
@@ -105,26 +108,22 @@
       </div>
     </div>
 
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-    </div>
-
     <!-- Activity Logs -->
     <div class="tw-bg-white | max-sm:tw-text-sm ">
-      <h3 class="tw-text-md tw-font-bold tw-my-4 | max-md:tw-text-sm">Activity Information</h3>
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Activity Information ({{ $logs->count() }} entries)</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and track your activity logs. </p>
+      </div>
       <div class="card-body tw-max-h-[calc(100vh-23rem)]">
         <div class="tw-overflow-y-auto tw-max-h-[calc(100vh-23rem)] tw-mb-4">
           <div class="tw-container tw-mx-auto tw-p-6">
-            <div class="tw-relative tw-border-l-4 tw-border-blue-500 tw-ml-1">
+            <div class="tw-relative tw-border-l-4 tw-border-[#212529] tw-ml-1">
               @foreach ($logs as $log)
               <div class="tw-mb-6 tw-ml-6">
                 @if (strpos($log->event, 'Unauthorized access attempt') !== false)
                 <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#f7808a] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 @else
-                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-blue-500 tw-rounded-full tw--left-[10px] tw-mt-8"></div>
+                <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#212529] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 @endif
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4" style="background-color: {{ strpos($log->event, 'Unauthorized access attempt') !== false ? '#f8d7da' : '#ffffff' }};">
                   <div class="tw-flex tw-justify-between">

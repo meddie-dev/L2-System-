@@ -142,8 +142,8 @@
       <tr>
         <td>{{ $product['name'] }}</td>
         <td>{{ $product['quantity'] }}</td>
-        <td>${{ number_format($product['price'], 2) }}</td>
-        <td>{{ $product['weight'] }} kg</td>
+        <td>PHP {{ number_format($product['price'], 2) }}</td>
+        <td>{{ number_format($product['weight'] * $product['quantity'], 2) }} kg</td>
       </tr>
       @endforeach
     </table>

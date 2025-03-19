@@ -14,10 +14,10 @@ use App\Models\Modules\Order;
 use App\Models\Modules\VehicleReservation;
 use App\Models\User;
 use App\Models\Vehicle;
-
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class VehicleReservationController extends Controller
 {
@@ -138,12 +138,21 @@ class VehicleReservationController extends Controller
     public function indexOrder()
     {
         $orders = Order::where('assigned_to', auth()->id())
-            ->where('approval_status', 'reviewed')
+            ->where(function ($query) {
+                $query->where('approval_status', '=', 'reviewed')
+                    ->orWhere('approval_status', '=', 'approved');
+            })
             ->whereHas('payment', function ($q) {
-                $q->where('approval_status', 'reviewed');
+                $q->where(function ($query) {
+                    $query->where('approval_status', 'reviewed')
+                        ->orWhere('approval_status', 'approved');
+                });
             })
             ->whereHas('document', function ($q) {
-                $q->where('approval_status', 'reviewed');
+                $q->where(function ($query) {
+                    $query->where('approval_status', 'reviewed')
+                        ->orWhere('approval_status', 'approved');
+                });
             })
             ->get();
 
@@ -209,7 +218,9 @@ class VehicleReservationController extends Controller
 
     public function indexVehicle()
     {
-        $vehicleReservations = VehicleReservation::where('assigned_to', auth()->user()->id)->get();
+        $vehicleReservations = VehicleReservation::whereNull('order_id')
+            ->where('assigned_to', auth()->user()->id)
+            ->get();
 
         return view('modules.staff.vehicleReservation.indexVehicle', compact('vehicleReservations'));
     }
@@ -297,6 +308,7 @@ class VehicleReservationController extends Controller
                     'approved_by' => Auth::id(),
                     'redirected_to' => Auth::id()
                 ]);
+
 
             } else {
                 return back()->with('error', 'No available vehicle or driver found that meets the requirements.');

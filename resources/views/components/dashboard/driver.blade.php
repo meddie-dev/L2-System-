@@ -197,7 +197,7 @@
       const performanceScore = {{
           $user->performance_score
         }};
-      const scoreCategory = performanceScore > 60 ? ['Good', 'Bad'] : ['Bad', 'Good'];
+      const scoreCategory = ['Good', 'Bad'];
 
       const ctx = document.getElementById('userChart');
       if (ctx) {
@@ -208,8 +208,8 @@
             datasets: [{
               label: 'Driver Performance',
               data: [performanceScore, 100 - performanceScore],
-              backgroundColor: ['rgba(33, 37, 41, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-              borderColor: ['rgba(33, 37, 41, 1)', 'rgba(255, 99, 132, 1)'],
+              backgroundColor: ['rgba(33, 37, 41, 0.2)', 'rgba(gray, 0.2, 0.2, 0.2)'],
+              borderColor: ['rgba(33, 37, 41, 1)', 'rgba(gray, 0.2, 0.2, 0.2)'],
               borderWidth: 1
             }]
           },

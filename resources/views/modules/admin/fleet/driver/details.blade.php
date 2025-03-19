@@ -78,12 +78,6 @@
       </form>
     </div>
 
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-    </div>
 
     <!-- Performance Tracking -->
     <div class="card-body">
@@ -132,12 +126,6 @@
       </div>
     </div>
 
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-    </div>
 
     <!-- Trip Tracking -->
     <div class="card-body">
@@ -173,12 +161,6 @@
       </div>
     </div>
 
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-    </div>
 
     <!-- Vehicle Use Reports -->
     <div class="card-body">

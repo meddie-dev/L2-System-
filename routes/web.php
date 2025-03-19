@@ -23,7 +23,7 @@ use App\Http\Controllers\Modules\OrderController;
 use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TripTicketController;
-use App\Models\Payment;
+use App\Http\Controllers\WarehouseController;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -150,6 +150,13 @@ Route::middleware('role:Admin', 'active')->group(function () {
     Route::patch('/admin/dashboard/fleet/fuel/{fuel}', [FleetController::class, 'fuelUpdate'])
         ->name('admin.fleet.fuel.update');
 
+    // Warehouse
+    Route::get('/admin/dashboard/warehouse/inventory', [WarehouseController::class, 'index'])
+        ->name('admin.warehouse.index');
+    Route::get('/admin/dashboard/warehouse/inventory/request/{product}', [WarehouseController::class, 'create'])
+        ->name('admin.warehouse.request');
+    Route::patch('/admin/dashboard/warehouse/inventory/update/{product}', [WarehouseController::class, 'update'])
+        ->name('admin.warehouse.update');
 
 });
 
@@ -194,7 +201,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     // Payment Management
     Route::get('/staff/dashboard/document/payment', [PaymentController::class, 'manage'])
         ->name('staff.payment.manage');
-    Route::get('/staff/dashboard/document/payment/{order}', [PaymentController::class, 'show'])
+    Route::get('/staff/dashboard/document/payment/{payment}', [PaymentController::class, 'show'])
         ->name('staff.payment.show');
     Route::patch('/staff/dashboard/payment/approve/{payment}', [PaymentController::class, 'approve'])
         ->name('staff.payment.approve');

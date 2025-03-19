@@ -26,6 +26,7 @@
         <p class="tw-text-sm tw-text-gray-500 tw-indent-14 max-sm:tw-text-[12px] max-sm:tw-text-justify max-sm:tw-indent-5">
           Welcome, {{ Auth::user()->firstName }}!, We're glad you're here! We're excited to announce that we've released a new feature to help you manage your orders more efficiently! You can now view your order statistics over the past 12 months and get insights on how to improve your business. Check it out and let us know what you think!
         </p>
+        <p class="tw-text-2xl tw-text-gray-500 tw-mt-2">Today is {{ \Carbon\Carbon::now()->format('F j, Y, g:i a') }}</p>
       </div>
     </div>
 

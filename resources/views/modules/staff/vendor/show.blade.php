@@ -49,14 +49,38 @@
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
         <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this order.</p>
       </div>
-      <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
+      <table class="datatable tw-min-w-full tw-divide-y tw-divide-gray-200 tw-my-3">
+        <thead class="tw-bg-gray-50">
+          <tr>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-tracking-wider">Product Name</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-tracking-wider">Price</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-tracking-wider">Quantity</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-tracking-wider">Amount</th>
+          </tr>
+        </thead>
+        <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
+          @foreach (json_decode($order->products, true) as $productId => $product)
+          <tr>
+            <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+            {{ $product['name'] }}
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              {{ $product['price'] }}
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              {{ $product['quantity'] }}
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              {{ $product['price'] * $product['quantity'] }}
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+      <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm tw-mt-4 | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
           <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $order->orderNumber }}" readonly>
-        </div>
-        <div>
-          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Product</label>
-          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->product }}" readonly>
         </div>
         <div>
           <label for="deliveryLocation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Delivery Location</label>
@@ -88,8 +112,8 @@
         </div>
       </div>
     </div>
-    
-    @if($order->approval_status !== 'approved')
+
+    @if($order->approval_status !== 'approved' || $order->approval_status !== 'reviewed' && $order->reviewed_by === null)
     <div class="tw-flex tw-justify-end tw-mb-6">
       <form class="tw-mr-2" action="{{ route('staff.vendors.reject', $order->id) }}" method="POST">
         @csrf

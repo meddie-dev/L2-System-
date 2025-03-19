@@ -33,7 +33,7 @@
           <!-- Card Number -->
           <div class="tw-mb-4">
             <label for="cardNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Card Number<span class="tw-text-red-500">*</span></label>
-            <input type="text" id="cardNumber" name="cardNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('cardNumber') is-invalid @enderror" placeholder="Enter card number" value="{{ $fuel->cardNumber }}" required>
+            <input type="text" id="cardNumber" name="cardNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('cardNumber') is-invalid @enderror" placeholder="Enter card number" value="{{ $fuel->fleetCard->cardNumber }}" readonly>
             @error('cardNumber')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
@@ -42,7 +42,7 @@
           <!-- Credit Limit -->
           <div class="tw-mb-4">
             <label for="credit_limit" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Credit Limit<span class="tw-text-red-500">*</span></label>
-            <input type="number" id="credit_limit" name="credit_limit" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('credit_limit') is-invalid @enderror" placeholder="Enter credit limit" value="{{ $fuel->credit_limit }}" required>
+            <input type="number" id="credit_limit" name="credit_limit" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('credit_limit') is-invalid @enderror" placeholder="Enter credit limit" value="{{ $fuel->fleetCard->credit_limit }}" required>
             @error('credit_limit')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
@@ -51,7 +51,7 @@
           <!-- Balance -->
           <div class="tw-mb-4">
             <label for="balance" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Balance<span class="tw-text-red-500">*</span></label>
-            <input type="number" id="balance" name="balance" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('balance') is-invalid @enderror" placeholder="Enter balance" value="{{ $fuel->balance }}" required>
+            <input type="number" id="balance" name="balance" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('balance') is-invalid @enderror" placeholder="Enter balance" value="{{ $fuel->fleetCard->balance }}" >
             @error('balance')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
@@ -72,7 +72,7 @@
           <!-- Expiry Date -->
           <div class="tw-mb-4">
             <label for="expiry_date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Expiry Date<span class="tw-text-red-500">*</span></label>
-            <input type="date" id="expiry_date" name="expiry_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('expiry_date') is-invalid @enderror" placeholder="Enter expiry date" value="{{ $fuel->expiry_date }}" required>
+            <input type="date" id="expiry_date" name="expiry_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('expiry_date') is-invalid @enderror" placeholder="Enter expiry date" value="{{ $fuel->expiry_date }}" >
             @error('expiry_date')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
@@ -81,7 +81,7 @@
           <!-- Created At -->
           <div class="tw-mb-4">
             <label for="created_at" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Created At<span class="tw-text-red-500">*</span></label>
-            <input type="datetime-local" id="created_at" name="created_at" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('created_at') is-invalid @enderror" placeholder="Enter created at" value="{{ $fuel->created_at }}" required>
+            <input type="datetime-local" id="created_at" name="created_at" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('created_at') is-invalid @enderror" placeholder="Enter created at" value="{{ $fuel->created_at }}" readonly>
             @error('created_at')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
@@ -93,13 +93,6 @@
           <button type="submit" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Update</button>
         </div>
       </form>
-    </div>
-
-    <!-- Custom Divider -->
-    <div class="tw-flex tw-items-center tw-justify-center tw-mt-4">
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
-      <span class="tw-text-sm tw-font-bold tw-text-gray-200 | max-md:tw-text-xs">DS GLOBAL HOLDING INC.</span>
-      <div class="tw-mx-auto tw-my-6 tw-w-[30%] tw-h-[2px] tw-bg-slate-100"></div>
     </div>
 
     <hr>

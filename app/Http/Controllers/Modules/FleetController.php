@@ -73,7 +73,8 @@ class FleetController extends Controller
 
     public function edit(Vehicle $vehicle)
     {
-        return view('modules.admin.fleet.vehicle.edit', compact('vehicle'));
+        $fuels = Fuel::where('vehicle_id', $vehicle->id)->get();
+        return view('modules.admin.fleet.vehicle.edit', compact('vehicle', 'fuels'));
     }
 
     public function update(Request $request, Vehicle $vehicle)
@@ -189,6 +190,25 @@ class FleetController extends Controller
     public function fuelDetails(Fuel $fuel)
     {
         return view('modules.admin.fleet.fuel.details', compact('fuel',));
+    }
+
+    public function fuelUpdate(FleetCard $fleetCard)
+    {
+        $fleetCard->update([
+            'cardNumber' => request()->cardNumber,
+            'credit_limit' => request()->credit_limit,
+            'balance' => request()->balance,
+            'status' => request()->status,
+            'expiry_date' => request()->expiry_date,
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated Fuel: {$fleetCard->cardNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => request()->ip(),
+        ]);
+
+        return redirect()->route('admin.fleet.fuel.index')->with('success', 'Fuel updated successfully.');
     }
 
     //  Driver

@@ -38,18 +38,12 @@
             <td>{{ $driver->email}}</td>
 
             <td class="tw-px-4 tw-py-2">
-              @php
-              $currentDate = now();
-              $lastLoginDate = $driver->last_active_at;
-              $daysSinceLastLogin = $lastLoginDate ? (int) $currentDate->diffInDays($lastLoginDate) : null;
-              @endphp
-
-              @if (!is_null($daysSinceLastLogin))
-              <span class="tw-text-{{ $daysSinceLastLogin === 0 ? 'green-500' : ($daysSinceLastLogin < 0 ? 'yellow-500' : 'red-500') }} tw-font-medium">
-                {{ $daysSinceLastLogin === 0 ? 'Active' : 'Inactive ' . '(' .$daysSinceLastLogin . ' days since last login'. ')' }}
-              </span>
+              @if(\Carbon\Carbon::parse($driver->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
+              <span class="tw-text-green-600 tw-text-sm">Active</span>
               @else
-              <span class="tw-text-gray-500">Last Login: N/A</span>
+              <span class="tw-text-{{ $driver->last_active_at && \Carbon\Carbon::parse($driver->last_active_at)->diffInDays() < 6 ? 'yellow-500' : 'red-500' }}">
+                {{ $driver->last_active_at ? \Carbon\Carbon::parse($driver->last_active_at)->diffForHumans() : 'N/A' }}
+              </span>
               @endif
             </td>
 

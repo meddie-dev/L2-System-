@@ -7,11 +7,11 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="false">
-        Vendor Management
+        Warehouse
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Document Submissions
+        Inventory
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -19,43 +19,47 @@
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
       <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
-
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Order ID. </th>
+            <th class="tw-px-4 tw-py-2">ID</th>
             <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Document Number</th>
-            <th class="tw-px-4 tw-py-2"> Created Date</th>
+            <th class="tw-px-4 tw-py-2">Description</th>
+            <th class="tw-px-4 tw-py-2">Stock</th>
+            <th class="tw-px-4 tw-py-2">Price</th>
+            <th class="tw-px-4 tw-py-2">Weight</th>
+            <th class="tw-px-4 tw-py-2">Demand</th>
             <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
-
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($documents as $document)
+          @foreach($products as $product)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $document->order->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $document->user->firstName }} {{ $document->user->lastName }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $product->id }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if($document->approval_status !== 'reviewed')
-              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.document.show', $document->id) }}">{{ $document->documentNumber }}</a>
+              @if ($product->demand > 0 || $product->stock <= 50)
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.warehouse.request', $product->id) }}">{{ $product->name }}</a>
               @else
-              {{ $document->documentNumber }}
+                <span class="tw-text-gray-600">{{ $product->name }}</span>
               @endif
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $product->description }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $product->stock }}</td>
+            <td class="tw-px-4 tw-py-2">&#x20B1;{{ number_format($product->price, 2) }}</td>
+            <td class="tw-px-4 tw-py-2">{{ number_format($product->weight, 2) }} kg</td>
+            <td class="tw-px-4 tw-py-2">{{ $product->demand }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
-                @if($document->reviewed_by === null)
-                <span class="tw-text-yellow-500">Need Review</span>
-                @else
-                {{ ucfirst($document->approval_status) }}
+              @if ($product->demand > 0)
+              <span class="tw-text-green-500">In Demand</span>
+              @endif
+              @if ($product->stock <= 50)
+                <span class="tw-text-red-500">Needs Restock</span>
                 @endif
-              </span>
             </td>
           </tr>
           @endforeach
         </tbody>
       </table>
+
       <hr>
     </div>
     <div>

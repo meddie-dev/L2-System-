@@ -44,9 +44,11 @@
             <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($user->created_at)->format('F j, Y')  }}</td>
             <td class="tw-px-4 tw-py-2">
               @if(\Carbon\Carbon::parse($user->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
-              <span class="tw-bg-green-500 tw-text-white tw-rounded-full tw-px-2 tw-py-1 tw-text-[12px]">Active</span>
+              <span class="tw-text-green-600 tw-text-sm">Active</span>
               @else
-              <span>{{ \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() }}</span>
+              <span class="tw-text-{{ $user->last_active_at && \Carbon\Carbon::parse($user->last_active_at)->diffInDays() < 6 ? 'yellow-500' : 'red-500' }}">
+                {{ $user->last_active_at ? \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() : 'N/A' }}
+              </span>
               @endif
             </td>
 

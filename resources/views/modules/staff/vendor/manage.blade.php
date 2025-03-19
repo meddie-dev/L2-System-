@@ -15,7 +15,7 @@
       </x-partials.breadcrumb>
     </ol>
   </nav>
-  
+
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
       <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
@@ -36,7 +36,9 @@
             <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
               @if($order->approval_status !== 'reviewed')
-              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.vendors.show', $order->id) }}">{{ $order->orderNumber }}</a>
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.vendors.show', $order->id) }}">
+
+                {{ $order->orderNumber }}</a>
               @else
               {{ $order->orderNumber }}
               @endif
@@ -45,7 +47,11 @@
             <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($order->deliveryRequestDate)->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : ($order->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
+                @if($order->reviewed_by === null)
+                <span class="tw-text-yellow-500">Need Review</span>
+                @else
                 {{ ucfirst($order->approval_status) }}
+                @endif
               </span>
             </td>
 

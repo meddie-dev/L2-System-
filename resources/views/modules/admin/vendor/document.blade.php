@@ -93,7 +93,7 @@
       </div>
       @endif
 
-      @if($document->approval_status === 'approved')
+      @if($document->approval_status === 'approved' && $document->approval_status === 'reviewed')
       <!-- Reviewed By -->
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Reviewed By</h2>

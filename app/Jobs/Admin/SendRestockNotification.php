@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Jobs\Admin;
+
+use App\Models\User;
+use App\Models\Product;
+use App\Notifications\NewNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+
+class SendRestockNotification implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $product;
+    protected $stock;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(Product $product, $stock)
+    {
+        $this->product = $product;
+        $this->stock = $stock;
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        // Step 1: Update Stock
+        $this->product->update([
+            'stock' => $this->product->stock + $this->stock,
+        ]);
+
+        // Step 2: Notify Admins & Staff
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Admin');
+        })->get();
+
+        $staffs = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Staff');
+        })->get();
+
+        $message = "Product inventory for {$this->product->name} has been updated with an additional {$this->stock} units.";
+
+        foreach ($admins as $admin) {
+            $admin->notify(new NewNotification($message));
+        }
+
+        foreach ($staffs as $staff) {
+            $staff->notify(new NewNotification($message));
+        }
+    }
+}

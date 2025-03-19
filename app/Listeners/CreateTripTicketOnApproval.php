@@ -7,9 +7,11 @@ use App\Models\FleetCard;
 use App\Models\Fuel;
 use App\Models\TripTicket;
 use App\Models\Vehicle;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CreateTripTicketOnApproval
@@ -134,6 +136,31 @@ class CreateTripTicketOnApproval
                 'updated_at' => now(),
             ]);
 
+            // Define the filename and storage path
+            $filename = $tripTicket->tripNumber . '.pdf';
+            $folderPath = "trip_tickets/{$reservation->redirected_to}/";
+            $fullPath = "{$folderPath}{$filename}";
+
+            // Ensure directory exists
+            Storage::disk('public')->makeDirectory($folderPath);
+
+            // Check if an existing PDF file needs to be deleted
+            if (Storage::disk('public')->exists($fullPath)) {
+                Storage::disk('public')->delete($fullPath);
+            }
+
+            // Generate PDF
+            $pdf = Pdf::loadView('pdf.tripTicket', [
+                'vehicleReservation' => $reservation,
+                'tripTicket' => $tripTicket,
+                'fuel' => Fuel::where('trip_ticket_id', $tripTicket->id)->first(),
+            ]);
+
+            // Store PDF in public disk
+            Storage::disk('public')->put($fullPath, $pdf->output());
+
+            // Log for debugging
+            Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
 
             Log::info("Fleet Card Created", ['credit_limit' => $creditLimit]);
         } catch (\Exception $e) {

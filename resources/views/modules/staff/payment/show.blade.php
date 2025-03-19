@@ -12,7 +12,7 @@
 
       <x-partials.breadcrumb :active="true" :isLast="true">
         <div class="tw-flex tw-items-center tw-justify-center ">
-          Review Payment No.(<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $order->payment->first()->paymentNumber }}</span>)
+          Review Payment No.(<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $payment->paymentNumber }}</span>)
         </div>
       </x-partials.breadcrumb>
     </ol>
@@ -27,19 +27,19 @@
       <div class="tw-px-4 tw-flex tw-flex-col tw-gap-2 tw-text-sm | max-md:tw-text-xs">
         <div>
           <label for="vendorID" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor ID</label>
-          <input type="text" id="vendorID" name="vendorID" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user ? $order->user->id : 'N/A' }}" readonly>
+          <input type="text" id="vendorID" name="vendorID" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->user ? $payment->user->id : 'N/A' }}" readonly>
         </div>
         <div>
           <label for="vendorName" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vendor Name</label>
-          <input type="text" id="vendorName" name="vendorName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user ? $order->user->firstName . ' ' . $order->user->lastName : 'N/A' }}" readonly>
+          <input type="text" id="vendorName" name="vendorName" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->user ? $payment->user->firstName . ' ' . $payment->user->lastName : 'N/A' }}" readonly>
         </div>
         <div>
           <label for="vendorEmail" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Email</label>
-          <input type="text" id="vendorEmail" name="vendorEmail" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user ? $order->user->email : 'N/A' }}" readonly>
+          <input type="text" id="vendorEmail" name="vendorEmail" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->user ? $payment->user->email : 'N/A' }}" readonly>
         </div>
         <div>
           <label for="verificationStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Verification Status</label>
-          <input type="text" id="verificationStatus" name="verificationStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->user ? ($order->user->two_factor_enabled ? 'Verified' : 'Not Verified') : 'N/A' }}" readonly>
+          <input type="text" id="verificationStatus" name="verificationStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->user ? ($payment->user->two_factor_enabled ? 'Verified' : 'Not Verified') : 'N/A' }}" readonly>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
       <div class="tw-flex tw-flex-col tw-gap-4 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Order Number</label>
-          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->orderNumber }}" readonly>
+          <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->order->orderNumber }}" readonly>
         </div>
       </div>
 
@@ -63,43 +63,43 @@
       <div class="tw-grid tw-grid-cols-2 tw-gap-2 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div>
           <label for="paymentNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Number</label>
-          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->paymentNumber }}" readonly>
+          <input type="text" id="paymentNumber" name="paymentNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->paymentNumber }}" readonly>
         </div>
         <div>
           <label for="date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Date</label>
-          <input type="text" id="date" name="date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->date }}" readonly>
+          <input type="text" id="date" name="date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->date }}" readonly>
         </div>
         <div>
           <label for="due_date" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Due Date</label>
-          <input type="text" id="due_date" name="due_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->due_date }}" readonly>
+          <input type="text" id="due_date" name="due_date" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->due_date }}" readonly>
         </div>
         <div>
           <label for="account_number" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Account Number</label>
-          <input type="text" id="account_number" name="account_number" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->account_number }}" readonly>
+          <input type="text" id="account_number" name="account_number" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->account_number }}" readonly>
         </div>
         <div>
           <label for="total_amount_due" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Total Amount Due</label>
-          <input type="text" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ number_format($order->payment->first()->total_amount_due, 2) }}" readonly>
+          <input type="text" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ number_format($payment->total_amount_due, 2) }}" readonly>
         </div>
         <div>
           <label for="paymentStatus" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Status</label>
-          <input type="text" id="paymentStatus" name="paymentStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ ucfirst($order->payment->first()->approval_status) }}" readonly>
+          <input type="text" id="paymentStatus" name="paymentStatus" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ ucfirst($payment->approval_status) }}" readonly>
         </div>
         <div>
           <label for="paymentCreate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Payment Create</label>
-          <input type="text" id="paymentCreate" name="paymentCreate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->payment->first()->created_at->format('Y-m-d') }}" readonly>
+          <input type="text" id="paymentCreate" name="paymentCreate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->created_at ? $payment->created_at->format('Y-m-d') : 'N/A' }}" readonly>
         </div>
       </div>
     </div>
 
-    @if($order->payment->first()->approval_status !== 'approved')
+    @if($payment->approval_status !== 'approved' || $payment->approval_status !== 'reviewed' && $payment->reviewed_by === null)
     <div class="tw-flex tw-justify-end tw-mb-6">
-      <form class="tw-mr-2" action="{{ route('staff.payment.reject', $order->payment->id) }}" method="POST">
+      <form class="tw-mr-2" action="{{ route('staff.payment.reject', $payment->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <button type="submit" class="tw-text-white tw-bg-red-600 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Reject</button>
       </form>
-      <form action="{{ route('staff.payment.approve', $order->payment->id) }}" method="POST">
+      <form action="{{ route('staff.payment.approve', $payment->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Reviewed</button>

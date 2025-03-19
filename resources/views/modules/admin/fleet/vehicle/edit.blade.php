@@ -195,24 +195,34 @@
         <table class=" datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4">
           <thead class="tw-bg-gray-200 tw-text-gray-700">
             <tr>
-              <th class="tw-px-4 tw-py-2">Month</th>
-              <th class="tw-px-4 tw-py-2">Issue</th>
-              <th class="tw-px-4 tw-py-2">Description</th>
-              <th class="tw-px-4 tw-py-2">Schedule</th>
-              <th class="tw-px-4 tw-py-2">Condition Status</th>
+              <th class="tw-px-4 tw-py-2">Fuel Number</th>
+              <th class="tw-px-4 tw-py-2">Fuel Type</th>
+              <th class="tw-px-4 tw-py-2">Estimated Fuel Consumption</th>
+              <th class="tw-px-4 tw-py-2">Estimated Cost</th>
+              <th class="tw-px-4 tw-py-2">Fuel Date</th>
+              <th class="tw-px-4 tw-py-2">Fuel Status</th>
             </tr>
           </thead>
           <tbody id="orderRecords" class="tw-bg-white">
-
-            <!-- Display Month as a Full-Row Header -->
-            <tr class="tw-bg-gray-100">
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ date('F Y') }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->vehicleIssue }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceDescription }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceSchedule }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->conditionStatus }}</td>
-            </tr>
-
+            @foreach ($fuels as $fuel)
+              <tr class="tw-bg-gray-100">
+                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $fuel->fuelNumber }}</td>
+                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ ucfirst($fuel->fuelType) }}</td>
+                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ number_format($fuel->estimatedFuelConsumption, 2) . ' L' }}</td>
+                <td class="tw-px-4 tw-py-2 tw-font-bold">PHP {{ number_format($fuel->estimatedCost, 2) }}</td>
+                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ \Carbon\Carbon::parse($fuel->fuelDate)->format('F d, Y') }}</td>
+                <td class="tw-px-4 tw-py-2 tw-font-bold">
+                  @switch($fuel->fuelStatus)
+                    @case('scheduled')
+                    <span class="tw-text-yellow-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+                    @break
+                    @case('completed')
+                    <span class="tw-text-green-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+                    @break
+                  @endswitch
+                </td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
 

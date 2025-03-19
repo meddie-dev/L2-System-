@@ -184,9 +184,9 @@ class PaymentController extends Controller
         return view('modules.staff.payment.manage', compact('orders'));
     }
 
-    public function show(Order $order)
+    public function show(Payment $payment)
     {
-        return view('modules.staff.payment.show', compact('order'));
+        return view('modules.staff.payment.show', compact('payment'));
     }
 
     public function approve(Payment $payment)

@@ -24,14 +24,48 @@
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
         <p class="tw-text-xs | max-md:tw-text-xs">Edit and update your driver's information.</p>
       </div>
+      <table class="datatable tw-min-w-full tw-divide-y tw-divide-gray-200">
+        <thead class="tw-bg-gray-50">
+          <tr>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase">Product</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase">Quantity</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase">Weight</th>
+            <th scope="col" class="tw-px-6 tw-py-3 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase">Amount</th>
+          </tr>
+        </thead>
+        <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
+          @foreach(json_decode($order->products, true) as $product)
+          <tr>
+            <td class="tw-px-6 tw-py-4 tw-text-sm tw-font-medium tw-text-gray-900">
+              <div class="tw-flex tw-items-center">
+              
+                <div class="tw-ml-4">
+                  <div class="tw-text-sm tw-font-medium tw-text-gray-900">
+                    {{ $product['name'] }}
+                  </div>
+                  <div class="tw-text-sm tw-text-gray-500">
+                    {{-- {{ $product->variant }} --}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-text-sm tw-font-medium tw-text-gray-500">
+              {{ $product['quantity'] }}
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-text-sm tw-font-medium tw-text-gray-900">
+              {{ number_format($product['weight'] * $product['quantity'], 2) }} kg
+            </td>
+            <td class="tw-px-6 tw-py-4 tw-text-sm tw-font-medium tw-text-gray-900">
+              &#x20B1;{{ number_format($product['price'] * $product['quantity'], 2) }}
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
       <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-px-4 tw-text-sm ">
         <div>
           <label for="orderNumber" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Order Number:</label>
           <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ strtoupper(Str::random(20)) }}" readonly>
-        </div>
-        <div>
-          <label for="product" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Product:</label>
-          <input type="text" id="product" name="product" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $order->product }}" readonly>
         </div>
         <div>
           <label for="quantity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Quantity:</label>
@@ -79,7 +113,7 @@
       </div>
       @endif
 
-      @if($order->approval_status === 'approved')
+      @if($order->approval_status === 'approved' && $order->approval_status === 'reviewed')
       <!-- Reviewed By -->
       <div>
         <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">

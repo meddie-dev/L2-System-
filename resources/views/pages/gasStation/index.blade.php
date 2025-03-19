@@ -1,5 +1,5 @@
 <x-layout.authTemplate>
-  <div class="tw-relative tw-flex tw-justify-center tw-mx-auto tw-h-[82vh] tw-bg-blue-500 tw-shadow-lg  tw-rounded-xl tw-overflow-hidden">
+  <div class="tw-relative tw-flex tw-justify-center tw-mx-auto tw-h-[82vh] tw-bg-blue-500 tw-shadow-lg  tw-overflow-hidden">
     <div class="tw-relative tw-z-10 tw-flex tw-flex-col tw-justify-center tw-items-center ">
       <img
         src="/img/logo.png"
@@ -28,8 +28,7 @@
 
         <form action="{{ route('gasStation.verify') }}" method="POST">
           @csrf
-          @for ($i = 0; $i
-          < 10; $i++)
+          @for ($i = 0; $i < 20; $i++)
             <input type="text" name="cardNumber[]" maxlength="1" class="otp-input" id="input{{$i}}" />
           @endfor
         </form>

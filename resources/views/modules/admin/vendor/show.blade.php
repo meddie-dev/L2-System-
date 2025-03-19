@@ -45,7 +45,7 @@
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $order->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $order->assigned_to !== null ? \App\Models\User::find($order->reviewed_by)->firstName . ' ' . \App\Models\User::find($order->assigned_to)->lastName : 'N/A' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $order->assigned_to !== null ? \App\Models\User::find($order->assigned_to)->firstName . ' ' . \App\Models\User::find($order->assigned_to)->lastName : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $order->approval_status === 'approved' ? 'green-500' : ($order->approval_status === 'pending' ? 'yellow-500' : ($order->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($order->approval_status) }}
@@ -83,7 +83,7 @@
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $document->assigned_to !== null ? \App\Models\User::find($document->reviewed_by)->firstName . ' ' . \App\Models\User::find($document->assigned_to)->lastName : 'N/A' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $document->assigned_to !== null ? \App\Models\User::find($document->assigned_to)->firstName . ' ' . \App\Models\User::find($document->assigned_to)->lastName : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($document->approval_status) }}
@@ -121,7 +121,7 @@
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $payment->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $payment->assigned_to !== null ? \App\Models\User::find($payment->reviewed_by)->firstName . ' ' . \App\Models\User::find($payment->assigned_to)->lastName : 'N/A' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $payment->assigned_to !== null ? \App\Models\User::find($payment->assigned_to)->firstName . ' ' . \App\Models\User::find($payment->assigned_to)->lastName : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $payment->approval_status === 'approved' ? 'green-500' : ($payment->approval_status === 'pending' ? 'yellow-500' : ($payment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($payment->approval_status) }}
@@ -159,7 +159,7 @@
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->created_at->format('F j, Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->assigned_to !== null ? \App\Models\User::find($vehicleReservation->reviewed_by)->firstName . ' ' . \App\Models\User::find($vehicleReservation->assigned_to)->lastName : 'N/A' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->assigned_to !== null ? \App\Models\User::find($vehicleReservation->assigned_to)->firstName . ' ' . \App\Models\User::find($vehicleReservation->assigned_to)->lastName : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : ($vehicleReservation->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($order->approval_status) }}

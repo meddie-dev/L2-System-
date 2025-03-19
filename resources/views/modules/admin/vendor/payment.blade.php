@@ -19,18 +19,6 @@
   </nav>
 
   <div class="card-body tw-px-4">
-    <div>
-      <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
-        @if (Str::endsWith(strtolower($payment->paymentUrl), ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']))
-        <img src="{{ asset('storage/' . $payment->paymentUrl) }}"
-          class="tw-w-full tw-h-auto tw-rounded-md tw-shadow-md tw-max-w-[500px]"
-          alt="Image"> <!-- Use a generic alt text or dynamic based on context -->
-        @else
-        <p class="tw-text-sm tw-text-gray-500">No preview available. Click to <a href="{{ asset('storage/' . $payment->paymentUrl) }}" target="_blank" class="tw-text-blue-500 hover:tw-text-blue-700 hover:tw-underline">Download</a></p>
-        @endif
-      </div>
-    </div>
-
     <div class="tw-overflow-x-auto tw-mb-6">
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
@@ -92,7 +80,7 @@
       </div>
       @endif
 
-      @if($payment->approval_status == 'approved')
+      @if($payment->approval_status == 'approved' && $payment->payment_status == 'reviewed')
       <!-- Reviewed By -->
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Reviewed By</h2>

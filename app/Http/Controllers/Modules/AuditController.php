@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Jobs\Staff\Audit\NotifyIncidentApproved;
 use App\Jobs\Staff\Audit\NotifyIncidentReview;
+use App\Jobs\Staff\Document\SendDocumentApprovalNotification;
+use App\Jobs\Staff\Order\SendOrderApprovalNotification;
+use App\Jobs\Staff\Payment\SendPaymentApprovalNotification;
+use App\Jobs\Vendor\SendDocumentNotifications;
+use App\Jobs\Vendor\SendOrderNotifications;
+use App\Jobs\Vendor\SendPaymentNotifications;
 use App\Models\ActivityLogs;
 use App\Models\IncidentReport;
 use App\Models\Modules\Document;
@@ -109,6 +115,11 @@ class AuditController extends Controller
             'approved_by' => Auth::id(),
         ]);
 
+        if (is_null($order->reviewed_by)) {
+            // Dispatch job asynchronously
+            SendOrderNotifications::dispatch($order, $user);
+        }
+
         ActivityLogs::create([
             'user_id' => Auth::id(),
             'event' => "Approved Order: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
@@ -160,6 +171,11 @@ class AuditController extends Controller
             'approved_by' => Auth::id(),
         ]);
 
+        if (is_null($document->reviewed_by)) {
+            // Dispatch job asynchronously
+            SendDocumentNotifications::dispatch($document, $user);
+        }
+
         ActivityLogs::create([
             'user_id' => Auth::id(),
             'event' => "Approved Document: {$document->document_number} at " . now('Asia/Manila')->format('Y-m-d H:i'),
@@ -209,6 +225,11 @@ class AuditController extends Controller
             'approval_status' => 'approved',
             'approved_by' => Auth::id(),
         ]);
+
+        if (is_null($payment->reviewed_by)) {
+            // Dispatch job asynchronously
+            SendPaymentNotifications::dispatch($payment, $user);
+        }
 
         ActivityLogs::create([
             'user_id' => Auth::id(),

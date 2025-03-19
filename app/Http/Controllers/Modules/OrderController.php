@@ -91,7 +91,13 @@ class OrderController extends Controller
     
          
             if ($request->has('products')) {
-                $order->products()->sync($request->products);
+                $order->products()->sync(collect($request->products)->mapWithKeys(function ($details) {
+                    return [$details['id'] => [
+                        'quantity' => $details['quantity'],
+                        'price' => $details['price'],
+                        'weight' => $details['weight']
+                    ]];
+                })->toArray());
                 foreach ($request->products as $productId => $details) {
                     $product = Product::findOrFail($productId);
                     $product->stock -= $details['quantity'];
