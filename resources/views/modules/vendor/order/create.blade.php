@@ -241,7 +241,34 @@
       }
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+      const datepicker = document.getElementById("deliveryRequestDate");
 
+      datepicker.addEventListener("change", function() {
+        const selectedDate = new Date(this.value);
+        const day = selectedDate.getDay();
+
+        if (day === 0 || day === 6) { // 0 = Sunday, 6 = Saturday
+          this.setCustomValidity("Weekends are not allowed. Please select a weekday.");
+          this.reportValidity();
+          this.value = ""; // Reset the selected date
+        } else {
+          this.setCustomValidity(""); // Clear previous validity messages
+        }
+      });
+
+      function setValidDates() {
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = (today.getMonth() + 1).toString().padStart(2, "0");
+        let day = today.getDate().toString().padStart(2, "0");
+        let minDate = `${year}-${month}-${day}`;
+
+        datepicker.setAttribute("min", minDate);
+      }
+
+      setValidDates();
+    });
 
     // $(document).ready(function() {
     //   $("#deliveryAddress").on("input", function() {

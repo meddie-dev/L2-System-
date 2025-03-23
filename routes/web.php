@@ -113,9 +113,12 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.vehicleReservation.manage');
     Route::get('/admin/dashboard/vehicleReservation/{vehicleReservation}', [VehicleReservationController::class, 'showAdmin'])
         ->name('admin.vehicleReservation.show');
-    Route::patch('/admin/dashboard/vendor/approve/{vehicleReservation}', [VehicleReservationController::class, 'approve'])
+    Route::patch('/admin/dashboard/vehicleReservation/approve/{vehicleReservation}', [VehicleReservationController::class, 'approve'])
         ->name('admin.vehicleReservation.approve');
-    Route::patch('/admin/dashboard/vendor/reject/{vehicleReservation}', [VehicleReservationController::class, 'reject'])
+    Route::patch('/admin/dashboard/vehicleReservation/scheduled/{vehicleReservation}', [VehicleReservationController::class, 'approveVehisleReservation'])
+        ->name('admin.vehicleReservation.scheduled');
+
+    Route::patch('/admin/dashboard/vehicleReservation/reject/{vehicleReservation}', [VehicleReservationController::class, 'reject'])
         ->name('admin.vehicleReservation.reject');
 
     // Fleet Management -> Vehicle
@@ -218,10 +221,12 @@ Route::middleware('role:Staff', 'active')->group(function () {
 
     Route::get('/staff/dashboard/vehicleReservation/vehicle', [VehicleReservationController::class, 'indexVehicle'])
         ->name('staff.vehicleReservation.indexVehicle');
-    Route::get('/staff/dashboard/vehicleReservation/create/vehicle/{vehicleReservation}', [VehicleReservationController::class, 'createVehicle'])
-        ->name('staff.vehicleReservation.createVehicle');
-    Route::post('/staff/dashboard/vehicleReservation/vehicle/{vehicleReservation}', [VehicleReservationController::class, 'storeVehicle'])
-        ->name('staff.vehicleReservation.storeVehicle');
+    Route::get('/staff/dashboard/vehicleReservation/vehicle/details/{vehicleReservation}', [VehicleReservationController::class, 'detailsVehicle'])
+        ->name('staff.vehicleReservation.detailsVehicle');
+    Route::patch('/staff/dashboard/vehicleReservation/vehicle/approve/{vehicleReservation}', [VehicleReservationController::class, 'reviewVehicle'])
+        ->name('staff.vehicleReservation.reviewVehicle');
+    Route::patch('/staff/dashboard/vehicleReservation/vehicle/reject/{vehicleReservation}', [VehicleReservationController::class, 'rejectVehicle'])
+        ->name('staff.vehicleReservation.rejectVehicle');
 });
 
 /*--------------------------------------------------------------
@@ -233,8 +238,11 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
         ->name('vendorPortal.dashboard');
 
     // Pdf 
-    Route::get('/portal/vendor/dashboard/pdf/{order}', [PaymentController::class, 'paymentPdf'])
+    Route::get('/portal/vendor/dashboard/pdf/invoice/{order}', [PaymentController::class, 'paymentPdf'])
         ->name('vendorPortal.payment.pdf');
+    // Pdf 
+    Route::get('/portal/vendor/dashboard/pdf/booking/{vehicleReservation}', [PaymentController::class, 'paymentPdfVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.pdf');
 
     // Order Management
     Route::resource('vendors', OrderController::class);
@@ -265,8 +273,8 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     Route::get('/portal/vendor/dashboard/document/details/{document}', [DocumentController::class, 'details'])
         ->name('vendorPortal.document.details');
 
-    // Payment Management
-    Route::get('/portal/vendor/dashboard/payment', [PaymentController::class, 'index'])
+    // Payment Management -> Order  
+    Route::get('/portal/vendor/dashboard/payment/invoice', [PaymentController::class, 'index'])
         ->name('vendorPortal.order.payment');
     Route::get('/portal/vendor/dashboard/order/payment/new/{order}', [PaymentController::class, 'create'])
         ->name('vendorPortal.order.payment.new');
@@ -276,7 +284,7 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
         ->name('vendorPortal.order.payment.edit');
     Route::patch('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'update'])
         ->name('vendorPortal.order.payment.update');
-    Route::get('/portal/vendor/dashboard/payment/details/{payment}', [PaymentController::class, 'details'])
+    Route::get('/portal/vendor/dashboard/payment/details/invoice/{payment}', [PaymentController::class, 'details'])
         ->name('vendorPortal.payment.details');
 
     // Vehicle Reservation Management
@@ -286,12 +294,32 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
         ->name('vendorPortal.vehicleReservation.new');
     Route::post('/portal/vendor/dashboard/vehicleReservation/{user}', [VehicleReservationController::class, 'vendorStore'])
         ->name('vendorPortal.vehicleReservation.store');
-    Route::get('/portal/vendor/dashboard/vehicleReservation/{vehicleReservation}', [VehicleReservationController::class, 'vendorEdit'])
+    Route::get('/portal/vendor/dashboard/vehicleReservation/edit/{vehicleReservation}', [VehicleReservationController::class, 'vendorEdit'])
         ->name('vendorPortal.vehicleReservation.edit');
-    Route::patch('/portal/vendor/dashboard/vehicleReservation/{vehicleReservation}', [VehicleReservationController::class, 'vendorUpdate'])
+    Route::patch('/portal/vendor/dashboard/vehicleReservation/update/{vehicleReservation}', [VehicleReservationController::class, 'vendorUpdate'])
         ->name('vendorPortal.vehicleReservation.update');
     Route::get('/portal/vendor/dashboard/vehicleReservation/details/{vehicleReservation}', [VehicleReservationController::class, 'vendorDetails'])
         ->name('vendorPortal.vehicleReservation.details');
+
+    Route::get('/portal/vendor/dashboard/vehicleReservation/status', [VehicleReservationController::class, 'vendorStatusIndex'])
+        ->name('vendorPortal.vehicleReservation.status');
+    Route::get('/portal/vendor/dashboard/vehicleReservation/status/details/{tripTicket}', [VehicleReservationController::class, 'vendorStatusDetails'])
+    ->name('vendorPortal.vehicleReservation.status.details');
+
+
+    // Payment Management -> Vehicle Reservation
+    Route::get('/portal/vendor/dashboard/payment/booking', [PaymentController::class, 'indexVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment');
+    Route::get('/portal/vendor/dashboard/vehicleReservation/payment/new/{vehicleReservation}', [PaymentController::class, 'createVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment.new');
+    Route::post('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'storeVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment.store');
+    Route::get('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'editVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment.edit');
+    Route::patch('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'updateVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment.update');
+    Route::get('/portal/vendor/dashboard/payment/details/booking/{payment}', [PaymentController::class, 'detailsVehicleReservation'])
+        ->name('vendorPortal.vehicleReservation.payment.details');
 
     // Card Management
     Route::get('/portal/vendor/dashboard/card/in-transit', [TripTicketController::class, 'vendorInTransitIndex'])

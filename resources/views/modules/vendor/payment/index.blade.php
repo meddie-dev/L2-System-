@@ -6,8 +6,12 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb :active="true" :isLast="true">
+      <x-partials.breadcrumb :active="true" :isLast="false">
         Payment
+      </x-partials.breadcrumb>
+
+      <x-partials.breadcrumb :active="true" :isLast="true">
+        Invoices
       </x-partials.breadcrumb>
     </ol>
   </nav>

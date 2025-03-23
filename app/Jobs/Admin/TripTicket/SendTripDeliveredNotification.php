@@ -25,10 +25,13 @@ class SendTripDeliveredNotification implements ShouldQueue
     public function handle()
     {
         
-        $user = User::find($this->trip->order->user_id);
-
-        if ($user) {
-            $user->notify(new NewNotification("Order ({$this->trip->order->orderNumber}) has been delivered. Check trip details."));
+        if ($this->trip->vehicleReservation && $this->trip->vehicleReservation->order_id) {
+            $creator = User::find($this->trip->order->user_id);
+            if ($creator) {
+                $creator->notify(new NewNotification("Your trip ({$this->trip->tripNumber}) has been marked as in transit. Check trip details."));
+            }
+        }else {
+            $this->trip->user->notify(new NewNotification("Your trip ({$this->trip->tripNumber}) has been marked as in transit. Check trip details."));
         }
     }
 }

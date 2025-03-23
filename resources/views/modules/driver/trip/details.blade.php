@@ -120,11 +120,22 @@
       </div>
 
       <!-- Feedback -->
+      @if($tripTicket->vehicleReservation && $tripTicket->vehicleReservation->order_id !== null)
       <div>
         <label for="feedback" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Feedback:</label>
         <textarea id="feedback" name="feedback" rows="4" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" readonly>{{ $tripTicket->order->user->firstName }} {{ $tripTicket->order->user->lastName }}:
         {{ $tripTicket->feedback }}</textarea>
       </div>
+      @endif
+
+      <!-- Feedback -->
+      @if($tripTicket->vehicleReservation && $tripTicket->vehicleReservation->order_id === null)
+      <div>
+        <label for="feedback" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="4" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" readonly>{{ $tripTicket->vehicleReservation->user->firstName }} {{ $tripTicket->vehicleReservation->user->lastName }}:
+        {{ $tripTicket->feedback }}</textarea>
+      </div>
+      @endif
     </div>
     @endif
 

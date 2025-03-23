@@ -104,7 +104,11 @@
         @method('PATCH')
         <button type="submit" class="tw-text-white tw-bg-red-600 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Reject</button>
       </form>
-      <form action="{{ route('admin.vehicleReservation.approve', $vehicleReservation->id)}}" method="POST">
+      @if (is_null($vehicleReservation->order_id))
+        <form action="{{ route('admin.vehicleReservation.scheduled', $vehicleReservation->id)}}" method="POST">
+      @else
+        <form action="{{ route('admin.vehicleReservation.approve', $vehicleReservation->id)}}" method="POST">
+      @endif
         @csrf
         @method('PATCH')
         <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Approve Reservation</button>

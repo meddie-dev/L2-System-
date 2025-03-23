@@ -3,6 +3,7 @@
 namespace App\Models\Modules;
 
 use App\Models\Fuel;
+use App\Models\Payment;
 use App\Models\shipments;
 use App\Models\TripTicket;
 use App\Models\User;
@@ -45,4 +46,11 @@ class VehicleReservation extends Model
     {
         return $this->belongsTo(TripTicket::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+
 }

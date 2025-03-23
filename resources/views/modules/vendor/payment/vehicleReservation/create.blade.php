@@ -6,19 +6,19 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb href="{{ route('vendorPortal.order') }}" :active="false" :isLast="false">
-        Order Management
+      <x-partials.breadcrumb href="{{ route('vendorPortal.vehicleReservation') }}" :active="false" :isLast="false">
+        Vehicle Reservation
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        (Step 3) Payment
+        (Step 2) Payment
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="tw-px-4">
     <p class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs"><span class="tw-font-semibold">Instructions:</span> Please fill out the form below to create a new order request. All fields with an <span class="tw-text-red-500">*</span> are required.</p>
-    <form action="{{ route('vendorPortal.order.payment.store', ['order' => $order->id]) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
+    <form action="{{ route('vendorPortal.vehicleReservation.payment.store', ['vehicleReservation' => $vehicleReservation->id]) }}" enctype="multipart/form-data" method="POST" class="tw-mt-6">
       @csrf
       <div class="tw-text-sm">
         <!-- Payment Number -->
@@ -60,17 +60,12 @@
         <!-- Total Amount Due -->
         <div class="tw-mb-2">
           <label for="total_amount_due" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Total Amount Due<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('total_amount_due') is-invalid @enderror" value="{{$order->amount * 1.26 }}" readonly>
+          <input type="text" id="total_amount_due" name="total_amount_due" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs @error('total_amount_due') is-invalid @enderror" value="{{ number_format($vehicleReservation->amount, 2) }}" readonly>
           @error('total_amount_due')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
         </div>
-        <div class="tw-mb-3 tw-flex tw-flex-col tw-text-xs tw-text-gray-500 tw-gap-1">
-          <span>SubTotal: {{ number_format($order->amount, 2) }}</span>
-          <span>Tax: {{ number_format($order->amount * 0.10, 2) }}</span>
-          <span>Shipping: {{ number_format($order->amount * 0.26, 2) }}</span>
-          <span class="tw-font-semibold">Total: {{ number_format($order->amount * 1.26, 2) }}</span>
-        </div>
+      
       </div>
 
       <!-- Submit Registration Button -->

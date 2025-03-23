@@ -33,21 +33,15 @@
           <tr>
             <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->user->firstName }} {{ $vehicleReservation->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if($vehicleReservation->vehicleReservation)
-              {{ $vehicleReservation->reservationNumber }} <span class="tw-text-gray-400">(Reservation already exists.)</span>
+              @if($vehicleReservation->approval_status === 'reviewed' || $vehicleReservation->approval_status === 'approved')
+              {{ $vehicleReservation->reservationNumber }}
               @else
-              <a href="{{ route('staff.vehicleReservation.createVehicle', $vehicleReservation->id) }}">
-                {{ $vehicleReservation->reservationNumber }} <span class="tw-text-gray-400">(
-                  @if(isset($vehicleReservation->payment->approval_status) && $vehicleReservation->payment->approval_status === 'approved' && isset($vehicleReservation->document->first()->approval_status) && $vehicleReservation->document->first()->approval_status === 'approved')
-                  Payment & Document submitted viewed successfully.
-                  @else
-                  Order, Payment & Document not submitted.
-                  @endif
-                  )</span>
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.vehicleReservation.detailsVehicle', $vehicleReservation->id) }}">
+                {{ $vehicleReservation->reservationNumber }}
               </a>
               @endif
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->updated_at->format('M d, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->updated_at->format('n-j-Y') }}</td>
           </tr>
           @endforeach
         </tbody>

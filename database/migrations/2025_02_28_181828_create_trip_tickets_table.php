@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('trip_tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
             $table->foreignId('vehicle_reservation_id')->references('id')->on('vehicle_reservations')->onDelete('cascade');
             $table->foreignId('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreignId('fleet_card_id')->references('id')->on('fleet_cards')->onDelete('cascade');

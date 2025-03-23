@@ -10,13 +10,6 @@
         Vechile Reservation
       </x-partials.breadcrumb>
     </ol>
-
-    <div class="tw-flex">
-      <a href="{{ route('vendorPortal.vehicleReservation.new') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-1 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
-        <i class="fa-solid fa-plus tw-text-xl | max-md:tw-text-sm"></i>
-        <span class="tw-pl-1 tw-text-sm | max-md:tw-text-xs">Add New</span>
-      </a>
-  </div>
   </nav>
   
   <div class="card-body tw-px-4">
@@ -32,17 +25,17 @@
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicleReservation as $vehicleReservations)
+          @foreach($tripTickets as $tripTickets)
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a class="tw-text-blue-600 hover:tw-underline" href="{{ $vehicleReservations->approval_status == 'approved' ? route('vendorPortal.vehicleReservation.details', $vehicleReservations->id) : route('vendorPortal.vehicleReservation.edit', $vehicleReservations->id) }}">
-                {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('vendorPortal.vehicleReservation.status.details', $tripTickets->id) }} ">
+                {{ $tripTickets ? $tripTickets->vehicleReservation->reservationNumber : 'N/A' }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicleReservations->approval_status === 'approved' ? 'green-500' : ($vehicleReservations->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($vehicleReservations->approval_status) }}
+            <span class="tw-text-{{ $tripTickets->status === 'delivered' ? 'green-500' : ($tripTickets->status === 'in_transit' ? 'yellow-500' : ($tripTickets->status === 'delayed' ? 'red-500' : 'blue-500')) }}">
+                {{ str_replace('_', ' ', ucfirst($tripTickets->status)) }}
               </span>
             </td>
 

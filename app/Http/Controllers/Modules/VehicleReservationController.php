@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Modules;
 
-use App\Events\VehicleReservationApproved;
+use App\Jobs\Admin\VehicleReservation\VehicleReservationApproved;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Jobs\Admin\VehicleReservation\SendApprovalNotification;
@@ -12,17 +12,22 @@ use App\Jobs\Vendor\SendVehicleReservationNotifications;
 use App\Models\ActivityLogs;
 use App\Models\Modules\Order;
 use App\Models\Modules\VehicleReservation;
+use App\Models\TripTicket;
 use App\Models\User;
 use App\Models\Vehicle;
+use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 
 class VehicleReservationController extends Controller
 {
 
     // Vendor
+
+    // Vechicle Reservation -> Order
     public function vendorIndex()
     {
         $vehicleReservation = VehicleReservation::where('user_id', Auth::id())->get();
@@ -31,12 +36,12 @@ class VehicleReservationController extends Controller
 
     public function vendorCreate(User $user)
     {
+
         return view('modules.vendor.vehicleReservation.create', compact('user'));
     }
 
-    public function vendorStore(Request $request, User $user, Order $order)
+    public function vendorStore(Request $request, User $user)
     {
-        DB::beginTransaction();
         $request->validate([
             'reservationNumber' => 'required|string|max:255',
             'reservationDate' => 'required|date',
@@ -44,44 +49,111 @@ class VehicleReservationController extends Controller
             'vehicle_type' => 'required|string|max:255',
             'pickUpLocation' => 'required|string|max:255',
             'dropOffLocation' => 'required|string|max:255',
+            'purpose' => 'required|string|max:255',
         ]);
 
+        $apiKey = env('OPENROUTESERVICE_API_KEY');
+        $fuelCostPerLitre = env('FUEL_COST_PER_LITRE', 56.55);
+        $client = new Client();
+
+        // Booking cost per vehicle type
+        $bookingCostRates = [
+            'light' => 500,  // Light vehicles: PHP 500
+            'medium' => 1000, // Medium vehicles: PHP 1000
+            'heavy' => 2000,  // Heavy vehicles: PHP 2000
+        ];
+
         try {
-            $checkReservationNumber = VehicleReservation::where('reservationNumber', $request->reservationNumber)->first();
-            $reservationNumber = $checkReservationNumber ? strtoupper(Str::random(20)) : $request->reservationNumber;
-
-            $order = Order::create([
-                'user_id' => $user->id,
+            // Get Coordinates
+            $pickUpResponse = $client->get("https://api.openrouteservice.org/geocode/search", [
+                'query' => ['api_key' => $apiKey, 'text' => $request->pickUpLocation],
+            ]);
+            $dropOffResponse = $client->get("https://api.openrouteservice.org/geocode/search", [
+                'query' => ['api_key' => $apiKey, 'text' => $request->dropOffLocation],
             ]);
 
-            $vehicleReservation = VehicleReservation::create([
-                'order_id' => $order->id,
-                'user_id' => $user->id,
-                'reservationNumber' => $reservationNumber,
-                'vehicle_type' => $request->vehicle_type,
-                'reservationDate' => $request->reservationDate,
-                'reservationTime' => $request->reservationTime,
-                'pickUpLocation' => $request->pickUpLocation,
-                'dropOffLocation' => $request->dropOffLocation,
-                
-            ]);
+            $pickUpData = json_decode($pickUpResponse->getBody(), true);
+            $dropOffData = json_decode($dropOffResponse->getBody(), true);
 
-            ActivityLogs::create([
-                'user_id' => auth()->id(),
-                'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
-                'ip_address' => $request->ip(),
-            ]);
+            if (empty($pickUpData['features']) || empty($dropOffData['features'])) {
+                Log::error("Geocode API failed: No features found for locations.");
+                return back()->withErrors(['error' => 'Invalid pickup or drop-off location.']);
+            }
 
-            // Dispatch job asynchronously
-            SendVehicleReservationNotifications::dispatch($vehicleReservation, $user);
+            $pickUpCoords = $pickUpData['features'][0]['geometry']['coordinates'];
+            $dropOffCoords = $dropOffData['features'][0]['geometry']['coordinates'];
 
-            DB::commit();
+            // Get Distance
+            $requestDistance = new \GuzzleHttp\Psr7\Request('POST', 'https://api.openrouteservice.org/v2/matrix/driving-car', [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => $apiKey,
+            ], json_encode([
+                'locations' => [[$pickUpCoords[0], $pickUpCoords[1]], [$dropOffCoords[0], $dropOffCoords[1]]],
+                'metrics' => ['distance']
+            ]));
 
-            return redirect()->route('vendorPortal.vehicleReservation')->with('success', 'Vehicle reservation submitted successfully.');
+            $response = $client->send($requestDistance);
+            $data = json_decode($response->getBody(), true);
+
+            if (empty($data['distances'][0][1])) {
+                Log::error("Distance API failed: No valid distance returned.");
+                return back()->withErrors(['error' => 'Could not calculate distance.']);
+            }
+
+            $distance = $data['distances'][0][1] / 1000; // Convert meters to KM
+            $vehicle = Vehicle::where('vehicleType', $request->vehicle_type)
+            ->where('vehicleStatus', 'available')
+            ->first();
+
+
+            if (!$vehicle || !$vehicle->fuel_efficiency || $vehicle->fuel_efficiency <= 0) {
+                Log::error("Invalid vehicle data: Missing or zero fuel efficiency.");
+                return back()->with('error', 'No vehicle available, please try again later.');
+            }
+
+            // Get base booking cost for selected vehicle type
+            $selectedVehicleType = strtolower($request->vehicle_type);
+            $bookingCost = $bookingCostRates[$selectedVehicleType] ?? 1000; 
+
+            $fuelEfficiency = $vehicle->fuel_efficiency;
+            $fuelRequired = 2 * ($distance / $fuelEfficiency); // Round trip
+            $fuelCost = ($fuelRequired * $fuelCostPerLitre) + $bookingCost;
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+            Log::error("Error computing fuel and distance: " . $e->getMessage());
+            return back()->withErrors(['error' => 'Could not compute distance and fuel cost.']);
         }
+
+        $checkReservationNumber = VehicleReservation::where('reservationNumber', $request->reservationNumber)->first();
+        $reservationNumber = $checkReservationNumber ? strtoupper(Str::random(20)) : $request->reservationNumber;
+
+        $vehicleReservation = VehicleReservation::create([
+            'user_id' => auth()->id(),
+            'vehicle_id' => $vehicle->id,
+            'reservationNumber' => $reservationNumber,
+            'vehicle_type' => $request->vehicle_type,
+            'reservationDate' => $request->reservationDate,
+            'reservationTime' => $request->reservationTime,
+            'pickUpLocation' => $request->pickUpLocation,
+            'dropOffLocation' => $request->dropOffLocation,
+            'purpose' => $request->purpose,
+            'amount' => $fuelCost,
+        ]);
+
+        Vehicle::where('id', $vehicle->id)->update([
+            'vehicleStatus' => 'unavailable',
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => auth()->id(),
+            'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        // Dispatch job asynchronously
+        SendVehicleReservationNotifications::dispatch($vehicleReservation, $user);
+
+        return redirect()->route('vendorPortal.vehicleReservation.payment.new', ['vehicleReservation' => $vehicleReservation->id]);
     }
 
     public function vendorEdit(VehicleReservation $vehicleReservation)
@@ -98,28 +170,27 @@ class VehicleReservationController extends Controller
             'vehicle_type' => 'required|string|max:255',
             'pickUpLocation' => 'required|string|max:255',
             'dropOffLocation' => 'required|string|max:255',
+            "purpose" => "required|string|max:255",
         ]);
 
-        try {
-            $vehicleReservation->update([
-                'reservationNumber' => $request->reservationNumber,
-                'reservationDate' => $request->reservationDate,
-                'reservationTime' => $request->reservationTime,
-                'vehicle_type' => $request->vehicle_type,
-                'pickUpLocation' => $request->pickUpLocation,
-                'dropOffLocation' => $request->dropOffLocation,
-            ]);
 
-            ActivityLogs::create([
-                'user_id' => Auth::id(),
-                'event' => "Updated Vehicle Reservation: {$vehicleReservation->reservation_number} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
-                'ip_address' => $request->ip(),
-            ]);
+        $vehicleReservation->update([
+            'reservationNumber' => $request->reservationNumber,
+            'reservationDate' => $request->reservationDate,
+            'reservationTime' => $request->reservationTime,
+            'vehicle_type' => $request->vehicle_type,
+            'pickUpLocation' => $request->pickUpLocation,
+            'dropOffLocation' => $request->dropOffLocation,
+            'purpose' => $request->purpose
+        ]);
 
-            return redirect()->route('vendorPortal.vehicleReservation')->with('success', 'Vehicle reservation updated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()])->withInput();
-        }
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated Vehicle Reservation: {$vehicleReservation->reservation_number} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect()->route('vendorPortal.vehicleReservation.payment.edit', ['vehicleReservation' => $vehicleReservation->id]);
     }
 
     public function vendorDestroy(VehicleReservation $vehicleReservation)
@@ -133,8 +204,22 @@ class VehicleReservationController extends Controller
         return view('modules.vendor.vehicleReservation.details', compact('vehicleReservation'));
     }
 
+    public function vendorStatusIndex()
+    {
+        $vehicleReservationID = VehicleReservation::where('user_id', auth()->id())->pluck('id');
+        $tripTickets = TripTicket::whereIn('vehicle_reservation_id', $vehicleReservationID)->with('vehicleReservation')->get();
+
+        return view('modules.vendor.vehicleReservation.status', compact('tripTickets'));
+    }
+
+    public function vendorStatusDetails(TripTicket $tripTicket)
+    {
+        return view('modules.vendor.vehicleReservation.statusDetails', compact('tripTicket'));
+    }
+
     // Staff
 
+    // Vehicle Reservation -> Order
     public function indexOrder()
     {
         $orders = Order::where('assigned_to', auth()->id())
@@ -158,7 +243,6 @@ class VehicleReservationController extends Controller
 
         return view('modules.staff.vehicleReservation.indexOrder', compact('orders'));
     }
-
 
     public function createOrder(Order $order)
     {
@@ -215,7 +299,7 @@ class VehicleReservationController extends Controller
         }
     }
 
-
+    // Vechicle Reservation -> Vehicle
     public function indexVehicle()
     {
         $vehicleReservations = VehicleReservation::whereNull('order_id')
@@ -228,6 +312,46 @@ class VehicleReservationController extends Controller
     public function detailsVehicle(VehicleReservation $vehicleReservation)
     {
         return view('modules.staff.vehicleReservation.detailsVehicle', compact('vehicleReservation'));
+    }
+
+    public function reviewVehicle(Request $request, VehicleReservation $vehicleReservation)
+    {
+        $vehicleReservation->update([
+            'approval_status' => 'reviewed',
+            'reviewed_by' => auth()->id(),
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => auth()->id(),
+            'event' => "Approved Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        // Dispatch notification asynchronously
+        SendVehicleReservationNotification::dispatch($vehicleReservation);
+
+
+        return redirect()->route('staff.vehicleReservation.indexVehicle')
+            ->with('success', 'Vehicle reservation approved successfully.');
+    }
+
+    public function rejectVehicle(Request $request, VehicleReservation $vehicleReservation)
+    {
+        $vehicleReservation->update([
+            'reviewed_by' => auth()->id(),
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => auth()->id(),
+            'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        // Dispatch notification asynchronously
+        SendVehicleReservationRejectionNotification::dispatch($vehicleReservation);
+
+        return redirect()->route('staff.vehicleReservation.indexVehicle')
+            ->with('success', 'Vehicle reservation rejected successfully.');
     }
 
 
@@ -333,6 +457,28 @@ class VehicleReservationController extends Controller
         event(new VehicleReservationApproved($vehicleReservation));
 
         return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Reservation approved successfully.');
+    }
+
+    public function approveVehisleReservation($vehicleReservation)
+    {
+        // I-schedule ang approval job sa reservation date
+        // $reservationDate = Carbon::parse($vehicleReservation->reservationDate)->startOfDay();
+
+        $vehicleReservation = VehicleReservation::findOrFail($vehicleReservation);
+
+        VehicleReservationApproved::dispatch($vehicleReservation);
+
+        $vehicleReservation->update([
+            'approval_status' => 'scheduled',
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Scheduled Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'ip_address' => request()->ip(),
+        ]);
+
+        return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Vehicle reservation approval is scheduled for the reservation date.');
     }
 
     public function reject(VehicleReservation $vehicleReservation)

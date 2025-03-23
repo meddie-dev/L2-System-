@@ -50,6 +50,14 @@ class DashboardController extends Controller
 
     public function adminDashboard()
     {
+        $fraud = ActivityLogs::where('event', 'LIKE', 'Unauthorized access attempt at:%')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->get();
+
+        $product = Product::whereMonth('created_at', Carbon::now()->month)->get();
+
+        $vehicleReservations = VehicleReservation::whereMonth('created_at', Carbon::now()->month)->get();
+
         // Get the current month and year
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
@@ -76,6 +84,9 @@ class DashboardController extends Controller
         return view('components.dashboard.admin', [
             'productNames' => $productNames,
             'orderCounts' => $orderCounts,
+            'fraud' => $fraud,
+            'product' => $product,
+            'vehicleReservations' => $vehicleReservations
         ]);
     }
 

@@ -328,6 +328,6 @@ class FleetController extends Controller
         // Dispatch job to generate PDF asynchronously
         ProcessFuelTransaction::dispatch($fleetCard, $fuel);
     
-        return back()->with('success', 'Transaction completed successfully. PDF will be available soon.');
+        return back()->with('success', 'Transaction completed successfully.');
     }
 }

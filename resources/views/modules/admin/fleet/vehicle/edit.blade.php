@@ -174,10 +174,27 @@
             <!-- Display Month as a Full-Row Header -->
             <tr class="tw-bg-gray-100">
               <td class="tw-px-4 tw-py-2 tw-font-bold">{{ date('F Y') }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->vehicleIssue }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceDescription }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceSchedule }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->conditionStatus }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->vehicleIssue ?? '-' }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceDescription ?? '-' }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceSchedule ?? '-' }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">
+                @switch($vehicle->conditionStatus)
+                  @case('good')
+                    <span class="tw-text-green-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
+                    @break
+
+                  @case('fair')
+                    <span class="tw-text-yellow-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
+                    @break
+
+                  @case('poor')
+                    <span class="tw-text-red-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
+                    @break
+
+                  @default
+                    <span class="tw-text-gray-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
+                @endswitch
+              </td>
             </tr>
 
           </tbody>
@@ -228,40 +245,14 @@
 
       </div>
     </div>
-
-    <div class="card-body">
-      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
-        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Vehicle Performance Reports</h2>
-        <p class="tw-text-xs | max-md:tw-text-xs">Ensure that all vehicle performance data are accurate and up-to-date for efficient tracking and reporting.</p>
-      </div>
-      <div class="tw-px-4">
-        <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4">
-          <thead class="tw-bg-gray-200 tw-text-gray-700">
-            <tr>
-              <th class="tw-px-4 tw-py-2">Month</th>
-              <th class="tw-px-4 tw-py-2">Issue</th>
-              <th class="tw-px-4 tw-py-2">Description</th>
-              <th class="tw-px-4 tw-py-2">Schedule</th>
-              <th class="tw-px-4 tw-py-2">Condition Status</th>
-            </tr>
-          </thead>
-          <tbody id="orderRecords" class="tw-bg-white">
-
-            <!-- Display Month as a Full-Row Header -->
-            <tr class="tw-bg-gray-100">
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ date('F Y') }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->vehicleIssue }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceDescription }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceSchedule }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->conditionStatus }}</td>
-            </tr>
-
-          </tbody>
-        </table>
-
+    <div class="tw-flex tw-justify-start">
+      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
+        <a href="{{ route('admin.fleet.index') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+          <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
+          Back
+        </a>
       </div>
     </div>
-
     <hr>
     <div>
       <h3 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mt-6 tw-mb-2 | max-md:tw-text-sm">Review After Submission</h3>

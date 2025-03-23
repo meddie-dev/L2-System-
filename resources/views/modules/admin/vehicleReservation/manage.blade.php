@@ -34,7 +34,7 @@
             <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->id }}</td>
             <td class="tw-px-4 tw-py-2">
               <div class="tw-flex tw-justify-between">
-                @if($vehicleReservation->approval_status === 'approved')
+                @if($vehicleReservation->approval_status === 'approved' || $vehicleReservation->approval_status === 'scheduled')
                 {{ $vehicleReservation->reservationNumber }}
                 @else
                 <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.vehicleReservation.show', $vehicleReservation->id) }}">
@@ -47,7 +47,7 @@
               </div>
             </td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $vehicleReservation->approval_status === 'approved' ? 'green-500' : ($vehicleReservation->approval_status === 'pending' ? 'yellow-500' : ($vehicleReservation->approval_status === 'reviewed' ? 'blue-500' : ($vehicleReservation->approval_status === 'scheduled' ? 'gray-500' : 'red-500'))) }}">
                 {{ ucfirst($vehicleReservation->approval_status) }}
               </span>
             </td>

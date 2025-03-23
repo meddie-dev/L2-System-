@@ -236,18 +236,32 @@
             <div class="sb-nav-link-icon"><i class="fa-solid fa-folder"></i></div>
             Uploaded Document
           </a>
-
-          <!-- Payment Management -->
-          <a class="nav-link collapsed" href="/portal/vendor/dashboard/payment">
-            <div class="sb-nav-link-icon"><i class="fa-solid fa-credit-card"></i></div>
-            Payment
-          </a>
-
+          
           <!-- Vehicle Reservation Management -->
-          <a class="nav-link collapsed" href="/portal/vendor/dashboard/vehicleReservation">
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVehicle" aria-expanded="false" aria-controls="collapseVehicle">
             <div class="sb-nav-link-icon"><i class="fa-solid fa-car"></i></div>
             Vehicle Reservation
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
           </a>
+          <div class="collapse" id="collapseVehicle" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/portal/vendor/dashboard/vehicleReservation">Make Reservations</a>
+              <a class="nav-link" href="/portal/vendor/dashboard/vehicleReservation/status">Reservations</a>
+            </nav>
+          </div>
+
+          <!-- Payment Management -->
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-credit-card"></i></div>
+              Payment
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapsePayment" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/portal/vendor/dashboard/payment/invoice">Invoice</a>
+              <a class="nav-link" href="/portal/vendor/dashboard/payment/booking">Booking</a>
+            </nav>
+          </div>
         </div>
         @endif
 

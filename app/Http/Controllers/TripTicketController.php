@@ -6,6 +6,7 @@ use App\Jobs\Admin\TripTicket\SendTripDeliveredNotification;
 use App\Jobs\Vendor\SendTripRatingNotification;
 use App\Models\ActivityLogs;
 use App\Models\IncidentReport;
+use App\Models\Modules\VehicleReservation;
 use App\Models\TripTicket;
 use App\Models\User;
 use App\Notifications\NewNotification;
@@ -31,10 +32,15 @@ class TripTicketController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        $creator = User::find($trip->order->user_id);
+        if ($trip->vehicleReservation && $trip->vehicleReservation->order_id) {
+            $creator = User::find($trip->order->user_id);
 
-        if ($creator) {
-            $creator->notify(new NewNotification("Your trip ({$trip->tripNumber}) has been marked as in transit. Check trip details."));
+            if ($creator) {
+                $creator->notify(new NewNotification("Your trip ({$trip->tripNumber}) has been marked as in transit. Check trip details."));
+            }
+        }else
+        {
+            $trip->user->notify(new NewNotification("Your trip ({$trip->tripNumber}) has been marked as in transit. Check trip details."));
         }
 
         return redirect()->back()->with(['success' => 'Trip marked as in transit.']);
@@ -174,6 +180,7 @@ class TripTicketController extends Controller
         $userOrderIds = Auth::user()->order()->pluck('id');
 
         $tripTickets = TripTicket::whereIn('order_id', $userOrderIds)->with('order')->get();
+
         return view('modules.vendor.cards.delivered.index', compact('tripTickets'));
     }
 

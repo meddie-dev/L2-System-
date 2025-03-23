@@ -11,6 +11,7 @@ class AppServiceProvider extends ServiceProvider
     protected $listen = [
         \App\Events\VehicleReservationApproved::class => [
         ],
+      
     ];
     
     /**

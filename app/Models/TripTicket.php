@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Modules\Order;
+use App\Models\Modules\VehicleReservation;
 use Illuminate\Database\Eloquent\Model;
 
 class TripTicket extends Model
@@ -24,5 +25,10 @@ class TripTicket extends Model
     public function incidentReport()
     {
         return $this->hasOne(IncidentReport::class);
+    }
+
+    public function vehicleReservation()
+    {
+        return $this->belongsTo(VehicleReservation::class);
     }
 }

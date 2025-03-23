@@ -11350,6 +11350,24 @@ body {
   z-index: 1000;
 }
 
+#suggestionsDrop {
+  border: 1px solid #ddd;
+  max-width: 300px;
+  display: none;
+  position: absolute;
+  background: white;
+  z-index: 1000;
+}
+
+#suggestionsDrop div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#suggestionsDrop div:hover {
+  background: #f0f0f0;
+}
+
 #suggestions div {
   padding: 10px;
   cursor: pointer;

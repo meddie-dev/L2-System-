@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
+            $table->foreignId('vehicle_reservation_id')->nullable()->constrained('vehicle_reservations')->onDelete('set null');
             $table->string('paymentNumber')->unique();
             $table->date('date');
             $table->date('due_date');
