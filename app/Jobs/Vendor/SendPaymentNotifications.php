@@ -49,6 +49,11 @@ class SendPaymentNotifications implements ShouldQueue
         }
 
         // Notify user
-        $this->user->notify(new NewNotification("Your order ({$this->payment->order->orderNumber}) has been submitted. Please wait for approval."));
+        if (is_null($this->payment->order_id)) {
+            $user = User::find($this->payment->user_id);
+            $user->notify(new NewNotification("Your payment has been submitted. Please wait for approval."));
+        } else {
+            $this->user->notify(new NewNotification("Your order ({$this->payment->order->orderNumber}) has been submitted. Please wait for approval."));
+        }
     }
 }

@@ -113,6 +113,24 @@
           @enderror
         </div>
 
+        <!-- Vehicle Cost -->
+        <div class="tw-mb-4">
+          <label for="vehicleCost" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Cost (Brand New)<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="vehicleCost" name="vehicleCost" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleCost') is-invalid @enderror" placeholder="Enter vehicle cost" required min="0" step="0.01">
+          @error('vehicleCost')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
+        <!-- Vehicle Lifespan -->
+        <div class="tw-mb-4">
+          <label for="vehicleLifespan" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Lifespan (years)<span class="tw-text-red-500">*</span></label>
+          <input type="number" id="vehicleLifespan" name="vehicleLifespan" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleLifespan') is-invalid @enderror" placeholder="Enter vehicle lifespan" required min="1" max="9999" step="1">
+          @error('vehicleLifespan')
+          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+          @enderror
+        </div>
+
         <!-- Vehicle Image -->
         <div class="tw-mb-4">
           <label for="vehicleImage" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Image<span class="tw-text-red-500">*</span></label>

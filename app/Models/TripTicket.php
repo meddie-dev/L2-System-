@@ -31,4 +31,9 @@ class TripTicket extends Model
     {
         return $this->belongsTo(VehicleReservation::class);
     }
+
+     public function vehicle()
+     {
+         return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+     }
 }

@@ -8,6 +8,7 @@ use App\Jobs\ProcessFuelTransaction;
 use App\Models\ActivityLogs;
 use App\Models\FleetCard;
 use App\Models\Fuel;
+use App\Models\Maintenance;
 use App\Models\Modules\VehicleReservation;
 use App\Models\shipments;
 use App\Models\TripTicket;
@@ -48,6 +49,8 @@ class FleetController extends Controller
             'vehicleCapacity' => 'required|integer|min:1|max:9999',
             'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'fuel_efficiency' => 'required|numeric|min:0.1',
+            'vehicleCost' => 'required|numeric|min:0',
+            'vehicleLifespan' => 'required|integer|min:1|max:9999',
         ]);
 
         // Store vehicle image
@@ -57,7 +60,6 @@ class FleetController extends Controller
         $vehicle = Vehicle::create(array_merge($validated, [
             'vehicleImage' => $path,
             'vehicleStatus' => "available",
-            'conditionStatus' => 'good',
             'user_id' => Auth::id(),
         ]));
 
@@ -74,7 +76,8 @@ class FleetController extends Controller
     public function edit(Vehicle $vehicle)
     {
         $fuels = Fuel::where('vehicle_id', $vehicle->id)->get();
-        return view('modules.admin.fleet.vehicle.edit', compact('vehicle', 'fuels'));
+        $maintenances = Maintenance::where('vehicle_id', $vehicle->id)->get();
+        return view('modules.admin.fleet.vehicle.edit', compact('vehicle', 'fuels', 'maintenances'));
     }
 
     public function update(Request $request, Vehicle $vehicle)
@@ -90,6 +93,8 @@ class FleetController extends Controller
             'vehicleCapacity' => 'required|integer|min:1|max:9999',
             'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'fuel_efficiency' => 'required|numeric|min:0.1',
+            'vehicleCost' => 'required|numeric|min:0',
+            'vehicleLifespan' => 'required|integer|min:1|max:9999',
         ]);
 
         // Store vehicle image
@@ -113,7 +118,9 @@ class FleetController extends Controller
             'vehicleYear' => $request->vehicleYear,
             'vehicleFuelType' => $request->vehicleFuelType,
             'vehicleCapacity' => $request->vehicleCapacity,
-            'fuel_efficiency' => $request->fuel_efficiency
+            'fuel_efficiency' => $request->fuel_efficiency,
+            'vehicleCost' => $request->vehicleCost,
+            'vehicleLifespan' => $request->vehicleLifespan
         ]);
 
         ActivityLogs::create([
@@ -128,19 +135,6 @@ class FleetController extends Controller
     public function details(Vehicle $vehicle)
     {
         return view('modules.admin.fleet.vehicle.details', compact('vehicle'));
-    }
-
-    public function destroy(Vehicle $vehicle)
-    {
-        ActivityLogs::create([
-            'user_id' => Auth::id(),
-            'event' => "Deleted Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
-            'ip_address' => request()->ip(),
-        ]);
-
-        $vehicle->delete();
-
-        return redirect()->route('admin.fleet.index')->with('success', 'Vehicle deleted successfully.');
     }
 
     // Fleet - Driver

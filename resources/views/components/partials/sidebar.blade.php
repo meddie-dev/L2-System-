@@ -216,7 +216,7 @@
           </a>
           <div class="collapse" id="collapseFleet" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/staff/dashboard/fleet/request">Request Vehicle Maintenance</a>
+              <a class="nav-link" href="/staff/dashboard/fleet/maintenance">Vehicle Maintenance</a>
             </nav>
           </div>
         </div>

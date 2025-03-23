@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\Admin\TripTicket\SendTripDeliveredNotification;
+use App\Jobs\CheckMaintenance;
 use App\Jobs\Vendor\SendTripRatingNotification;
 use App\Models\ActivityLogs;
 use App\Models\IncidentReport;
@@ -93,6 +94,7 @@ class TripTicketController extends Controller
 
         if ($vehicle = $trip->vehicle) {
             $vehicle->update(['vehicleStatus' => 'available']);
+            CheckMaintenance::dispatch($vehicle->id);
         }
 
         if ($driver) {

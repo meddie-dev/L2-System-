@@ -28,13 +28,13 @@ class SendVehicleReservationNotification implements ShouldQueue
     public function handle()
     {
         $admin = User::role('Admin')->first();
-
         if ($admin) {
             $this->vehicleReservation->redirected_to = $admin->id;
             $this->vehicleReservation->save();
         }
 
-        $creator = User::find($this->vehicleReservation->order->user_id);
+        $userId = $this->vehicleReservation->order_id ? $this->vehicleReservation->order->user_id : $this->vehicleReservation->user_id;
+        $creator = User::find($userId);
 
         if ($creator) {
             $creator->notify(new adminApprovalRequest('VehicleReservation', $this->vehicleReservation));

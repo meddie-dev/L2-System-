@@ -105,20 +105,38 @@
 
           </div>
 
-           <!-- Vehicle Fuel Efficiency -->
-        <div class="tw-mb-4">
-          <label for="fuel_efficiency" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Fuel Efficiency (km/l)<span class="tw-text-red-500">*</span></label>
-          <input type="number" id="fuel_efficiency" name="fuel_efficiency" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('fuel_efficiency') is-invalid @enderror" placeholder="Enter fuel efficiency" min="0" required step="0.1" value="{{ $vehicle->fuel_efficiency }}">
-          @error('fuel_efficiency')
-          <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-          @enderror
-        </div>
+          <!-- Vehicle Fuel Efficiency -->
+          <div class="tw-mb-4">
+            <label for="fuel_efficiency" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Fuel Efficiency (km/l)<span class="tw-text-red-500">*</span></label>
+            <input type="number" id="fuel_efficiency" name="fuel_efficiency" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('fuel_efficiency') is-invalid @enderror" placeholder="Enter fuel efficiency" min="0" required step="0.1" value="{{ $vehicle->fuel_efficiency }}">
+            @error('fuel_efficiency')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+          </div>
 
           <!-- Vehicle Capacity -->
           <div class="tw-mb-4">
             <label for="vehicleCapacity" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Capacity (kg)<span class="tw-text-red-500">*</span></label>
             <input type="number" id="vehicleCapacity" name="vehicleCapacity" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleCapacity') is-invalid @enderror" placeholder="Enter vehicle capacity" required min="1" max="9999" step="1" value="{{ $vehicle->vehicleCapacity }}">
             @error('vehicleCapacity')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+          </div>
+
+          <!-- Vehicle Cost -->
+          <div class="tw-mb-4">
+            <label for="vehicleCost" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Cost (Brand New)<span class="tw-text-red-500">*</span></label>
+            <input type="number" id="vehicleCost" name="vehicleCost" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleCost') is-invalid @enderror" placeholder="Enter vehicle cost" required min="0" step="0.01" value="{{ $vehicle->vehicleCost }}">
+            @error('vehicleCost')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+          </div>
+
+          <!-- Vehicle Lifespan -->
+          <div class="tw-mb-4">
+            <label for="vehicleLifespan" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Vehicle Lifespan (years)<span class="tw-text-red-500">*</span></label>
+            <input type="number" id="vehicleLifespan" name="vehicleLifespan" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-focus:ring-indigo-500 tw-focus:border-indigo-500 | max-md:tw-text-xs @error('vehicleLifespan') is-invalid @enderror" placeholder="Enter vehicle lifespan" required min="1" max="9999" step="1" value="{{ $vehicle->vehicleLifespan }}">
+            @error('vehicleLifespan')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
           </div>
@@ -142,16 +160,12 @@
         </div>
         <!-- Submit Registration Button -->
         <div class="tw-flex tw-justify-end">
-        <button form="deleteVehicleForm" type="submit" class="tw-text-white tw-bg-red-600  tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md  tw-mr-2 | max-md:tw-text-xs">Delete Vehicle</button>
           <button type="submit" class=" tw-bg-indigo-600  tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Update</button>
         </div>
       </form>
-     
+
     </div>
-    <form class="tw-mr-2 tw-hidden" id="deleteVehicleForm"  action="{{ route('admin.fleet.destroy', $vehicle->id) }}" method="POST">
-        @csrf
-        @method('DELETE')
-      </form>
+
     <!-- Maintenance Tracking -->
     <div class="card-body">
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
@@ -162,41 +176,42 @@
         <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4">
           <thead class="tw-bg-gray-200 tw-text-gray-700">
             <tr>
-              <th class="tw-px-4 tw-py-2">Month</th>
-              <th class="tw-px-4 tw-py-2">Issue</th>
-              <th class="tw-px-4 tw-py-2">Description</th>
+              <th class="tw-px-4 tw-py-2">Maintenance Number</th>
+              <th class="tw-px-4 tw-py-2">Task</th>
+              <th class="tw-px-4 tw-py-2">Amount</th>
               <th class="tw-px-4 tw-py-2">Schedule</th>
+              <th class="tw-px-4 tw-py-2">Completed Date</th>
               <th class="tw-px-4 tw-py-2">Condition Status</th>
             </tr>
           </thead>
           <tbody id="orderRecords" class="tw-bg-white">
+            @foreach($maintenances as $maintenance)
+            <tr>
+              <td class="tw-px-4 tw-py-2">{{ $maintenance->maintenanceNumber }}</td>
+              <td class="tw-px-4 tw-py-2">{{ $maintenance->task }}</td>
+              <td class="tw-px-4 tw-py-2">{{ $maintenance->amount }}</td>
+              <td class="tw-px-4 tw-py-2">{{ $maintenance->scheduled_date }}</td>
+              <td class="tw-px-4 tw-py-2">{{ $maintenance->completed_date }}</td>
+              <td class="tw-px-4 tw-py-2">
+                @switch($maintenance->conditionStatus)
+                @case('good')
+                <span class="tw-text-green-500">{{ ucfirst($maintenance->conditionStatus) }}</span>
+                @break
 
-            <!-- Display Month as a Full-Row Header -->
-            <tr class="tw-bg-gray-100">
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ date('F Y') }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->vehicleIssue ?? '-' }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceDescription ?? '-' }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $vehicle->maintenanceSchedule ?? '-' }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">
-                @switch($vehicle->conditionStatus)
-                  @case('good')
-                    <span class="tw-text-green-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
-                    @break
+                @case('fair')
+                <span class="tw-text-yellow-500">{{ ucfirst($maintenance->conditionStatus) }}</span>
+                @break
 
-                  @case('fair')
-                    <span class="tw-text-yellow-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
-                    @break
+                @case('poor')
+                <span class="tw-text-red-500">{{ ucfirst($maintenance->conditionStatus) }}</span>
+                @break
 
-                  @case('poor')
-                    <span class="tw-text-red-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
-                    @break
-
-                  @default
-                    <span class="tw-text-gray-500">{{ ucfirst($vehicle->conditionStatus) }}</span>
+                @default
+                <span class="tw-text-gray-500">{{ ucfirst($maintenance->conditionStatus) }}</span>
                 @endswitch
               </td>
             </tr>
-
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -222,23 +237,23 @@
           </thead>
           <tbody id="orderRecords" class="tw-bg-white">
             @foreach ($fuels as $fuel)
-              <tr class="tw-bg-gray-100">
-                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $fuel->fuelNumber }}</td>
-                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ ucfirst($fuel->fuelType) }}</td>
-                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ number_format($fuel->estimatedFuelConsumption, 2) . ' L' }}</td>
-                <td class="tw-px-4 tw-py-2 tw-font-bold">PHP {{ number_format($fuel->estimatedCost, 2) }}</td>
-                <td class="tw-px-4 tw-py-2 tw-font-bold">{{ \Carbon\Carbon::parse($fuel->fuelDate)->format('F d, Y') }}</td>
-                <td class="tw-px-4 tw-py-2 tw-font-bold">
-                  @switch($fuel->fuelStatus)
-                    @case('scheduled')
-                    <span class="tw-text-yellow-500">{{ ucfirst($fuel->fuelStatus) }}</span>
-                    @break
-                    @case('completed')
-                    <span class="tw-text-green-500">{{ ucfirst($fuel->fuelStatus) }}</span>
-                    @break
-                  @endswitch
-                </td>
-              </tr>
+            <tr class="tw-bg-gray-100">
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $fuel->fuelNumber }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ ucfirst($fuel->fuelType) }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ number_format($fuel->estimatedFuelConsumption, 2) . ' L' }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">PHP {{ number_format($fuel->estimatedCost, 2) }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ \Carbon\Carbon::parse($fuel->fuelDate)->format('F d, Y') }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">
+                @switch($fuel->fuelStatus)
+                @case('scheduled')
+                <span class="tw-text-yellow-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+                @break
+                @case('completed')
+                <span class="tw-text-green-500">{{ ucfirst($fuel->fuelStatus) }}</span>
+                @break
+                @endswitch
+              </td>
+            </tr>
             @endforeach
           </tbody>
         </table>

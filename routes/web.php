@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\IncidentReportController;
+use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\MFA\TwoFactorController;
 use App\Http\Controllers\Modules\AuditController;
 use App\Http\Controllers\Modules\DocumentController;
@@ -134,8 +135,6 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.fleet.update');
     Route::get('/admin/dashboard/fleet/vehicle/details/{vehicle }', [FleetController::class, 'details'])
         ->name('admin.fleet.details');
-    Route::delete('/admin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'destroy'])
-        ->name('admin.fleet.destroy');
 
     // Fleet Management -> Driver
     Route::get('/admin/dashboard/fleet/driver', [FleetController::class, 'driverIndex'])
@@ -227,6 +226,11 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.vehicleReservation.reviewVehicle');
     Route::patch('/staff/dashboard/vehicleReservation/vehicle/reject/{vehicleReservation}', [VehicleReservationController::class, 'rejectVehicle'])
         ->name('staff.vehicleReservation.rejectVehicle');
+
+    // Fleet Management
+    Route::get('/staff/dashboard/fleet/maintenance', [MaintenanceController::class, 'index'])
+        ->name('staff.fleet.index');
+  
 });
 
 /*--------------------------------------------------------------

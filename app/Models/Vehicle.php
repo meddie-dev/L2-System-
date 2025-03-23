@@ -31,4 +31,14 @@ class Vehicle extends Model
         return $this->hasMany(Fuel::class);
     }
 
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+
+    public function tripTickets()
+    {
+        return $this->hasMany(TripTicket::class, 'vehicle_id', 'id');
+    }
+
 }

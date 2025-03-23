@@ -84,6 +84,11 @@ class User extends Authenticatable
         // return $this->hasMany(Vehicle::class);
     }
 
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+
     public function vehicleReservations()
     {
         return $this->hasMany(VehicleReservation::class);
