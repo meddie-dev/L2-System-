@@ -35,7 +35,7 @@
           @foreach($maintenance as $maintenances)
           <tr>
             <td class="tw-px-4 tw-py-2">
-              <a class="tw-text-blue-600 hover:tw-underline" href="">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.fleet.vehicle.view', $maintenances->id ?? '') }}">
                 {{ $maintenances->maintenanceNumber }}
               </a>
             </td>

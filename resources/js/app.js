@@ -123,9 +123,15 @@ const calendar = new Calendar(calendarEl, {
     // Populate modal fields with event data
     document.getElementById('reservation-dateTitle').textContent = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(eventObj.start);
     document.getElementById('reservation-number').textContent = eventObj.title;
-    document.getElementById('vehicle-type').textContent = eventObj.extendedProps.vehicle || 'N/A';
+    document.getElementById('vehicle-type').textContent = eventObj.extendedProps.vehicle === 'light' 
+        ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' 
+        : (eventObj.extendedProps.vehicle === 'medium' 
+            ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' 
+            : (eventObj.extendedProps.vehicle === 'heavy' 
+                ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' 
+                : 'N/A'));
     document.getElementById('reservation-date').textContent = eventObj.start.toISOString().split('T')[0];
-    document.getElementById('reservation-time').textContent = eventObj.extendedProps.reservationTime || 'N/A';
+    document.getElementById('reservation-time').textContent = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).format(eventObj.start) || 'N/A';
     document.getElementById('pickup-location').textContent = eventObj.extendedProps.pickupLocation || 'N/A';
     document.getElementById('dropoff-location').textContent = eventObj.extendedProps.dropoffLocation || 'N/A';
     document.getElementById('approval-status').textContent = eventObj.extendedProps.approvalStatus || 'N/A';

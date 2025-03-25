@@ -28,6 +28,9 @@ use App\Http\Controllers\TripTicketController;
 use App\Http\Controllers\WarehouseController;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 /*-------------------------------------------------------------- 
 # Default Route
@@ -239,6 +242,10 @@ Route::middleware('role:Staff', 'active')->group(function () {
         ->name('staff.fleet.index');
     Route::get('/staff/dashboard/fleet/vehicle/show/{vehicle}', [MaintenanceController::class, 'show'])
         ->name('staff.fleet.vehicle.show');
+    Route::get('/staff/dashboard/fleet/vehicle/view/{maintenance}', [MaintenanceController::class, 'view'])
+        ->name('staff.fleet.vehicle.view');
+    Route::patch('/staff/dashboard/fleet/vehicle/mark-as-available/{maintenance}', [MaintenanceController::class, 'markAsAvailable'])
+        ->name('staff.fleet.vehicle.markAsAvailable');
 
   
 });
@@ -465,33 +472,44 @@ Route::middleware(['auth', 'active'])->group(function () {
 /*--------------------------------------------------------------
 # Add Ons Route
 --------------------------------------------------------------*/
-Route::view('/maps', 'pages.addOns.map')->name('map');
-Route::get('/calendar', [AddOnsController::class, 'calendar'])->name('calendar');
-
+Route::get('/maps', [AddOnsController::class, 'map'])
+    ->name('map')
+    ->middleware(['auth', 'active']);
+Route::get('/calendar', [AddOnsController::class, 'calendar'])
+    ->name('calendar')
+    ->middleware(['auth', 'active']);
 
 /*--------------------------------------------------------------
 # Vendor Portal Auth Route
 --------------------------------------------------------------*/
 Route::middleware(['web'])->group(function () {
-    Route::get('/portal/login', [PortalLoginController::class, 'index'])->name('portal.login');
-    Route::post('/portal/login', [PortalLoginController::class, 'login']);
-    Route::get('/portal/register', [PortalRegisterController::class, 'index'])->name('portal.register');
+    Route::get('/portal/login', [PortalLoginController::class, 'index'])
+        ->name('portal.login');
+    Route::post('/portal/login', [PortalLoginController::class, 'login'])
+        ->name('portal.login');
+    Route::get('/portal/register', [PortalRegisterController::class, 'index'])
+        ->name('portal.register');
     Route::post('/portal/register', [PortalRegisterController::class, 'register']);
-    Route::post('/portal/logout', [PortalLoginController::class, 'destroy'])->name('portal.logout');
+    Route::post('/portal/logout', [PortalLoginController::class, 'destroy'])
+        ->name('portal.logout');
 });
 
 
 /*--------------------------------------------------------------
 # Gas Station Route
 --------------------------------------------------------------*/
-Route::get('/gasStation', [FleetController::class, 'gasStationIndex'])->name('gasStation');
-Route::post('/gasStation/verify', [FleetController::class, 'gasStationVerify'])->name('gasStation.verify');
+Route::get('/gasStation', [FleetController::class, 'gasStationIndex'])
+    ->name('gasStation');
+Route::post('/gasStation/verify', [FleetController::class, 'gasStationVerify'])
+    ->name('gasStation.verify');
 
 /*--------------------------------------------------------------
 # Legal Route
 --------------------------------------------------------------*/
-Route::view('/privacy-policy', 'pages.legal.privacyPolicy')->name('privacy-policy');
-Route::view('/terms-and-conditions', 'pages.legal.termsAndConditions')->name('terms-and-conditions');
+Route::view('/privacy-policy', 'pages.legal.privacyPolicy')
+    ->name('privacy-policy');
+Route::view('/terms-and-conditions', 'pages.legal.termsAndConditions')
+    ->name('terms-and-conditions');
 
 /*--------------------------------------------------------------
 # Geocode Route
