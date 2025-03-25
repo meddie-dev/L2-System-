@@ -230,6 +230,9 @@ Route::middleware('role:Staff', 'active')->group(function () {
     // Fleet Management
     Route::get('/staff/dashboard/fleet/maintenance', [MaintenanceController::class, 'index'])
         ->name('staff.fleet.index');
+    Route::get('/staff/dashboard/fleet/vehicle/show/{vehicle}', [MaintenanceController::class, 'show'])
+        ->name('staff.fleet.vehicle.show');
+
   
 });
 

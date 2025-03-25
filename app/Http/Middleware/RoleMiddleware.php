@@ -24,17 +24,14 @@ class RoleMiddleware
 
         // Check if the authenticated user has the required role
         if (!Auth::user()->hasRole($role)) {
-            if (str_contains($request->url(), '/portal')) {
-                return redirect()->route('portal.login')->with('error', 'You do not have the required role to access this resource.');
-            }
-
+            
             ActivityLogs::create([
                 'user_id' => auth()->id(),
                 'event' => "Unauthorized access attempt at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
 
-            return redirect()->route('login')->with('error', 'You do not have the required role to access this resource.');
+            abort(401);
         }
 
         return $next($request);

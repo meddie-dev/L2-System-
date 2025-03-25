@@ -7,11 +7,11 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="false">
-        Fleet Management
+        Vehicle Maintenance
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Vehicle Maintenance
+        Vehicle PLate Number: (<span class="tw-font-semibold tw-text-xs tw-opacity-20 tw-mt-1 ">{{ $vehicle->plateNumber }}</span>)
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -22,27 +22,46 @@
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th class="tw-px-4 tw-py-2">Plate Number</th>
-            <th class="tw-px-4 tw-py-2">Vehicle Type</th>
-            <th class="tw-px-4 tw-py-2">Created At</th>
-            <th class="tw-px-4 tw-py-2">Status</th>
+            <th class="tw-px-4 tw-py-2">Maintenance Number</th>
+            <th class="tw-px-4 tw-py-2">Task</th>
+            <th class="tw-px-4 tw-py-2">Amount</th>
+            <th class="tw-px-4 tw-py-2">Schedule</th>
+            <th class="tw-px-4 tw-py-2">Completed Date</th>
+            <th class="tw-px-4 tw-py-2">Condition Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($vehicle as $vehicles)
+          @foreach($maintenance as $maintenances)
           <tr>
             <td class="tw-px-4 tw-py-2">
-              <a class="tw-text-blue-500 hover:tw-underline" href="{{ route('staff.fleet.vehicle.show', $vehicles->id) }}" class="tw-text-blue-500 hover:tw-underline">{{ $vehicles->plateNumber }}</a>
+              <a class="tw-text-blue-600 hover:tw-underline" href="">
+                {{ $maintenances->maintenanceNumber }}
+              </a>
             </td>
             <td class="tw-px-4 tw-py-2">
-              {{ $vehicles->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicles->vehicleType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicles->vehicleType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}
+                {{ $maintenances->task }}
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicles->created_at->format('m-d-Y') }}</td>
+            <td class="tw-px-4 tw-py-2">PHP {{ number_format($maintenances->amount, 2) }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($maintenances->scheduled_date)->format('m-d-Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $maintenances->completed_date ? \Carbon\Carbon::parse($maintenances->completed_date)->format('m-d-Y') : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $vehicles->vehicleStatus === 'available' ? 'green-500' : ($vehicles->vehicleStatus === 'maintenance' ? 'yellow-500' : 'red-500') }}">
-                {{ ucfirst($vehicles->vehicleStatus) }}
-              </span>
+              @switch($maintenances->conditionStatus)
+                @case('good')
+                <span class="tw-text-green-500">{{ ucfirst($maintenances->conditionStatus) }}</span>
+                @break
+
+                @case('fair')
+                <span class="tw-text-yellow-500">{{ ucfirst($maintenances->conditionStatus) }}</span>
+                @break
+
+                @case('poor')
+                <span class="tw-text-red-500">{{ ucfirst($maintenances->conditionStatus) }}</span>
+                @break
+
+                @default
+                <span class="tw-text-gray-500">{{ ucfirst($maintenances->conditionStatus) }}</span>
+                @endswitch
             </td>
           </tr>
           @endforeach
