@@ -163,6 +163,17 @@
               <a class="nav-link" href="/admin/dashboard/warehouse/inventory">Inventory</a>
             </nav>
           </div>
+
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAssetManagement" aria-expanded="false" aria-controls="collapseAssetManagement">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
+            Asset Management
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapseAssetManagement" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/admin/dashboard/asset">Manage Assets</a>
+            </nav>
+          </div>
         </div>
         @endif
 

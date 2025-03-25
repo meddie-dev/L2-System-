@@ -7,51 +7,49 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="false">
-        Vendor Management
+        Asset Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Our Vendors
+        Manage Assets
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm ">
+      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
             <th class="tw-px-4 tw-py-2">ID</th>
-            <th class="tw-px-4 tw-py-2">Name</th>
-            <th class="tw-px-4 tw-py-2">Email</th>
-            <th class="tw-px-4 tw-py-2">Created At</th>
-            <th class="tw-px-4 tw-py-2">Active Status</th>
-
+            <th class="tw-px-4 tw-py-2">Plate Number</th>
+            <th class="tw-px-4 tw-py-2">Type</th>
+            <th class="tw-px-4 tw-py-2">Status</th>
           </tr>
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($users as $user)
+          @foreach($vehicles as $vehicle)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
+            <td class="tw-px-4 tw-py-2"> {{ $vehicle->id }}</td>
+            <td class="tw-px-4 tw-py-2"><a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.asset.details', $vehicle->id) }}">{{ $vehicle->plateNumber }}</a></td>
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ route('admin.vendors.show', $user->id) }}" class="hover:tw-underline tw-text-blue-700">
-                {{ $user->firstName }} {{ $user->lastName }}
-              </a>
+              {{ $vehicle->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicle->vehicle_type === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicle->vehicle_type === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $user->email }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($user->created_at)->format('Y-m-d')  }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if(\Carbon\Carbon::parse($user->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
-              <span class="tw-text-green-600 tw-text-sm">Active</span>
-              @else
-              <span class="tw-text-{{ $user->last_active_at && \Carbon\Carbon::parse($user->last_active_at)->diffInDays() < 6 ? 'yellow-500' : 'red-500' }}">
-                {{ $user->last_active_at ? \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() : 'N/A' }}
-              </span>
-              @endif
+              @switch($vehicle->vehicleStatus)
+              @case('available')
+              <span class="tw-text-green-500">{{ ucfirst($vehicle->vehicleStatus) }}</span>
+              @break
+              @case('unavailable')
+             <span class="tw-text-red-500">{{ ucfirst($vehicle->vehicleStatus) }}</span>
+              @break
+              @case('maintenance')
+               <span class="tw-text-yellow-500">{{ ucfirst($vehicle->vehicleStatus) }}</span>
+              @break
+              @endswitch
             </td>
-
           </tr>
           @endforeach
         </tbody>

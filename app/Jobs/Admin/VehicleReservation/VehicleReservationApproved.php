@@ -86,7 +86,7 @@ class VehicleReservationApproved implements ShouldQueue
 
             ActivityLogs::create([
                 'user_id' => $admin->id,
-                'event' => "Approved Vehicle Reservation: {$reservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Approved Vehicle Reservation: {$reservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

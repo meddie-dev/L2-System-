@@ -34,7 +34,7 @@
               </a>
             </td>
             <td class="tw-px-4 tw-py-2">{{ $document->documentName }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $document->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $document->approval_status === 'approved' ? 'green-500' : ($document->approval_status === 'pending' ? 'yellow-500' : ($document->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($document->approval_status) }}

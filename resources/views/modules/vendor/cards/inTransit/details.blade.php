@@ -126,19 +126,19 @@
         </div>
         <div>
           <label for="departureDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Departure Date</label>
-          <input type="text" id="departureDate" name="departureDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->departureTime)->format('F j, Y') }}" readonly>
+          <input type="text" id="departureDate" name="departureDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->departureTime)->format('Y-m-d') }}" readonly>
         </div>
         <div>
           <label for="departureTime" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Departure Time</label>
-          <input type="text" id="departureTime" name="departureTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->departureTime)->format('g:i A') }}" readonly>
+          <input type="text" id="departureTime" name="departureTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->departureTime)->format('h:i A') }}" readonly>
         </div>
         <div>
           <label for="arrivalDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Arrival Date</label>
-          <input type="text" id="arrivalDate" name="arrivalDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->arrivalTime)->format('F j, Y') }}" readonly>
+          <input type="text" id="arrivalDate" name="arrivalDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->arrivalTime)->format('Y-m-d') }}" readonly>
         </div>
         <div>
           <label for="arrivalTime" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Arrival Time</label>
-          <input type="text" id="arrivalTime" name="arrivalTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->arrivalTime)->format('g:i A') }}" readonly>
+          <input type="text" id="arrivalTime" name="arrivalTime" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ \Carbon\Carbon::parse($tripTicket->arrivalTime)->format('h:i A') }}" readonly>
         </div>
         <div>
           @php

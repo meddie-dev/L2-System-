@@ -42,7 +42,7 @@
                 {{ $order->payment->paymentNumber }}
               @endif
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $order->payment->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $order->payment->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $order->payment->approval_status === 'approved' ? 'green-500' : ($order->payment->approval_status === 'pending' ? 'yellow-500' : ($order->payment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
               @if($order->payment->reviewed_by === null)

@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+// Move Files to Google Drive (Daily)
+Schedule::command('move:files')->dailyAt('1:00 AM')->timezone('Asia/Manila');
+
+// Compute Asset Depreciation (Yearly)
+Schedule::command('compute:depreciation')->yearlyOn(1, 1, '00:00');
+

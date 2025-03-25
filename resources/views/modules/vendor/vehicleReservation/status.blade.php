@@ -32,7 +32,7 @@
                 {{ $tripTickets ? $tripTickets->vehicleReservation->reservationNumber : 'N/A' }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
             <span class="tw-text-{{ $tripTickets->status === 'delivered' ? 'green-500' : ($tripTickets->status === 'in_transit' ? 'yellow-500' : ($tripTickets->status === 'delayed' ? 'red-500' : 'blue-500')) }}">
                 {{ str_replace('_', ' ', ucfirst($tripTickets->status)) }}

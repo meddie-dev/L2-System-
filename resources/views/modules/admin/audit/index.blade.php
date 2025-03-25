@@ -42,7 +42,7 @@
                 </span>
               </div>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $reports->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $reports->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $reports->approval_status === 'approved' ? 'green-500' : ($reports->approval_status === 'pending' ? 'yellow-500' : ($reports->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
                 {{ ucfirst($reports->approval_status) }}

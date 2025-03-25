@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Maintenance;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class MaintenanceController extends Controller
 {

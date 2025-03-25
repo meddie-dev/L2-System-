@@ -43,7 +43,7 @@
               @endif
             </td>
             <td class="tw-px-4 tw-py-2">
-             {{ $order->updated_at->format('F j, Y') }}
+             {{ $order->updated_at->format('Y-m-d') }}
             </td>
             <td class="tw-px-4 tw-py-2">
               @if($order->vehicleReservation !== null)

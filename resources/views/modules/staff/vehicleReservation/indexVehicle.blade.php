@@ -41,7 +41,7 @@
               </a>
               @endif
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->updated_at->format('n-j-Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservation->updated_at->format('Y-m-d') }}</td>
           </tr>
           @endforeach
         </tbody>

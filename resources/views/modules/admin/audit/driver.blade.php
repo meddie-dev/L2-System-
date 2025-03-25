@@ -81,16 +81,26 @@
           <p class="tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">
             from:
             <span class="tw-font-semibold tw-text-gray-700">
-            {{ $tripTicket->order->user->firstName }} {{ $tripTicket->order->user->lastName }}
+              {{ $tripTicket->order ? $tripTicket->order->user->firstName . ' ' . $tripTicket->order->user->lastName : $tripTicket->vehicleReservation->user->firstName . ' ' . $tripTicket->vehicleReservation->user->lastName }}
             </span>
           </p>
           @endif
         </div>
         <div class="tw-border-2 tw-rounded-lg tw-p-4 @if ($tripTicket && $tripTicket->rating >= 4) tw-bg-green-100 tw-border-green-500 @elseif ($tripTicket && $tripTicket->rating < 4 && $tripTicket->rating >= 3) tw-bg-yellow-100 tw-border-yellow-500 @else tw-bg-red-100 tw-border-red-500 @endif">
           @if ($tripTicket && $tripTicket->rating !== null)
+          <div class="tw-flex tw-justify-between tw-mb-2">
+            <span class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs">
+              {{ $tripTicket->created_at->format('Y-m-d') }}
+            </span>
+
+            <span class="tw-text-sm tw-text-gray-500 | max-md:tw-text-xs">
+              {{ $tripTicket->created_at->format('h:i A') }}
+            </span>
+
+          </div>
           <p class="tw-text-sm tw-text-gray-700 | max-md:tw-text-xs">
-            "{{ $tripTicket->feedback }}"
-          </p>
+              "{{ $tripTicket->feedback }}"
+            </p>
           <div class="tw-flex tw-items-center tw-space-x-1 tw-my-2">
             @for ($i = 0; $i < 5; $i++)
               @if ($i < floor($tripTicket->rating))
@@ -98,8 +108,8 @@
               @else
               <span style="color: #6c757d;">&#9734;</span>
               @endif
-            @endfor
-            <span class="tw-text-sm tw-text-gray-500 tw-ml-2">{{ number_format($tripTicket->rating, 1) }}/5.0</span>
+              @endfor
+              <span class="tw-text-sm tw-text-gray-500 tw-ml-2">{{ number_format($tripTicket->rating, 1) }}/5.0</span>
           </div>
           @else
           <p class="tw-text-sm tw-text-gray-500">No feedback available yet.</p>
@@ -127,8 +137,8 @@
                 @endif
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4" style="background-color: {{ strpos($log->event, 'Unauthorized access attempt') !== false ? '#f8d7da' : '#ffffff' }};">
                   <div class="tw-flex tw-justify-between">
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('Y-m-d') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('h:i A') }}</p>
                   </div>
                   <p class="tw-text-gray-700">{{ $log->event }}</p>
                 </div>

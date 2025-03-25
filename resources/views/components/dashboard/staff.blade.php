@@ -153,8 +153,8 @@
                 <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#212529] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
                   <div class="tw-flex tw-justify-between">
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('Y-m-d') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('h:i A') }}</p>
                   </div>
                   <p class="tw-text-gray-700">{{ $log->event }}</p>
                 </div>

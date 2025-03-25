@@ -63,7 +63,7 @@
         </div>
         <div>
           <label for="documentCreatedDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Created Date:</label>
-          <input type="text" id="documentCreatedDate" name="documentCreatedDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED DATE" value="{{ $document->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}" readonly>
+          <input type="text" id="documentCreatedDate" name="documentCreatedDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED DATE" value="{{ $document->created_at->setTimezone('Asia/Manila')->format('Y-m-d') }}" readonly>
         </div>
         <div>
           <label for="documentCreatedTime" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 | max-md:tw-text-xs">Document Created Time:</label>

@@ -49,7 +49,7 @@
         </div>
         <div>
           <label for="documentCreatedDate" class="tw-font-semibold">Document Created Date:</label>
-          <input type="text" id="documentCreatedDate" name="documentCreatedDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED DATE" value="{{ $payment->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}" readonly>
+          <input type="text" id="documentCreatedDate" name="documentCreatedDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER DOCUMENT CREATED DATE" value="{{ $payment->created_at->setTimezone('Asia/Manila')->format('Y-m-d') }}" readonly>
         </div>
         <div>
           <label for="documentCreatedTime" class="tw-font-semibold">Document Created Time:</label>

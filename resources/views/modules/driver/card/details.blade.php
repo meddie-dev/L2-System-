@@ -51,13 +51,13 @@
       <!-- Expiry Date -->
       <div>
         <label for="expiryDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Expiry Date:</label>
-        <input type="text" id="expiryDate" name="expiryDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $fleetCard->expiry_date ? \Carbon\Carbon::parse($fleetCard->expiry_date)->format('F j, Y') : '-' }}" readonly>
+        <input type="text" id="expiryDate" name="expiryDate" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ $fleetCard->expiry_date ? \Carbon\Carbon::parse($fleetCard->expiry_date)->format('Y-m-d') : '-' }}" readonly>
       </div>
 
       <!-- Created At -->
       <div>
         <label for="createdAt" class="tw-block tw-text-sm tw-font-medium tw-text-gray-500 | max-md:tw-text-xs">Created At:</label>
-        <input type="text" id="createdAt" name="createdAt" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ \Carbon\Carbon::parse($fleetCard->createdAt)->format('F j, Y') }}" readonly>
+        <input type="text" id="createdAt" name="createdAt" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" placeholder="ENTER ORDER NUMBER" value="{{ \Carbon\Carbon::parse($fleetCard->createdAt)->format('Y-m-d') }}" readonly>
       </div>
     </div>
     <div class="tw-flex tw-items-center tw-justify-start tw-my-6">

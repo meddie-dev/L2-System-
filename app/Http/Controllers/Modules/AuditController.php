@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Jobs\Staff\Audit\NotifyIncidentApproved;
 use App\Jobs\Staff\Audit\NotifyIncidentReview;
-use App\Jobs\Staff\Document\SendDocumentApprovalNotification;
-use App\Jobs\Staff\Order\SendOrderApprovalNotification;
-use App\Jobs\Staff\Payment\SendPaymentApprovalNotification;
 use App\Jobs\Vendor\SendDocumentNotifications;
 use App\Jobs\Vendor\SendOrderNotifications;
 use App\Jobs\Vendor\SendPaymentNotifications;
@@ -21,8 +18,6 @@ use App\Models\TripTicket;
 use App\Models\User;
 use App\Notifications\NewNotification;
 use App\Notifications\staff\staffApprovalStatus;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -53,7 +48,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Reviewed Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Reviewed Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -72,7 +67,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Rejected Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -122,7 +117,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Approved Order: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Approved Order: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -145,7 +140,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Rejected Order: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Order: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -178,7 +173,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Approved Document: {$document->document_number} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Approved Document: {$document->document_number} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -201,7 +196,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Rejected Document: {$document->document_number} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Document: {$document->document_number} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -233,7 +228,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Approved Payment: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Approved Payment: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -256,7 +251,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Rejected Payment: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Payment: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -283,7 +278,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Approved Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Approved Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -306,7 +301,7 @@ class AuditController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]); 
 
@@ -343,7 +338,7 @@ class AuditController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Reviewed Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Reviewed Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 
@@ -371,7 +366,7 @@ class AuditController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Rejected Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Rejected Incident Report: {$incidentReport->reportNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

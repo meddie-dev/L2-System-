@@ -68,7 +68,7 @@ class PaymentController extends Controller
 
         ActivityLogs::create([
             'user_id' => $user->id,
-            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -130,7 +130,7 @@ class PaymentController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Payment Updated with Payment Number: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Payment Updated with Payment Number: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -225,7 +225,7 @@ class PaymentController extends Controller
 
         ActivityLogs::create([
             'user_id' => $user->id,
-            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Payment Submitted with Payment Number: {$payment->paymentNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -317,7 +317,7 @@ class PaymentController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Payment Updated with Payment Number: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Payment Updated with Payment Number: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -389,7 +389,7 @@ class PaymentController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Rejected Payment Request: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Rejected Payment Request: {$payment->paymentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

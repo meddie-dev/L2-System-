@@ -127,20 +127,20 @@
               </div>
               <div>
                 <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Departure Date</p>
-                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('F j, Y') : '-' }}</p>
+                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('Y-m-d') : '-' }}</p>
               </div>
 
               <div>
                 <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Departure Time</p>
-                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('g:i A') : '-' }}</p>
+                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->departureTime)->format('h:i A') : '-' }}</p>
               </div>
               <div>
                 <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Arrival Date</p>
-                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('F j, Y') : '-' }}</p>
+                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('Y-m-d') : '-' }}</p>
               </div>
               <div>
                 <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-mb-1 | max-sm:tw-text-[12px]">Arrival Time</p>
-                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('g:i A') : '-' }}</p>
+                <p class="tw-text-xs tw-font-semibold | max-sm:tw-text-[12px]">{{ $latestTripTicket ? \Carbon\Carbon::parse($latestTripTicket->arrivalTime)->format('h:i A') : '-' }}</p>
               </div>
 
               <div>
@@ -171,8 +171,8 @@
                 <div class="tw-absolute tw-w-4 tw-h-4 tw-bg-[#212529] tw-rounded-full tw--left-[10px] tw-mt-8"></div>
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4">
                   <div class="tw-flex tw-justify-between">
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('Y-m-d') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('h:i A') }}</p>
                   </div>
                   <p class="tw-text-gray-700">{{ $log->event }}</p>
                 </div>

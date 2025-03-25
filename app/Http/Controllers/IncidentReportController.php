@@ -73,7 +73,7 @@ class IncidentReportController extends Controller
         // Log Activity
         ActivityLogs::create([
             'user_id'    => Auth::id(),
-            'event'      => "Incident Report Submitted with Report Number: {$reportNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event'      => "Incident Report Submitted with Report Number: {$reportNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
     

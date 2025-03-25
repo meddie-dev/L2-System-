@@ -38,7 +38,7 @@
             <td class="tw-px-4 tw-py-2">
               {{ $vehicles->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($vehicles->vehicleType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($vehicles->vehicleType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicles->created_at->format('m-d-Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicles->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $vehicles->vehicleStatus === 'available' ? 'green-500' : ($vehicles->vehicleStatus === 'maintenance' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($vehicles->vehicleStatus) }}

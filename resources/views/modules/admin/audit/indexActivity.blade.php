@@ -26,6 +26,7 @@
             <th class="tw-px-4 tw-py-2">Name</th>
             <th class="tw-px-4 tw-py-2">Date Created</th>
             <th class="tw-px-4 tw-py-2">Role</th>
+            <th class="tw-px-4 tw-py-2">Active Status</th>
           </tr>
         </thead>
 
@@ -41,13 +42,22 @@
 
               </div>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $user->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $user->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <div class="tw-flex tw-justify-between">
                 <a href="">
                   {{ $user->hasRole('Super Admin') ? 'Super Admin' : ($user->hasRole('Admin') ? 'Admin' : ($user->hasRole('Staff') ? 'Staff' : 'Driver')) }}
                 </a>
               </div>
+            </td>
+            <td class="tw-px-4 tw-py-2">
+              @if(\Carbon\Carbon::parse($user->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
+              <span class="tw-text-green-600 tw-text-sm">Active</span>
+              @else
+              <span class="tw-text-{{ $user->last_active_at && \Carbon\Carbon::parse($user->last_active_at)->diffInDays() < 6 ? 'yellow-500' : 'red-500' }}">
+                {{ $user->last_active_at ? \Carbon\Carbon::parse($user->last_active_at)->diffForHumans() : 'N/A' }}
+              </span>
+              @endif
             </td>
           </tr>
           @endforeach

@@ -14,6 +14,8 @@ use Illuminate\Queue\SerializesModels;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class CheckMaintenance implements ShouldQueue
 {
@@ -211,7 +213,7 @@ class CheckMaintenance implements ShouldQueue
         // ✅ Store the new maintenance record
         $maintenance = Maintenance::create([
             'vehicle_id' => $this->vehicle_id,
-            'maintenanceNumber' => strtoupper(uniqid('MTN-')),
+            'maintenanceNumber' => Str::upper(Str::random(20)),
             'task' => $task,
             'amount' => $cost,
             'scheduled_date' => now(),

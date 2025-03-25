@@ -55,7 +55,7 @@ class FleetController extends Controller
 
         // Store vehicle image
         $file = $request->file('vehicleImage');
-        $path = $file->storeAs("vehicles/{$request->vehicleType}", $request->plateNumber . '.' . $file->getClientOriginalExtension(), 'public');
+        $path = Storage::disk('public')->putFileAs("vehicles/{$request->vehicleType}", $file, $request->plateNumber . '.' . $file->getClientOriginalExtension());
 
         $vehicle = Vehicle::create(array_merge($validated, [
             'vehicleImage' => $path,
@@ -65,7 +65,7 @@ class FleetController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Added Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Added Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -125,7 +125,7 @@ class FleetController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Updated Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Updated Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -164,7 +164,7 @@ class FleetController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Updated Driver: {$user->firstName} {$user->lastName} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Updated Driver: {$user->firstName} {$user->lastName} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 
@@ -198,7 +198,7 @@ class FleetController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Updated Fuel: {$fleetCard->cardNumber} at time: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Updated Fuel: {$fleetCard->cardNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 

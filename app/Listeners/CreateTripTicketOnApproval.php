@@ -91,7 +91,7 @@ class CreateTripTicketOnApproval
             // Create Fleet Card
             $fleetCard = FleetCard::create([
                 'user_id' => $reservation->redirected_to,
-                'cardNumber' => Str::upper(Str::random(20)),
+                'cardNumber' => Str::upper(Str::random(12)),
                 'status' => 'active',
                 'credit_limit' => $creditLimit,
             ]);

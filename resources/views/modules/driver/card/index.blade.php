@@ -35,7 +35,7 @@
                 {{ $fleetCards ? $fleetCards->cardNumber ?? '-' : '-' }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $fleetCards instanceof \App\Models\TripTicket ? $fleetCards->created_at->format('F j, Y') : '-' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $fleetCards instanceof \App\Models\TripTicket ? $fleetCards->created_at->format('Y-m-d') : '-' }}</td>
           </tr>
           @endforeach
         </tbody>

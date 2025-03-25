@@ -22,14 +22,15 @@
               width: 28px;
               height: 35px;
               font-size: 15px;
+              margin: 1px;
             }
           }
         </style>
 
         <form action="{{ route('gasStation.verify') }}" method="POST">
           @csrf
-          @for ($i = 0; $i < 20; $i++)
-            <input type="text" name="cardNumber[]" maxlength="1" class="otp-input" id="input{{$i}}" />
+          @for ($i = 0; $i < 12; $i++)
+            <input type="text" name="cardNumber[]" maxlength="1" class="otp-input" id="input{{$i}}" autocomplete="off" />
           @endfor
         </form>
 

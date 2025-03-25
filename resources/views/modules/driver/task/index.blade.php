@@ -32,7 +32,7 @@
                 {{ $vehicleReservations ? $vehicleReservations->reservationNumber : 'N/A' }}
               </a>
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('F j, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $vehicleReservations->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               <span class="tw-text-{{ $vehicleReservations->approval_status === 'approved' ? 'green-500' : ($vehicleReservations->approval_status === 'pending' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($vehicleReservations->approval_status) }}

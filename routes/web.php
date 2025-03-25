@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddOnsController;
+use App\Http\Controllers\AssetController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -159,6 +160,12 @@ Route::middleware('role:Admin', 'active')->group(function () {
         ->name('admin.warehouse.request');
     Route::patch('/admin/dashboard/warehouse/inventory/update/{product}', [WarehouseController::class, 'update'])
         ->name('admin.warehouse.update');
+
+    // Asset Management
+    Route::get('/admin/dashboard/asset', [AssetController::class, 'index'])
+        ->name('admin.asset.index');
+    Route::get('/admin/dashboard/asset/details/{vehicle}', [AssetController::class, 'details'])
+        ->name('admin.asset.details');
 
 });
 
@@ -485,13 +492,6 @@ Route::post('/gasStation/verify', [FleetController::class, 'gasStationVerify'])-
 --------------------------------------------------------------*/
 Route::view('/privacy-policy', 'pages.legal.privacyPolicy')->name('privacy-policy');
 Route::view('/terms-and-conditions', 'pages.legal.termsAndConditions')->name('terms-and-conditions');
-
-/*--------------------------------------------------------------
-# Error Routes
---------------------------------------------------------------*/
-Route::view('/401', 'components.errors.401')->name('401');
-Route::view('/404', 'components.errors.404')->name('404');
-Route::view('/500', 'components.errors.500')->name('500');
 
 /*--------------------------------------------------------------
 # Geocode Route

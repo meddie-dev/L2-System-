@@ -150,8 +150,8 @@
                 @endif
               </td>
               <td>{{ $user->email }}</td>
-              <td>{{ $user->created_at->format('Y/m/d') }}</td>
-              <td>{{ $user->updated_at->format('Y/m/d') }}</td>
+              <td>{{ $user->created_at->format('Y-m-d') }}</td>
+              <td>{{ $user->updated_at->format('Y-m-d') }}</td>
             </tr>
             @endforeach
           </tbody>

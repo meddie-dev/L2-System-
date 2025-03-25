@@ -41,4 +41,10 @@ class Vehicle extends Model
         return $this->hasMany(TripTicket::class, 'vehicle_id', 'id');
     }
 
+    
+    public function assetReport()
+    {
+        return $this->hasMany(AssetReport::class);
+    }
+
 }

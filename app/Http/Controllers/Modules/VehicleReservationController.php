@@ -146,7 +146,7 @@ class VehicleReservationController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -186,7 +186,7 @@ class VehicleReservationController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Updated Vehicle Reservation: {$vehicleReservation->reservation_number} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Updated Vehicle Reservation: {$vehicleReservation->reservation_number} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -282,7 +282,7 @@ class VehicleReservationController extends Controller
 
             ActivityLogs::create([
                 'user_id' => auth()->id(),
-                'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Submitted Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
 
@@ -323,7 +323,7 @@ class VehicleReservationController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Approved Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Approved Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -343,7 +343,7 @@ class VehicleReservationController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -474,7 +474,7 @@ class VehicleReservationController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Scheduled Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Scheduled Vehicle Reservation: {$vehicleReservation->reservationNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => request()->ip(),
         ]);
 
@@ -513,7 +513,7 @@ class VehicleReservationController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Rejected Vehicle Reservation: {$vehicleReservation->reservationNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

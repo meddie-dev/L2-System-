@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\Admin\SendRestockNotification;
+use App\Models\ActivityLogs;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WarehouseController extends Controller
@@ -59,6 +61,12 @@ class WarehouseController extends Controller
             // Dispatch job to update stock and notify admins/staff after 1 day
             SendRestockNotification::dispatch($product, $request->stock)->delay(Carbon::now()->addDay(1));
         }
+    
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated product record successfully in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
     
         return redirect()->route('admin.warehouse.index')->with('success', 'Product restock request successfully scheduled.');
     }

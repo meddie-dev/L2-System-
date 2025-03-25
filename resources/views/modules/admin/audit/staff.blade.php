@@ -86,8 +86,8 @@
                 @endif
                 <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-4" style="background-color: {{ strpos($log->event, 'Unauthorized access attempt') !== false ? '#f8d7da' : '#ffffff' }};">
                   <div class="tw-flex tw-justify-between">
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('M d, Y') }}</p>
-                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('H:i') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('Y-m-d') }}</p>
+                    <p class="tw-text-sm tw-text-gray-600">{{ $log->created_at->format('h:i A') }}</p>
                   </div>
                   <p class="tw-text-gray-700">{{ $log->event }}</p>
                 </div>

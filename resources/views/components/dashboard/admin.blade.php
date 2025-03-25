@@ -123,8 +123,8 @@
           <div class="tw-bg-gray-700 tw-shadow-md tw-rounded-lg tw-p-4 tw-mb-3">
 
             <div class="tw-flex tw-justify-between">
-              <p class="tw-text-sm tw-text-white">{{ $item->created_at->format('M d, Y') }}</p>
-              <p class="tw-text-sm tw-text-white">{{ $item->created_at->format('H:i') }}</p>
+              <p class="tw-text-sm tw-text-white">{{ $item->created_at->format('Y-m-d') }}</p>
+              <p class="tw-text-sm tw-text-white">{{ $item->created_at->format('h:i A') }}</p>
             </div>
             <p class="tw-text-white"><span class="tw-text-sm tw-text-white">({{ $item->user->firstName }} {{ $item->user->lastName }}):</span> {{ $item->event }} </p>
           </div>

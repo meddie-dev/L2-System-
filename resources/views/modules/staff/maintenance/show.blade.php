@@ -43,8 +43,8 @@
                 {{ $maintenances->task }}
             </td>
             <td class="tw-px-4 tw-py-2">PHP {{ number_format($maintenances->amount, 2) }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($maintenances->scheduled_date)->format('m-d-Y') }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $maintenances->completed_date ? \Carbon\Carbon::parse($maintenances->completed_date)->format('m-d-Y') : 'N/A' }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($maintenances->scheduled_date)->format('Y-m-d') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $maintenances->completed_date ? \Carbon\Carbon::parse($maintenances->completed_date)->format('Y-m-d') : 'N/A' }}</td>
             <td class="tw-px-4 tw-py-2">
               @switch($maintenances->conditionStatus)
                 @case('good')

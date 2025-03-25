@@ -28,7 +28,7 @@ class SettingsController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Updated profile record successfully",
+            'event' => "Updated profile record successfully in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 

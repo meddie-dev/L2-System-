@@ -11,12 +11,10 @@ use App\Models\ActivityLogs;
 use App\Models\Modules\Order;
 use App\Models\Product;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -108,7 +106,7 @@ class OrderController extends Controller
     
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Order Submitted with Order Number: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Order Submitted with Order Number: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
     
@@ -200,7 +198,7 @@ class OrderController extends Controller
     
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Updated Order Request: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Updated Order Request: {$order->orderNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
     
@@ -249,7 +247,7 @@ class OrderController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Reviewed Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Reviewed Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
     
@@ -274,7 +272,7 @@ class OrderController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Rejected Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Rejected Order Request: {$order->orderNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

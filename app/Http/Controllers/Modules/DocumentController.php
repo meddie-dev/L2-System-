@@ -12,7 +12,6 @@ use App\Models\Modules\Order;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Vehicle;
-use App\Notifications\staff\staffApprovalStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -69,7 +68,7 @@ class DocumentController extends Controller
     
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Document Submitted with Document Number: {$document->documentNumber} at " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Document Submitted with Document Number: {$document->documentNumber} at " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
     
@@ -120,7 +119,7 @@ class DocumentController extends Controller
 
         ActivityLogs::create([
             'user_id' => auth()->id(),
-            'event' => "Updated Document: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Updated Document: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 
@@ -188,7 +187,7 @@ class DocumentController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Rejected Document Request: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d H:i'),
+                'event' => "Rejected Document Request: {$document->documentNumber} in time of: " . now('Asia/Manila')->format('Y-m-d h:i A'),
                 'ip_address' => request()->ip(),
             ]);
 

@@ -42,7 +42,7 @@
             <td class="tw-px-4 tw-py-2">{{ucfirst( $fuels->fuelType) }}</td>
             <td class="tw-px-4 tw-py-2">{{ number_format($fuels->estimatedFuelConsumption, 2) . ' L' }}</td>
             <td class="tw-px-4 tw-py-2">PHP {{ number_format($fuels->estimatedCost, 2) }}</td>
-            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($fuels->fuelDate)->format('F d, Y') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ \Carbon\Carbon::parse($fuels->fuelDate)->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
               @switch($fuels->fuelStatus)
               @case('scheduled')
