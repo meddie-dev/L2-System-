@@ -150,8 +150,8 @@
             <tr class="tw-bg-gray-100">
               <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->tripNumber }}</td>
               <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->destination }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->departureTime }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->arrivalTime }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ \Carbon\Carbon::parse($ticket->departureTime)->format('Y-m-d h:i A') }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ \Carbon\Carbon::parse($ticket->arrivalTime)->format('Y-m-d h:i A') }}</td>
               <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->allocatedFuel }}</td>
               <td class="tw-px-4 tw-py-2 tw-font-bold">{{$ticket->status }}</td>
             </tr>
@@ -174,9 +174,6 @@
             <tr>
               <th class="tw-px-4 tw-py-2">Plate Number</th>
               <th class="tw-px-4 tw-py-2">Type</th>
-              <th class="tw-px-4 tw-py-2">Model</th>
-              <th class="tw-px-4 tw-py-2">Make</th>
-              <th class="tw-px-4 tw-py-2">Color</th>
               <th class="tw-px-4 tw-py-2">Year</th>
               <th class="tw-px-4 tw-py-2">Fuel Type</th>
               <th class="tw-px-4 tw-py-2">Capacity</th>
@@ -184,20 +181,24 @@
             </tr>
           </thead>
           <tbody id="orderRecords" class="tw-bg-white">
-            @foreach($vehicle as $user)
+            @foreach($tripTicket as $ticket)
+            @if ($ticket->vehicle) <!-- Ensure there is an associated vehicle -->
             <tr class="tw-bg-gray-100">
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->plateNumber }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleType }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleModel }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleMake }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleColor }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleYear }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleFuelType }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleCapacity }}</td>
-              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $user->vehicleStatus }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $ticket->vehicle->plateNumber }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">
+                {{ $ticket->vehicle->vehicleType === 'light' ? 'Light-Duty Vehicles (e.g., Motorcycle, Van, Small Van)' : ($ticket->vehicle->vehicleType === 'medium' ? 'Medium-Duty Vehicles (e.g., Pickup Trucks, Box Trucks)' : ($ticket->vehicle->vehicleType === 'heavy' ? 'Heavy-Duty Vehicles (e.g., Flatbed Trucks, Mini Trailers)' : 'N/A')) }}
+              </td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $ticket->vehicle->vehicleYear }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ ucfirst($ticket->vehicle->vehicleFuelType) }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">{{ $ticket->vehicle->vehicleCapacity }}</td>
+              <td class="tw-px-4 tw-py-2 tw-font-bold">
+                <span style="color: {{ $ticket->vehicle->vehicleStatus === 'available' ? '#388E3C' : ($ticket->vehicle->vehicleStatus === 'maintenance' ? '#F57C00' : '#E53935') }}">{{ ucfirst($ticket->vehicle->vehicleStatus) }}</span>
+              </td>
             </tr>
+            @endif
             @endforeach
           </tbody>
+
         </table>
       </div>
     </div>

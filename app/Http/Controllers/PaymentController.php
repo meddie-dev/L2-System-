@@ -147,25 +147,9 @@ class PaymentController extends Controller
 
         // Define the filename and storage path
         $filename = "invoice-{$order->payment->paymentNumber}.pdf";
-        $folderPath = "payments/invoices/{$order->payment->id}/";
-        $fullPath = "public/{$folderPath}{$filename}";
-
-        // Ensure directory exists
-        Storage::disk('public')->makeDirectory($folderPath, 0755, true, true);
-
-        // Check if an existing PDF file needs to be deleted
-        if (Storage::disk('public')->exists($folderPath . $filename)) {
-            Storage::disk('public')->delete($folderPath . $filename);
-        }
 
         // Generate PDF
         $pdf = Pdf::loadView('pdf.invoice', compact('order'));
-
-        // Store PDF in public disk
-        Storage::disk('public')->put($folderPath . $filename, $pdf->output());
-
-        // Log for debugging
-        Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
 
         return $pdf->stream($filename);
     }
@@ -266,25 +250,10 @@ class PaymentController extends Controller
 
         // Define the filename and storage path
         $filename = "booking-{$payment->paymentNumber}.pdf";
-        $folderPath = "payments/booking/{$payment->id}/";
-        $fullPath = "public/{$folderPath}{$filename}";
-
-        // Ensure directory exists
-        Storage::disk('public')->makeDirectory($folderPath, 0755, true, true);
-
-        // Check if an existing PDF file needs to be deleted
-        if (Storage::disk('public')->exists($folderPath . $filename)) {
-            Storage::disk('public')->delete($folderPath . $filename);
-        }
 
         // Generate PDF
         $pdf = Pdf::loadView('pdf.booking', compact('vehicleReservation'));
 
-        // Store PDF in public disk
-        Storage::disk('public')->put($folderPath . $filename, $pdf->output());
-
-        // Log for debugging
-        Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
 
         return $pdf->stream($filename);
     }

@@ -150,7 +150,11 @@
 
       <div class="tw-mt-4">
         <p class="tw-text-sm tw-font-medium tw-text-gray-600 tw-mb-2 | max-md:tw-text-[11px]">
-        Please ensure that the document is downloaded. You can Download <a href="{{ route('driver.tripTicket.pdf', $vehicleReservation->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>. <br> <span class="tw-text-xs tw-text-gray-500">("Believe you can and you're halfway there." - Theodore Roosevelt)</span>
+        Please ensure that the document is downloaded. You can Download 
+        <a href="{{ $vehicleReservation->order_id ? route('driver.tripTicket.pdf', $vehicleReservation->id) : route('driver.tripTicketBooking.pdf', $vehicleReservation->id) }}" 
+           class="tw-text-blue-600 hover:tw-underline">here</a>. 
+        <br> 
+        <span class="tw-text-xs tw-text-gray-500">("Believe you can and you're halfway there." - Theodore Roosevelt)</span>
         </p>
       </div>
 

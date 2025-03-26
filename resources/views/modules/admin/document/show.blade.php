@@ -11,18 +11,23 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Documents
+        Manage Documents ({{$file['name']}})
       </x-partials.breadcrumb>
     </ol>
   </nav>
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
+      <!-- Users -->
+      <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Manage Documents</h2>
+        <p class="tw-text-xs | max-md:tw-text-xs">View and manage your documents. Ensure that all document records are accurate and up-to-date for effective tracking and management.</p>
+      </div>
       <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
 
         <thead class="tw-bg-gray-200 tw-text-gray-700 ">
           <tr>
-            <th>Name</th>
+            <th>Year</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -32,9 +37,8 @@
           <tr>
             <td>
               @if($file['mimeType'] === 'application/vnd.google-apps.folder')
-              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.document.manage', ['folder_id' => $file['id']]) }}">
-              <i class="fa-solid fa-folder tw-mr-2"></i>
-              {{ ucfirst(str_replace('_', ' ', $file['name'])) }}
+              <a href="{{ route('drive.files', ['folder_id' => $file['id']]) }}">
+                📁 {{ $file['name'] }}
               </a>
               @else
               {{ $file['name'] }}
@@ -45,11 +49,6 @@
           @endforeach
         </tbody>
       </table>
-      @if($parentFolderId)
-      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-        <a href="{{ route('admin.document.manage', ['folder_id' => $parentFolderId]) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-py-2 max-md:tw-px-4 max-md:tw-text-xs">Back</a>
-      </div>
-      @endif
       <hr>
     </div>
     <div>

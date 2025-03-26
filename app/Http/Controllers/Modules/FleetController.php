@@ -148,8 +148,7 @@ class FleetController extends Controller
     public function driverDetails(User $user)
     {
         $tripTicket = TripTicket::where('user_id', $user->id)->get();
-        $vehicle = Vehicle::where('user_id', $user->id)->get();
-        return view('modules.admin.fleet.driver.details', compact('user', 'tripTicket', 'vehicle'));
+        return view('modules.admin.fleet.driver.details', compact('user', 'tripTicket'));
     }
 
     public function driverUpdate(User $user)
@@ -235,25 +234,31 @@ class FleetController extends Controller
 
         // Define the filename and storage path
         $filename = $tripTicket->tripNumber . '.pdf';
-        $folderPath = "trip_tickets/{$userId}/";
-        $fullPath = "public/{$folderPath}{$filename}";
-
-        // Ensure directory exists
-        Storage::disk('public')->makeDirectory($folderPath);
-
-        // Check if an existing PDF file needs to be deleted
-        if (Storage::disk('public')->exists($folderPath . $filename)) {
-            Storage::disk('public')->delete($folderPath . $filename);
-        }
 
         // Generate PDF
         $pdf = Pdf::loadView('pdf.tripTicket', compact('vehicleReservation', 'tripTicket', 'fuel'));
 
-        // Store PDF in public disk
-        Storage::disk('public')->put($folderPath . $filename, $pdf->output());
+        return $pdf->stream($filename);
+    }
 
-        // Log for debugging
-        Log::info("PDF saved at: " . storage_path("app/public/{$folderPath}{$filename}"));
+    public function driverTripTicketBookingPdf(VehicleReservation $vehicleReservation)
+    {
+        $tripTicket = TripTicket::where('user_id', auth()->user()->id)->first();
+        $userId = auth()->user()->id;
+
+        $fuel = Fuel::whereHas('fleetCard', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->first();
+
+        if (!$tripTicket) {
+            return response()->json(['error' => 'Trip Ticket not found'], 404);
+        }
+
+        // Define the filename and storage path
+        $filename = $tripTicket->tripNumber . '.pdf';
+
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.tripTicketBooking', compact('vehicleReservation', 'tripTicket', 'fuel'));
 
         return $pdf->stream($filename);
     }

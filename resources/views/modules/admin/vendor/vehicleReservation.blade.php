@@ -111,21 +111,6 @@
 
       @if($vehicleReservation->approval_status != 'approved')
       <div class="tw-flex tw-justify-end tw-mb-6">
-        <form class="tw-mr-2" action="{{ route('admin.vendors.payment.rejected',[$user->id,$vehicleReservation->id]) }}" method="POST">
-          @csrf
-          @method('PATCH')
-          <button type="submit" class="tw-text-white tw-bg-red-600 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Reject</button>
-        </form>
-        <form action="{{ route('admin.vendors.payment.approved',[$user->id,$vehicleReservation->id]) }}" method="POST">
-          @csrf
-          @method('PATCH')
-          <button type="submit" class="tw-text-white tw-bg-gray-700 tw-text-sm tw-font-bold tw-py-2 tw-px-4 tw-rounded | max-md:tw-text-xs">Mark as Approved</button>
-        </form>
-      </div>
-      @endif
-
-      @if($vehicleReservation->approval_status != 'approved')
-      <div class="tw-flex tw-justify-end tw-mb-6">
         <form class="tw-mr-2" action="{{ route('admin.vendors.vehicleReservation.rejected',[$user->id, $vehicleReservation->id]) }}" method="POST">
           @csrf
           @method('PATCH')

@@ -19,17 +19,16 @@
   </nav>
 
   <div class="card-body tw-px-4">
+    @if (Str::endsWith(strtolower($document->documentUrl), ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']) && file_exists(public_path('storage/' . $document->documentUrl)))
     <div>
       <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
-        @if (Str::endsWith(strtolower($document->documentUrl), ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']))
         <img src="{{ asset('storage/' . $document->documentUrl) }}"
           class="tw-w-full tw-h-auto tw-rounded-md tw-shadow-md tw-max-w-[500px]"
           alt="Image"> <!-- Use a generic alt text or dynamic based on context -->
-        @else
-        <p class="tw-text-sm tw-text-gray-500">No preview available. Click to <a href="{{ asset('storage/' . $document->documentUrl) }}" target="_blank" class="tw-text-blue-500 hover:tw-text-blue-700 hover:tw-underline">Download</a></p>
-        @endif
       </div>
     </div>
+    @else
+    @endif
     <div class="tw-overflow-x-auto tw-mb-6">
       <!-- Order -->
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">

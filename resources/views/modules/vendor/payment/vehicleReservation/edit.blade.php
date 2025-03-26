@@ -72,10 +72,7 @@
       </div>
 
       <!-- Submit Registration Button -->
-      <div class="tw-my-6 tw-flex tw-justify-between">
-        <p class="tw-text-sm tw-font-medium tw-text-gray-600 | max-md:tw-text-[11px]">
-          Please ensure that the document is downloaded. You can Download <a href="{{ route('vendorPortal.payment.pdf', $vehicleReservation->id) }}" class="tw-text-blue-600 hover:tw-underline">here</a>.
-        </p>
+      <div class="tw-my-6 tw-flex tw-justify-end">
         <button type="submit" class=" tw-bg-indigo-600 tw-text-white tw-px-6 tw-py-2 tw-mb-2 tw-rounded-md tw-shadow-md hover:tw-bg-indigo-700">Submit</button>
       </div>
     </form>

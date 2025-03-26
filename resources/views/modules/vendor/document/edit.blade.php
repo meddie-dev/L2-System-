@@ -53,13 +53,6 @@
           @error('documentUrl')
           <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
           @enderror
-          <div class="tw-mt-2 tw-bg-gray-50 tw-p-3 tw-rounded-md">
-            <p class="tw-text-sm tw-text-gray-600">View the uploaded document:
-              <a href="{{ asset('storage/' . $order->document->first()->documentUrl ?? '') }}" target="_blank" class="tw-text-blue-500 hover:tw-text-blue-700 hover:tw-underline">
-                click here
-              </a>
-            </p>
-          </div>
         </div>
 
       </div>

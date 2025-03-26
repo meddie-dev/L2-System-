@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
@@ -128,9 +129,9 @@ class DocumentController extends Controller
 
     public function details(Document $document)
     {
-        
         return view('modules.vendor.document.details', compact('document'));
     }
+    
 
     public function destroy(Document $document)
     {
@@ -202,9 +203,55 @@ class DocumentController extends Controller
 
     // Admin
 
-    public function manageAdmin() {
-        $vehicles = Vehicle::all();
-        $users = User::role(['Driver', 'Staff', 'Vendor'])->get();
-        return view('modules.admin.document.manage', compact('vehicles', 'users'));
+    public function manageAdmin( Request $request) {
+        $accessToken = $this->getAccessToken();
+        $folderId = $request->get('folder_id', config('filesystems.disks.google.folder_id'));
+
+        // Get the parent folder ID
+        $parentFolderId = $this->getParentFolderId($folderId, $accessToken);
+
+        // Fetch files in the current folder
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$accessToken}"
+        ])->get("https://www.googleapis.com/drive/v3/files", [
+            'q' => "'{$folderId}' in parents and trashed=false",
+            'fields' => 'files(id, name, mimeType, webViewLink, webContentLink)',
+        ]);
+
+        $files = $response->json()['files'] ?? [];
+     
+        return view('modules.admin.document.manage', compact('files', 'folderId','parentFolderId'));
+    }
+
+    private function getParentFolderId($folderId, $accessToken)
+    {
+        if ($folderId == config('filesystems.disks.google.folder_id')) {
+            return null; // No parent folder (root folder)
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$accessToken}"
+        ])->get("https://www.googleapis.com/drive/v3/files/{$folderId}", [
+            'fields' => 'parents'
+        ]);
+
+        return $response->json()['parents'][0] ?? null;
+    }
+
+
+    private function getAccessToken()
+    {
+        $client_id = config('services.google.client_id');
+        $client_secret = config('services.google.client_secret');
+        $refresh_token = config('services.google.refresh_token');
+
+        $response = Http::post('https://oauth2.googleapis.com/token', [
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+            'refresh_token' => $refresh_token,
+            'grant_type' => 'refresh_token',
+        ]);
+
+        return json_decode($response->getBody(), true)['access_token'] ?? null;
     }
 }

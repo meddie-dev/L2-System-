@@ -71,10 +71,8 @@
     }
   </style>
   <div class="container">
-    <hr>
-    <div style="margin-left: 15rem;">
-      <h3>TRIP TICKET INFORMATION (ORDER)</h3>
-    </div>
+  <hr>
+  <div style="margin-left: 11rem;"><h3>TRIP TICKET INFORMATION (BOOKING)</h3></div>
     <!-- Driver Information -->
     <hr>
     <div class="section">
@@ -100,56 +98,6 @@
       <p>Fuel Efficiency: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->fuel_efficiency }} km/l</span></p>
       <p>Vehicle Capacity: <span style="font-weight: bold;">{{ $vehicleReservation->vehicle->vehicleCapacity }} kg</span></p>
     </div>
-
-    <!-- Order Information -->
-    <hr>
-    <h2 style="margin-bottom: 13px;">Order Information</h2>
-    <table class="table">
-      <tr>
-        <th>Key</th>
-        <th>Information</th>
-      </tr>
-      <tr>
-        <td>Order Number</td>
-        <td>{{ $vehicleReservation->order->orderNumber }}</td>
-      </tr>
-      <tr>
-        <td>Product</td>
-        <td>{{ $vehicleReservation->order->product }}</td>
-      </tr>
-      <tr>
-        <td>Quantity</td>
-        <td>{{ $vehicleReservation->order->quantity }}</td>
-      </tr>
-      <tr>
-        <td>Weight</td>
-        <td>{{ $vehicleReservation->order->weight }} kg</td>
-      </tr>
-      <tr>
-        <td>Delivery Address</td>
-        <td>{{ $vehicleReservation->order->deliveryAddress }}</td>
-      </tr>
-      <tr>
-        <td>Delivery Request Date</td>
-        <td>{{ $vehicleReservation->order->deliveryRequestDate }}</td>
-      </tr>
-      <tr>
-        <td>Special Instructions</td>
-        <td>{{ $vehicleReservation->order->specialInstructions ? $vehicleReservation->order->specialInstructions : '-' }}</td>
-      </tr>
-      <tr>
-        <td>Approval Status</td>
-        <td>{{ ucfirst($vehicleReservation->approval_status) }}</td>
-      </tr>
-      <tr>
-        <td>Reviewed By</td>
-        <td>{{ \App\Models\User::find($vehicleReservation->reviewed_by)->firstName . ' ' . \App\Models\User::find($vehicleReservation->reviewed_by)->lastName }}</td>
-      </tr>
-      <tr>
-        <td>Approved By</td>
-        <td>{{ \App\Models\User::find($vehicleReservation->approved_by)->firstName . ' ' . \App\Models\User::find($vehicleReservation->approved_by)->lastName }}</td>
-      </tr>
-    </table>
 
     <!-- Reservation Information -->
     <hr>

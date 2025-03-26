@@ -26,11 +26,10 @@ use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TripTicketController;
 use App\Http\Controllers\WarehouseController;
+
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
+
 
 /*-------------------------------------------------------------- 
 # Default Route
@@ -83,7 +82,7 @@ Route::middleware('role:Admin', 'active')->group(function () {
     Route::patch('/admin/dashboard/vendor/{user}/payment/{payment}/rejected', [AuditController::class, 'rejectedPayment'])
         ->name('admin.vendors.payment.rejected');
     
-    Route::get('/admin/dashboard/vendor/{user}/reservation/{reservation}', [AuditController::class, 'showVehicleReservation'])
+    Route::get('/admin/dashboard/vendor/{user}/reservation/{vehicleReservation}', [AuditController::class, 'showVehicleReservation'])
         ->name('admin.vendors.reservation.show');
     Route::patch('/admin/dashboard/vendor/{user}/reservation/{vehicleReservation}/approved', [AuditController::class, 'approvedVehicleReservation'])
         ->name('admin.vendors.vehicleReservation.approved');
@@ -373,6 +372,9 @@ Route::middleware('role:Driver', 'active')->group(function () {
     // Pdf 
     Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])
         ->name('driver.tripTicket.pdf');
+    Route::get('/driver/dashboard/pdf/booking/{vehicleReservation}', [FleetController::class, 'driverTripTicketBookingPdf'])
+        ->name('driver.tripTicketBooking.pdf');
+    
 
     // Task Management
     Route::get('/driver/dashboard/task', [FleetController::class, 'driverTask'])
