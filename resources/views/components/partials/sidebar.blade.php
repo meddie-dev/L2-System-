@@ -333,6 +333,12 @@
           <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar"></i></div>
           Calendar and Schedule
         </a>
+        @if (Auth::user()->hasRole('Super Admin'))
+        <a class="nav-link" href="{{ route('backups') }}">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-database"></i></div>
+          Backups and Recovery
+        </a>
+        @endif
         @endif
 
         @if (Auth::user()->hasRole('Driver'))

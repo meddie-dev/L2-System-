@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\MaintenanceController;
@@ -45,7 +46,6 @@ Route::get('/', function () {
 Route::middleware('role:Super Admin', 'active')->group(function () {
     // Super Admin Dashboard
     Route::get('/superadmin/dashboard', [DashboardController::class, 'superAdminDashboard'])->name('superadmin.dashboard');
-  
 });
 
 /*--------------------------------------------------------------
@@ -515,6 +515,14 @@ Route::get('/maps', [AddOnsController::class, 'map'])
 Route::get('/calendar', [AddOnsController::class, 'calendar'])
     ->name('calendar')
     ->middleware(['auth', 'active']);
+
+// Backups Database
+Route::get('/backups', [BackupController::class, 'listBackups'])
+    ->name('backups')
+    ->middleware(['auth','role:Super Admin', 'active']);
+Route::post('/restore-backup', [BackupController::class, 'restoreBackup'])
+    ->name('restore-backup')
+    ->middleware(['auth','role:Super Admin', 'active']);
 
 /*--------------------------------------------------------------
 # Vendor Portal Auth Route
