@@ -311,8 +311,8 @@ class PaymentController extends Controller
 
     public function manage()
     {
-        $orders = Order::where('assigned_to', auth()->id())->get();
-        return view('modules.staff.payment.manage', compact('orders'));
+        $payments = Payment::where('assigned_to', auth()->id())->get();
+        return view('modules.staff.payment.manage', compact('payments'));
     }
 
     public function show(Payment $payment)

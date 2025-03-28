@@ -90,7 +90,7 @@
 
       <div>
         <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-          <a href="{{ route('vendorPortal.order.payment') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+          <a href="{{ route('vendorPortal.vehicleReservation.payment') }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
             <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
             Back
           </a>

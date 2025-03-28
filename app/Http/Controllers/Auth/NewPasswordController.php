@@ -64,8 +64,8 @@ class NewPasswordController extends Controller
         );
 
         ActivityLogs::create([
-            'user_id' => Auth::id(),
-            'event' => "Password changed time of: " . now()->format('Y-m-d H:i:s'),
+            'user_id' => $user->id,
+            'event' => "Password changed time of: " . now()->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 

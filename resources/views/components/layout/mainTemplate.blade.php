@@ -6,7 +6,8 @@
          class="max-sm:tw-w-[50%]"
           src="/img/logo.png"
           alt="Logo"
-          style="max-width: 250px; max-height: 50px; filter: brightness(0.2) grayscale(1) contrast(10);" />
+          style="max-width: 250px; max-height: 50px; filter: brightness(0.2) grayscale(1) contrast(10);" 
+          fetchpriority="high"/>
       </div>
       
       {{ $slot }}

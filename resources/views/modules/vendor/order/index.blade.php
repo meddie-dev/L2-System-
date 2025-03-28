@@ -37,7 +37,7 @@
           @if (!is_null($order->orderNumber))
           <tr class="hover:tw-bg-gray-100">
             <td class="tw-px-4 tw-py-2">
-              <a href="{{ $order->approval_status === 'approved' ? route('vendorPortal.order.details', $order->id) : route('vendorPortal.order.edit', $order->id) }}">
+              <a class="tw-text-blue-600 hover:tw-underline" href="{{ $order->approval_status === 'approved' ? route('vendorPortal.order.details', $order->id) : route('vendorPortal.order.edit', $order->id) }}">
                 {{ $order->orderNumber }}
               </a>
             </td>

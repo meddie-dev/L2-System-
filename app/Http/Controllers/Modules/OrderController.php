@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+
     public function index()
     {
         $orders = Order::where('user_id', auth()->user()->id)->get();

@@ -94,7 +94,7 @@ class TwoFactorController extends Controller
 
             ActivityLogs::create([
                 'user_id' => Auth::id(),
-                'event' => "Two-factor authentication Code has been verified time of: " . now()->format('Y-m-d H:i:s'),
+                'event' => "Two-factor authentication Code has been verified time of: " . now()->format('Y-m-d h:i A'),
                 'ip_address' => $request->ip(),
             ]);
 
@@ -127,7 +127,7 @@ class TwoFactorController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Two-factor authentication has been disabled time of: " . now()->format('Y-m-d H:i:s'),
+            'event' => "Two-factor authentication has been disabled time of: " . now()->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 

@@ -63,10 +63,12 @@
       </div>
       <div class="tw-flex tw-flex-col tw-gap-2 tw-px-4 tw-text-sm | max-md:tw-text-xs max-md:tw-grid-cols-1 max-md:tw-gap-2">
         <div class="tw-flex tw-items-center tw-justify-center tw-relative tw-mb-4">
-          <img src="{{ asset('storage/' . $document->documentUrl) }}" alt="Document Image" class="tw-max-w-[500px]  tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
+          @if (file_exists(public_path('storage/' . $document->documentUrl)))
+          <img src="{{ asset('storage/' . $document->documentUrl) }}" alt="Document Image" class="tw-max-w-[500px] tw-max-h-[500px] tw-rounded-md tw-shadow-md tw-object-fill">
           <div style="font-size: 2rem; left: 50%; top: 50%; transform: translate(-50%, -50%);" class="tw-absolute tw-z-10 tw-text-gray-700 tw-opacity-10 tw-font-bold">
             {{ $document->documentNumber ?? 'N/A' }}
           </div>
+          @endif
         </div>
 
         <div class="tw-grid tw-grid-cols-2 tw-gap-2">

@@ -142,16 +142,31 @@
               <td>{{ $user->firstName }} {{ $user->lastName }}</td>
               <td>
                 @if ($user->hasRole('Super Admin'))
-                <span class="badge rounded-pill bg-danger">Super Admin</span>
+                <span>Super Admin</span>
                 @elseif ($user->hasRole('Admin'))
-                <span class="badge rounded-pill bg-warning text-dark">Admin</span>
-                @else
-                <span class="badge rounded-pill bg-primary">Staff</span>
+                <span>Admin</span>
+                @elseif ($user->hasRole('Staff'))
+                <span>Staff</span>
+                @elseif ($user->hasRole('Vendor'))
+                <span>Vendor</span>
+                @elseif ($user->hasRole('Driver'))
+                <span>Driver</span>
                 @endif
               </td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->created_at->format('Y-m-d') }}</td>
-              <td>{{ $user->updated_at->format('Y-m-d') }}</td>
+              <td>
+                @if($user->last_active_at && \Carbon\Carbon::parse($user->last_active_at)->gt(\Carbon\Carbon::now()->subMinutes(5)))
+                  <span class="tw-text-green-600">Active</span>
+                @elseif($user->last_active_at)
+                  <?php $lastActiveAt = \Carbon\Carbon::parse($user->last_active_at); ?>
+                  <span class="tw-text-{{ $lastActiveAt->diffInDays() < 6 ? 'yellow-500' : 'red-500' }}">
+                    {{ $lastActiveAt->diffForHumans() }}
+                  </span>
+                @else
+                  <span class="tw-text-red-500">N/A</span>
+                @endif
+              </td>
             </tr>
             @endforeach
           </tbody>

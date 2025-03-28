@@ -206,7 +206,7 @@ class DocumentController extends Controller
     public function manageAdmin( Request $request) {
         $accessToken = $this->getAccessToken();
         $folderId = $request->get('folder_id', config('filesystems.disks.google.folder_id'));
-
+       
         // Get the parent folder ID
         $parentFolderId = $this->getParentFolderId($folderId, $accessToken);
 
@@ -219,8 +219,10 @@ class DocumentController extends Controller
         ]);
 
         $files = $response->json()['files'] ?? [];
+
+        $breadcrumbs = $this->getBreadcrumbs($folderId, $accessToken);
      
-        return view('modules.admin.document.manage', compact('files', 'folderId','parentFolderId'));
+        return view('modules.admin.document.manage', compact('files', 'folderId','parentFolderId', 'breadcrumbs'));
     }
 
     private function getParentFolderId($folderId, $accessToken)
@@ -253,5 +255,32 @@ class DocumentController extends Controller
         ]);
 
         return json_decode($response->getBody(), true)['access_token'] ?? null;
+    }
+
+    private function getBreadcrumbs($folderId, $accessToken) {
+        $breadcrumbs = [];
+    
+        while ($folderId && $folderId !== config('filesystems.disks.google.folder_id')) {
+            // Get folder details
+            $response = Http::withHeaders([
+                'Authorization' => "Bearer {$accessToken}"
+            ])->get("https://www.googleapis.com/drive/v3/files/{$folderId}", [
+                'fields' => 'id, name, parents'
+            ]);
+    
+            $folder = $response->json();
+    
+            if (isset($folder['id']) && isset($folder['name'])) {
+                array_unshift($breadcrumbs, [
+                    'id' => $folder['id'],
+                    'name' => ucfirst(str_replace('_', ' ', $folder['name']))
+                ]);
+            }
+    
+            // Move up to the parent folder
+            $folderId = $folder['parents'][0] ?? null;
+        }
+    
+        return $breadcrumbs;
     }
 }

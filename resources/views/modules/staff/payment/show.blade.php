@@ -44,6 +44,7 @@
       </div>
 
       <!-- Order Information -->
+      @if($payment->order)
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
         <h2 class="tw-text-md tw-font-semibold tw-mb-1 | max-md:tw-text-sm">Order Information</h2>
         <p class="tw-text-xs | max-md:tw-text-xs">View and track the details of this order.</p>
@@ -54,6 +55,7 @@
           <input type="text" id="orderNumber" name="orderNumber" class="tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm tw-opacity-50 tw-cursor-not-allowed | max-md:tw-text-xs" value="{{ $payment->order->orderNumber }}" readonly>
         </div>
       </div>
+      @endif
 
       <!-- Payment Information  -->
       <div class="tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">

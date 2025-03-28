@@ -31,24 +31,24 @@
         </thead>
 
         <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($orders as $order)
+          @foreach($payments as $payment)
           <tr class="hover:tw-bg-gray-100">
-            <td class="tw-px-4 tw-py-2">{{ $order->id }}</td>
-            <td class="tw-px-4 tw-py-2">{{ $order->user->firstName }} {{ $order->user->lastName }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $payment->id }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $payment->user->firstName }} {{ $payment->user->lastName }}</td>
             <td class="tw-px-4 tw-py-2">
-              @if($order->payment->approval_status !== 'reviewed')
-                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.payment.show', $order->payment->id) }}">{{ $order->payment->paymentNumber }}</a>
+              @if($payment->approval_status !== 'reviewed')
+                <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('staff.payment.show', $payment->id) }}">{{ $payment->paymentNumber }}</a>
               @else
-                {{ $order->payment->paymentNumber }}
+                {{ $payment->paymentNumber }}
               @endif
             </td>
-            <td class="tw-px-4 tw-py-2">{{ $order->payment->created_at->format('Y-m-d') }}</td>
+            <td class="tw-px-4 tw-py-2">{{ $payment->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $order->payment->approval_status === 'approved' ? 'green-500' : ($order->payment->approval_status === 'pending' ? 'yellow-500' : ($order->payment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
-              @if($order->payment->reviewed_by === null)
+              <span class="tw-text-{{ $payment->approval_status === 'approved' ? 'green-500' : ($payment->approval_status === 'pending' ? 'yellow-500' : ($payment->approval_status === 'reviewed' ? 'blue-500' : 'red-500')) }}">
+              @if($payment->reviewed_by === null)
                 <span class="tw-text-yellow-500">Need Review</span>
                 @else
-                {{ ucfirst($order->payment->approval_status) }}
+                {{ ucfirst($payment->approval_status) }}
                 @endif
               </span>
             </td>

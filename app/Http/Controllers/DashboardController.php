@@ -96,7 +96,8 @@ class DashboardController extends Controller
         $logs = ActivityLogs::where('user_id', Auth::id())
             ->where('event', 'NOT LIKE', 'Unauthorized access attempt at:%')
             ->where('event', 'NOT LIKE', 'Logged in at%')
-            ->where('event', 'NOT LIKE', 'Logged out at%') // Fixed exclusion condition
+            ->where('event', 'NOT LIKE', 'Logged out at%')
+            ->where('event', 'NOT LIKE', 'Tried to view Unassigned Task at:%') 
             ->get();
         $months = [];
         $reviewCounts = [];
@@ -163,7 +164,8 @@ class DashboardController extends Controller
         $logs = ActivityLogs::where('user_id', Auth::id())
             ->where('event', 'NOT LIKE', 'Unauthorized access attempt at:%')
             ->where('event', 'NOT LIKE', 'Logged in at%')
-            ->where('event', 'NOT LIKE', 'Logged out at%') // Fixed exclusion condition
+            ->where('event', 'NOT LIKE', 'Logged out at%') 
+            ->where('event', 'NOT LIKE', 'Tried to view Unowned File at%')
             ->get();
 
         $userOrderIds = Auth::user()->order()->pluck('id');
@@ -202,7 +204,8 @@ class DashboardController extends Controller
         $logs = ActivityLogs::where('user_id', Auth::id())
             ->where('event', 'NOT LIKE', 'Unauthorized access attempt at:%')
             ->where('event', 'NOT LIKE', 'Logged in at%')
-            ->where('event', 'NOT LIKE', 'Logged out at%') // Fixed exclusion condition
+            ->where('event', 'NOT LIKE', 'Logged out at%')
+            ->where('event', 'NOT LIKE', 'Tried to view Unowned File at%')
             ->get();
 
         $latestTripTicket = TripTicket::where('user_id', Auth::id())->latest()->first();

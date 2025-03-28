@@ -56,7 +56,6 @@
             @if(!Auth::check())
             <div class="small | tw-text-blue-700"><a href="/register">Don't have an account yet? Create one now!</a></div>
             @else
-            <a href="@if(Auth::user()->hasRole('Super Admin')) /superadmin/dashboard @elseif(Auth::user()->hasRole('Admin')) /admin/dashboard @elseif(Auth::user()->hasRole('Staff')) /staff/dashboard @elseif(Auth::user()->hasRole('Vendor')) /portal/vendor/dashboard @elseif(Auth::user()->hasRole('Driver')) /driver/dashboard @endif" class="text-primary">Go back to Dashboard</a>
             @endif
           </div>
         </div>

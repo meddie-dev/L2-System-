@@ -26,7 +26,7 @@ use App\Http\Controllers\Modules\VehicleReservationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TripTicketController;
 use App\Http\Controllers\WarehouseController;
-
+use App\Models\Modules\Order;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -183,7 +183,8 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/vendor/request', [OrderController::class, 'manage'])
         ->name('staff.vendors.manage');
     Route::get('/staff/dashboard/vendor/{order}', [OrderController::class, 'show'])
-        ->name('staff.vendors.show');
+        ->name('staff.vendors.show')
+        ->can('viewOrder','order');
     Route::patch('/staff/dashboard/vendor/approve/{order}', [OrderController::class, 'approve'])
         ->name('staff.vendors.approve');
     Route::patch('/staff/dashboard/vendor/reject/{order}', [OrderController::class, 'reject'])
@@ -193,7 +194,8 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/audit/report', [AuditController::class, 'indexStaff'])
         ->name('staff.audit.index');
     Route::get('/staff/dashboard/audit/report/details/{incidentReport}', [AuditController::class, 'detailsStaff'])
-        ->name('staff.audit.details');
+        ->name('staff.audit.details')
+        ->can('viewIncident','incidentReport');
     Route::patch('/staff/dashboard/audit/report/{incidentReport}/reviewed', [AuditController::class, 'reviewed'])
         ->name('staff.audit.report.reviewed');
     Route::patch('/staff/dashboard/audit/report/{incidentReport}/rejected', [AuditController::class, 'rejected'])
@@ -203,7 +205,8 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/document/submission', [DocumentController::class, 'manage'])
         ->name('staff.document.manage');
     Route::get('/staff/dashboard/document/submission/{document}', [DocumentController::class, 'show'])
-        ->name('staff.document.show');
+        ->name('staff.document.show')
+        ->can('viewDocument','document');
     Route::patch('/staff/dashboard/document/approve/{document}', [DocumentController::class, 'approve'])
         ->name('staff.document.approve');
     Route::patch('/staff/dashboard/document/reject/{document}', [DocumentController::class, 'reject'])
@@ -213,7 +216,8 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/document/payment', [PaymentController::class, 'manage'])
         ->name('staff.payment.manage');
     Route::get('/staff/dashboard/document/payment/{payment}', [PaymentController::class, 'show'])
-        ->name('staff.payment.show');
+        ->name('staff.payment.show')
+        ->can('viewPayment','payment');
     Route::patch('/staff/dashboard/payment/approve/{payment}', [PaymentController::class, 'approve'])
         ->name('staff.payment.approve');
     Route::patch('/staff/dashboard/payment/reject/{payment}', [PaymentController::class, 'reject'])
@@ -230,7 +234,8 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/vehicleReservation/vehicle', [VehicleReservationController::class, 'indexVehicle'])
         ->name('staff.vehicleReservation.indexVehicle');
     Route::get('/staff/dashboard/vehicleReservation/vehicle/details/{vehicleReservation}', [VehicleReservationController::class, 'detailsVehicle'])
-        ->name('staff.vehicleReservation.detailsVehicle');
+        ->name('staff.vehicleReservation.detailsVehicle')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::patch('/staff/dashboard/vehicleReservation/vehicle/approve/{vehicleReservation}', [VehicleReservationController::class, 'reviewVehicle'])
         ->name('staff.vehicleReservation.reviewVehicle');
     Route::patch('/staff/dashboard/vehicleReservation/vehicle/reject/{vehicleReservation}', [VehicleReservationController::class, 'rejectVehicle'])
@@ -259,10 +264,12 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
 
     // Pdf 
     Route::get('/portal/vendor/dashboard/pdf/invoice/{order}', [PaymentController::class, 'paymentPdf'])
-        ->name('vendorPortal.payment.pdf');
+        ->name('vendorPortal.payment.pdf')
+        ->can('viewPdfOrder','order');
     // Pdf 
     Route::get('/portal/vendor/dashboard/pdf/booking/{vehicleReservation}', [PaymentController::class, 'paymentPdfVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.pdf');
+        ->name('vendorPortal.vehicleReservation.pdf')
+        ->can('viewPdfVehicleReservation','vehicleReservation');
 
     // Order Management
     Route::resource('vendors', OrderController::class);
@@ -273,39 +280,52 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     Route::post('/portal/vendor/dashboard/order/{user}', [OrderController::class, 'store'])
         ->name('vendorPortal.order.store');
     Route::get('/portal/vendor/dashboard/order/{order}', [OrderController::class, 'edit'])
-        ->name('vendorPortal.order.edit');
+        ->name('vendorPortal.order.edit')
+        ->can('viewOrder','order');
     Route::patch('/portal/vendor/dashboard/order/{order}', [OrderController::class, 'update'])
-        ->name('vendorPortal.order.update');
+        ->name('vendorPortal.order.update')
+        ->can('viewOrder','order');
     Route::get('/portal/vendor/dashboard/order/details/{order}', [OrderController::class, 'details'])
-        ->name('vendorPortal.order.details');
+        ->name('vendorPortal.order.details')
+        ->can('viewOrder','order');
 
     // Document Management
     Route::get('/portal/vendor/dashboard/document', [DocumentController::class, 'index'])
         ->name('vendorPortal.order.document');
     Route::get('/portal/vendor/dashboard/order/document/new/{order}', [DocumentController::class, 'create'])
-        ->name('vendorPortal.order.document.new');
+        ->name('vendorPortal.order.document.new')
+        ->can('viewOrder','order');
     Route::post('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'store'])
-        ->name('vendorPortal.order.document.store');
+        ->name('vendorPortal.order.document.store')
+        ->can('viewOrder','order');
     Route::get('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'edit'])
-        ->name('vendorPortal.order.document.edit');
+        ->name('vendorPortal.order.document.edit')
+        ->can('viewOrder','order');
     Route::patch('/portal/vendor/dashboard/order/document/{order}', [DocumentController::class, 'update'])
-        ->name('vendorPortal.order.document.update');
+        ->name('vendorPortal.order.document.update')
+        ->can('viewOrder','order');
     Route::get('/portal/vendor/dashboard/document/details/{document}', [DocumentController::class, 'details'])
-        ->name('vendorPortal.document.details');
+        ->name('vendorPortal.document.details')
+        ->can('viewDocument','document');
 
     // Payment Management -> Order  
     Route::get('/portal/vendor/dashboard/payment/invoice', [PaymentController::class, 'index'])
         ->name('vendorPortal.order.payment');
     Route::get('/portal/vendor/dashboard/order/payment/new/{order}', [PaymentController::class, 'create'])
-        ->name('vendorPortal.order.payment.new');
+        ->name('vendorPortal.order.payment.new')
+        ->can('viewOrder','order');
     Route::post('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'store'])
-        ->name('vendorPortal.order.payment.store');
+        ->name('vendorPortal.order.payment.store')
+        ->can('viewOrder','order');
     Route::get('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'edit'])
-        ->name('vendorPortal.order.payment.edit');
+        ->name('vendorPortal.order.payment.edit')
+        ->can('viewOrder','order');
     Route::patch('/portal/vendor/dashboard/order/payment/{order}', [PaymentController::class, 'update'])
-        ->name('vendorPortal.order.payment.update');
+        ->name('vendorPortal.order.payment.update')
+        ->can('viewOrder','order');
     Route::get('/portal/vendor/dashboard/payment/details/invoice/{payment}', [PaymentController::class, 'details'])
-        ->name('vendorPortal.payment.details');
+        ->name('vendorPortal.payment.details')
+        ->can('viewPayment','payment');
 
     // Vehicle Reservation Management
     Route::get('/portal/vendor/dashboard/vehicleReservation', [VehicleReservationController::class, 'vendorIndex'])
@@ -315,11 +335,14 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     Route::post('/portal/vendor/dashboard/vehicleReservation/{user}', [VehicleReservationController::class, 'vendorStore'])
         ->name('vendorPortal.vehicleReservation.store');
     Route::get('/portal/vendor/dashboard/vehicleReservation/edit/{vehicleReservation}', [VehicleReservationController::class, 'vendorEdit'])
-        ->name('vendorPortal.vehicleReservation.edit');
+        ->name('vendorPortal.vehicleReservation.edit')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::patch('/portal/vendor/dashboard/vehicleReservation/update/{vehicleReservation}', [VehicleReservationController::class, 'vendorUpdate'])
-        ->name('vendorPortal.vehicleReservation.update');
+        ->name('vendorPortal.vehicleReservation.update')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::get('/portal/vendor/dashboard/vehicleReservation/details/{vehicleReservation}', [VehicleReservationController::class, 'vendorDetails'])
-        ->name('vendorPortal.vehicleReservation.details');
+        ->name('vendorPortal.vehicleReservation.details')
+        ->can('viewVehicleReservation','vehicleReservation');
 
     Route::get('/portal/vendor/dashboard/vehicleReservation/status', [VehicleReservationController::class, 'vendorStatusIndex'])
         ->name('vendorPortal.vehicleReservation.status');
@@ -331,15 +354,20 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
     Route::get('/portal/vendor/dashboard/payment/booking', [PaymentController::class, 'indexVehicleReservation'])
         ->name('vendorPortal.vehicleReservation.payment');
     Route::get('/portal/vendor/dashboard/vehicleReservation/payment/new/{vehicleReservation}', [PaymentController::class, 'createVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.payment.new');
+        ->name('vendorPortal.vehicleReservation.payment.new')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::post('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'storeVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.payment.store');
+        ->name('vendorPortal.vehicleReservation.payment.store')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::get('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'editVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.payment.edit');
+        ->name('vendorPortal.vehicleReservation.payment.edit')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::patch('/portal/vendor/dashboard/vehicleReservation/payment/{vehicleReservation}', [PaymentController::class, 'updateVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.payment.update');
+        ->name('vendorPortal.vehicleReservation.payment.update')
+        ->can('viewVehicleReservation','vehicleReservation');
     Route::get('/portal/vendor/dashboard/payment/details/booking/{payment}', [PaymentController::class, 'detailsVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.payment.details');
+        ->name('vendorPortal.vehicleReservation.payment.details')
+        ->can('viewPayment','payment');
 
     // Card Management
     Route::get('/portal/vendor/dashboard/card/in-transit', [TripTicketController::class, 'vendorInTransitIndex'])
@@ -367,32 +395,38 @@ Route::middleware('role:Driver', 'active')->group(function () {
         ->name('driver.dashboard');
 
     // Calendar
-    Route::get('/calendarDriver', [AddOnsController::class, 'calendarDriver'])->name('calendarDriver');
+    Route::get('/calendarDriver', [AddOnsController::class, 'calendarDriver'])
+        ->name('calendarDriver');
 
     // Pdf 
     Route::get('/driver/dashboard/pdf/{vehicleReservation}', [FleetController::class, 'driverTripTicketPdf'])
-        ->name('driver.tripTicket.pdf');
+        ->name('driver.tripTicket.pdf')
+        ->can('viewvehicleReservation','vehicleReservation');
     Route::get('/driver/dashboard/pdf/booking/{vehicleReservation}', [FleetController::class, 'driverTripTicketBookingPdf'])
-        ->name('driver.tripTicketBooking.pdf');
+        ->name('driver.tripTicketBooking.pdf')
+        ->can('viewvehicleReservation','vehicleReservation');
     
 
     // Task Management
     Route::get('/driver/dashboard/task', [FleetController::class, 'driverTask'])
         ->name('driver.task');
     Route::get('/driver/dashboard/task/{vehicleReservation}', [FleetController::class, 'driverTaskDetails'])
-        ->name('driver.task.details');
+        ->name('driver.task.details')
+        ->can('viewVehicleReservation','vehicleReservation');
 
     // Audit Management
     Route::get('/driver/dashboard/audit/report', [IncidentReportController::class, 'index'])
         ->name('driver.audit.report');
     Route::get('/driver/dashboard/audit/report/details/{incidentReport}', [IncidentReportController::class, 'details'])
-        ->name('driver.audit.report.details');
+        ->name('driver.audit.report.details')
+        ->can('viewIncidentReport','incidentReport');
 
     // Fleet - Trip Management
     Route::get('/driver/dashboard/fleet/ticket', [FleetController::class, 'driverTrip'])
         ->name('driver.trip');
     Route::get('/driver/dashboard/fleet/ticket/{tripTicket}', [FleetController::class, 'driverTripDetails'])
-        ->name('driver.trip.details');
+        ->name('driver.trip.details')
+        ->can('viewTripTicket','tripTicket');
     Route::patch('/driver/dashboard/fleet/ticket/{id}/inTransit', [TripTicketController::class, 'markAsInTransit'])
         ->name('driver.trip.inTransit');
     Route::patch('/driver/dashboard/fleet/ticket/{id}/deliver', [TripTicketController::class, 'markAsDelivered'])
@@ -407,7 +441,8 @@ Route::middleware('role:Driver', 'active')->group(function () {
     Route::get('/driver/dashboard/fleet/card', [FleetController::class, 'driverCard'])
         ->name('driver.card');
     Route::get('/driver/dashboard/fleet/card/{fleetCard}', [FleetController::class, 'driverCardDetails'])
-        ->name('driver.card.details');
+        ->name('driver.card.details')
+        ->can('viewFleetCard','fleetCard');
     
 });
 

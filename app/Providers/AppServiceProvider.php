@@ -2,6 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\FleetCard;
+use App\Models\IncidentReport;
+use App\Models\Modules\Document;
+use App\Models\Modules\Order;
+use App\Models\Modules\VehicleReservation;
+use App\Models\Payment;
+use App\Models\TripTicket;
+use App\Policies\DriverPolicy;
+use App\Policies\StaffPolicy;
+use App\Policies\VendorPolicy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
@@ -9,7 +19,7 @@ use Google\Client as Google_Client;
 use League\Flysystem\Filesystem;
 use Masbug\Flysystem\GoogleDriveAdapter;
 use Google\Service\Drive as Google_Service_Drive;
-
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,29 +49,24 @@ class AppServiceProvider extends ServiceProvider
             return $this->format('Y-m-d h:i A');
         });
 
-        Storage::extend('google', function ($app, $config) {
-            $client = new Google_Client();
-            $client->setClientId(config('filesystems.disks.google.client_id'));
-            $client->setClientSecret(config('filesystems.disks.google.client_secret'));
-            $client->refreshToken(config('filesystems.disks.google.refresh_token'));
-            
-            $service = new Google_Service_Drive($client);
-            
-            // List all files
-            $files = $service->files->listFiles();
-            
-            foreach ($files->getFiles() as $file) {
-                echo "Name: " . $file->getName() . "\n";
-                echo "ID: " . $file->getId() . "\n";
-                echo "MIME Type: " . $file->getMimeType() . "\n";
-                echo "-------------------------\n";
-            }
-            
-            
+        // Staff
+        Gate::policy(Order::class, StaffPolicy::class);
+        Gate::policy(IncidentReport::class, StaffPolicy::class);
+        Gate::policy(Document::class, StaffPolicy::class);
+        Gate::policy(Payment::class, StaffPolicy::class);
+        Gate::policy(VehicleReservation::class, StaffPolicy::class);
 
-            
-    
-            return new Filesystem($adapter);
-        });
+        // Vendor
+        Gate::policy(Order::class, VendorPolicy::class);
+        Gate::policy(VehicleReservation::class, VendorPolicy::class);
+        Gate::policy(Document::class, VendorPolicy::class);
+        Gate::policy(Payment::class, VendorPolicy::class);
+
+        // Driver
+        Gate::policy(VehicleReservation::class, DriverPolicy::class);
+        Gate::policy(IncidentReport::class, DriverPolicy::class);
+        Gate::policy(TripTicket::class, DriverPolicy::class);
+        Gate::policy(FleetCard::class, DriverPolicy::class);
+
     }
 }

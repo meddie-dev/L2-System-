@@ -68,7 +68,7 @@ class RegisterController extends Controller
 
         ActivityLogs::create([
             'user_id' => Auth::id(),
-            'event' => "Registered and logged in at: " . now('Asia/Manila')->format('Y-m-d H:i'),
+            'event' => "Registered and logged in at: " . now('Asia/Manila')->format('Y-m-d h:i A'),
             'ip_address' => $request->ip(),
         ]);
 

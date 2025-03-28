@@ -18,38 +18,60 @@
 
   <div class="card-body tw-px-4">
     <div class="tw-overflow-x-auto ">
-      <table class="datatable tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-my-4 | max-sm:tw-text-sm">
+      <!-- Breadcrumbs Navigation -->
+      <div class="tw-flex tw-flex-wrap tw-items-center tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
+        <a href="{{ route('admin.document.manage') }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
+          Documents
+        </a>
 
-        <thead class="tw-bg-gray-200 tw-text-gray-700 ">
-          <tr>
-            <th>Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+        @foreach($breadcrumbs as $index => $breadcrumb)
+        <span class="tw-mx-1">/</span>
+        @if($index !== count($breadcrumbs) - 1)
+        <a href="{{ route('admin.document.manage', ['folder_id' => $breadcrumb['id']]) }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
+          {{ $breadcrumb['name'] }}
+        </a>
+        @else
+        <span class="tw-text-white">{{ $breadcrumb['name'] }}</span>
+        @endif
+        @endforeach
+      </div>
 
-        <tbody id="reportRecords" class="tw-bg-white">
-          @foreach($files as $file)
-          <tr>
-            <td>
-              @if($file['mimeType'] === 'application/vnd.google-apps.folder')
-              <a class="tw-text-blue-600 hover:tw-underline" href="{{ route('admin.document.manage', ['folder_id' => $file['id']]) }}">
-              <i class="fa-solid fa-folder tw-mr-2"></i>
-              {{ ucfirst(str_replace('_', ' ', $file['name'])) }}
-              </a>
-              @else
-              {{ $file['name'] }}
-              @endif
-            </td>
-            <td><a class="tw-text-blue-600 hover:tw-underline" href="{{ $file['webViewLink'] }}" target="_blank">View</a></td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
+      <!-- File Manager Grid Layout -->
+      <div class="tw-grid tw-grid-cols-2 md:tw-grid-cols-4 lg:tw-grid-cols-6 tw-gap-4 tw-bg-white tw-p-4">
+        @foreach($files as $file)
+        <div class="tw-flex tw-flex-col tw-items-center tw-p-2 tw-bg-gray-100 tw-rounded-lg hover:tw-shadow-md">
+          @if($file['mimeType'] === 'application/vnd.google-apps.folder')
+          <!-- Folder Item -->
+          <a href="{{ route('admin.document.manage', ['folder_id' => $file['id']]) }}" class="tw-text-blue-600 tw-text-center">
+            <i class="fa-solid fa-folder tw-text-6xl tw-text-yellow-500" loading="lazy"></i>
+            <p class="tw-mt-2 tw-text-sm">{{ ucfirst(str_replace('_', ' ', $file['name'])) }}</p>
+          </a>
+          @else
+          <!-- File Item -->
+          <a href="{{ $file['webViewLink'] }}" target="_blank" class="tw-text-center">
+            <i class="fa-solid fa-file tw-text-6xl tw-text-gray-500" loading="lazy"></i>
+            <p class="tw-mt-2 tw-text-sm tw-text-gray-800">{{ $file['name'] }}</p>
+          </a>
+          @endif
+        </div>
+        @endforeach
+      </div>
+
       @if($parentFolderId)
-      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-        <a href="{{ route('admin.document.manage', ['folder_id' => $parentFolderId]) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-py-2 max-md:tw-px-4 max-md:tw-text-xs">Back</a>
+      <!-- Back Button -->
+      <div class="tw-flex tw-items-center tw-justify-between tw-my-6">
+        <a href="{{ route('admin.document.manage', ['folder_id' => $parentFolderId]) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200 tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white hover:tw-text-gray-600">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back</span>
+        </a>
+        <a href="https://drive.google.com/drive/folders/17mp2A1McodVzGqwPI6E_UtuPNsq2sAT8" target="_blank" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200 tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white hover:tw-text-gray-600">
+          <i class="fa-solid fa-external-link-alt"></i>
+          <span>Open in GDrive</span>
+        </a>
       </div>
       @endif
+
+
       <hr>
     </div>
     <div>

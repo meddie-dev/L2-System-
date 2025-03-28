@@ -29,7 +29,6 @@
           </a>
           <div class="collapse" id="collapseVendor" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/superadmin/vendor/approval">Vendor Approval</a>
               <a class="nav-link" href="/superadmin/vendor/profiles">Vendor Profiles</a>
             </nav>
           </div>
@@ -43,7 +42,7 @@
           <div class="collapse" id="collapseAudit" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
               <a class="nav-link" href="/superadmin/audit/final-report">Final Report</a>
-              <a class="nav-link" href="/superadmin/audit/users">Manage Users </a>
+              <a class="nav-link" href="/superadmin/audit/users">Manage Security </a>
             </nav>
           </div>
 
@@ -67,8 +66,7 @@
           </a>
           <div class="collapse" id="collapseDocument" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-              <a class="nav-link" href="/superadmin/document/storage">Document Storage</a>
-              <a class="nav-link" href="/superadmin/document/archived">Archived Documents</a>
+              <a class="nav-link" href="/superadmin/document/track">Document Tracking</a>
             </nav>
           </div>
 
@@ -82,7 +80,19 @@
             <nav class="sb-sidenav-menu-nested nav">
               <a class="nav-link" href="/superadmin/fleet/driver">Driver Management</a>
               <a class="nav-link" href="/superadmin/fleet/fuel">Fuel Management</a>
-              <a class="nav-link" href="/superadmin/fleet/maintenance">Maintenance Management</a>
+              <a class="nav-link" href="/superadmin/fleet/vehicle">Vehicle Management</a>
+            </nav>
+          </div>
+
+          <!-- Asset Management -->
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAssetManagement" aria-expanded="false" aria-controls="collapseAssetManagement">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
+            Asset Management
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapseAssetManagement" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/superadmin/asset">Manage Assets</a>
             </nav>
           </div>
         </div>
