@@ -96,6 +96,18 @@
             </nav>
           </div>
         </div>
+
+          <!-- Fraud Detection -->
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFraudDetection" aria-expanded="false" aria-controls="collapseFraudDetection">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-shield-virus"></i></div>
+            Fraud Detection
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="collapseFraudDetection" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="/superadmin/fraud/activity">Fraudulent Activity</a>
+            </nav>
+          </div>
         @endif
 
         @if(Auth::user()->hasRole('Admin'))

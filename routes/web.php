@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\Portal\PortalLoginController;
 use App\Http\Controllers\Auth\Portal\PortalRegisterController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\FraudDetectionController;
 use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\MaintenanceController;
@@ -30,7 +31,7 @@ use App\Http\Controllers\WarehouseController;
 use App\Models\Modules\Order;
 // Notifications
 use Illuminate\Notifications\DatabaseNotification;
-
+use Illuminate\Support\Facades\Http;
 
 /*-------------------------------------------------------------- 
 # Default Route
@@ -40,12 +41,19 @@ Route::get('/', function () {
     return view('pages.auth.portal.login');
 });
 
+Route::get('/test-python', [FraudDetectionController::class, 'testPython']);
+
 /*--------------------------------------------------------------
 # Super Admin Route
 --------------------------------------------------------------*/
 Route::middleware('role:Super Admin', 'active')->group(function () {
     // Super Admin Dashboard
-    Route::get('/superadmin/dashboard', [DashboardController::class, 'superAdminDashboard'])->name('superadmin.dashboard');
+    Route::get('/superadmin/dashboard', [DashboardController::class, 'superAdminDashboard'])
+        ->name('superadmin.dashboard');
+
+    Route::get('/superadmin/fraud/activity', [FraudDetectionController::class, 'showFraudResults'])
+        ->name('superadmin.fraud-detection');
+
 });
 
 /*--------------------------------------------------------------
