@@ -62,11 +62,11 @@ def main():
             'User': X_test['user_id'],
             'Event': X_test['event_numeric'],
             'IP Address': X_test['ip_address_numeric'],
-            'Behavior': np.where(predictions == 1, 'SUSPICIOUS', 'Normal'),
-            'Risk Level': np.where(predictions == 1, 'High', 'Low'),
-            'Confidence': np.where(predictions == 1, '85%', '15%'),
-            'Decision': np.where(predictions == 1, 'CONFIRMED FRAUD', 'CLEAN'),
-            'Action': np.where(predictions == 1, 'Block user', 'No action')
+            'Behavior': np.where(predictions == 1, 'SUSPICIOUS', 'Normal', 'Anomaly'),
+            'Risk Level': np.where(predictions == 1, 'High', 'Low', 'Medium'),
+            'Confidence': np.where(predictions == 1, '85%', '15%', '50%', '25%'),
+            'Decision': np.where(predictions == 1, 'CONFIRMED FRAUD', 'CLEAN', 'ANOMALY'),
+            'Action': np.where(predictions == 1, 'Block user', 'No action', 'Need manual review'),
         })
 
         # 9. OUTPUT RESULTS

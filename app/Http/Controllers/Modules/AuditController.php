@@ -436,4 +436,37 @@ class AuditController extends Controller
 
         return view('modules.admin.audit.driver', compact('user', 'logs',  'tripTicket'));
     }
+
+    public function indexSecuritySA()
+    {
+        $users = User::whereHas('activity_logs', function ($query) {
+            $query->where('event', 'LIKE', 'Unauthorized access attempt at:%')
+                ->orWhere('event', 'LIKE', 'Tried to view Unowned File at%');
+        })->get();
+
+        return view('modules.superAdmin.audit.security.index', compact('users'));
+    }
+
+    public function showSecuritySA(User $user)
+    {
+        $logs = ActivityLogs::where('user_id', $user->id)
+            ->where(function ($query) {
+                $query->where('event', 'LIKE', 'Unauthorized access attempt at:%')
+                      ->orWhere('event', 'LIKE', 'Tried to view Unowned File at %')
+                      ->orWhere('event', 'LIKE', 'Tried to view Unassigned File at %');
+            })->get();
+    
+        return view('modules.superAdmin.audit.security.show', compact('user', 'logs'));
+    }
+    
+    public function penaltySecuritySA(User $user)
+    {
+        $user->update([
+            'restricted_until' => now()->addDays(7),
+        ]);
+
+        $user->notify(new NewNotification("You have been restricted for 7 days."));
+        
+        return redirect()->route('superadmin.audit.index')->with('success', 'Penalty has been applied.');
+    }
 }

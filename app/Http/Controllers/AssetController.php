@@ -19,4 +19,16 @@ class AssetController extends Controller
         $assetReport = AssetReport::where('vehicle_id', $vehicle->id)->first();
         return view('modules.admin.asset.details', compact( 'assetReport'));
     }
+
+    public function indexSA()
+    {
+        $vehicles = Vehicle::has('assetReport')->get();
+        return view('modules.superAdmin.asset.index', compact('vehicles'));
+    }
+
+    public function detailsSA(Vehicle $vehicle)
+    {
+        $assetReport = AssetReport::where('vehicle_id', $vehicle->id)->first();
+        return view('modules.superAdmin.asset.details', compact( 'assetReport'));
+    }
 }

@@ -286,4 +286,21 @@ class OrderController extends Controller
         }
     }
 
+    // Super Admin
+
+    public function indexSA()
+    {
+        $users = User::role('Vendor')->get();
+        return view('modules.superAdmin.vendor.index', compact('users'));
+    }
+
+    public function showSA(User $user)
+    {
+        $orders = $user->order()->get();
+        $payments = $user->payment()->get();
+        $documents = $user->document()->get();
+        $vehicleReservations = $user->vehicleReservations()->get();
+        return view('modules.superAdmin.vendor.show', compact('user', 'orders', 'payments', 'documents', 'vehicleReservations'));
+    }
+
 }

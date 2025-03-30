@@ -24,7 +24,6 @@ class VendorPolicy
         return true;
     }
 
-
     public function viewPdfVehicleReservation(User $user, VehicleReservation $vehicleReservation): bool
     {
         if ($user->id !== $vehicleReservation->user_id) {

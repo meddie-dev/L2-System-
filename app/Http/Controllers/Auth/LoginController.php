@@ -44,6 +44,14 @@ class LoginController extends Controller
             $user->last_active_at = Carbon::now('Asia/Manila')->format('Y-m-d h:i A');
             $user->save();
 
+             // Check if the user is restricted until a certain date/time
+             if (!empty($user->restricted_until) && Carbon::parse($user->restricted_until)->isFuture()) {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your account is restricted until ' . Carbon::parse($user->restricted_until)->format('Y-m-d h:i A') . '.'
+                ]);
+            }
+
             // Check if the user has 2FA enabled (0 = false, 1 = true)
             if ($user->two_factor_enabled == 1) {
                 $this->sendTwoFactorCode($user);

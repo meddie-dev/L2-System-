@@ -329,4 +329,158 @@ class FleetController extends Controller
     
         return back()->with('success', 'Transaction completed successfully.');
     }
+
+    // Super Admin
+    public function driverIndexSA()
+    {
+        $drivers = User::role('Driver')->get();
+        return view('modules.superadmin.fleet.driver.index', compact('drivers'));
+    }
+
+    public function driverDetailsSA(User $user)
+    {
+        $tripTicket = TripTicket::where('user_id', $user->id)->get();
+        return view('modules.superadmin.fleet.driver.details', compact('user', 'tripTicket'));
+    }
+
+    public function fuelIndexSA()
+    {
+        $fuel = Fuel::all();
+        return view('modules.superadmin.fleet.fuel.index', compact('fuel'));
+    }
+
+    public function fuelDetailsSA(Fuel $fuel)
+    {
+        return view('modules.superadmin.fleet.fuel.details', compact('fuel'));
+    }
+
+    public function fuelUpdateSA(FleetCard $fleetCard)
+    {
+        $fleetCard->update([
+            'cardNumber' => request()->cardNumber,
+            'credit_limit' => request()->credit_limit,
+            'balance' => request()->balance,
+            'status' => request()->status,
+            'expiry_date' => request()->expiry_date,
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated Fuel: {$fleetCard->cardNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => request()->ip(),
+        ]);
+
+        return redirect()->route('superadmin.fleet.fuel.index')->with('success', 'Fuel updated successfully.');
+    }
+
+    public function vehicleIndexSA()
+    {
+        $vehicles = Vehicle::all();
+        return view('modules.superadmin.fleet.vehicle.index', compact('vehicles'));
+    }
+
+    public function createSA(User $user)
+    {
+        return view('modules.superAdmin.fleet.vehicle.create', compact('user'));
+    }
+
+    public function editSA(Vehicle $vehicle)
+    {
+        $fuels = Fuel::where('vehicle_id', $vehicle->id)->get();
+        $maintenances = Maintenance::where('vehicle_id', $vehicle->id)->get();
+        return view('modules.superAdmin.fleet.vehicle.edit', compact('vehicle', 'fuels', 'maintenances'));
+    }
+
+    public function detailsSA(Vehicle $vehicle)
+    {
+        return view('modules.superAdmin.fleet.vehicle.details', compact('vehicle'));
+    }
+
+    public function storeSA(Request $request)
+    {
+        $validated = $request->validate([
+            'plateNumber' => 'required|string|max:255',
+            'vehicleType' => 'required|string|max:255',
+            'vehicleModel' => 'required|string|max:255',
+            'vehicleMake' => 'required|string|max:255',
+            'vehicleColor' => 'required|string|max:255',
+            'vehicleYear' => 'required|integer|min:1900|max:2099',
+            'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
+            'vehicleCapacity' => 'required|integer|min:1|max:9999',
+            'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'fuel_efficiency' => 'required|numeric|min:0.1',
+            'vehicleCost' => 'required|numeric|min:0',
+            'vehicleLifespan' => 'required|integer|min:1|max:9999',
+        ]);
+
+        // Store vehicle image
+        $file = $request->file('vehicleImage');
+        $path = Storage::disk('public')->putFileAs("vehicles/{$request->vehicleType}", $file, $request->plateNumber . '.' . $file->getClientOriginalExtension());
+
+        $vehicle = Vehicle::create(array_merge($validated, [
+            'vehicleImage' => $path,
+            'vehicleStatus' => "available",
+            'user_id' => Auth::id(),
+        ]));
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Added Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect()->route('superadmin.fleet.vehicle.index')->with('success', 'Vehicle added successfully.');
+    }
+
+    public function updateSA(Request $request, Vehicle $vehicle)
+    {
+        $request->validate([
+            'plateNumber' => 'required|string|max:255',
+            'vehicleType' => 'required|string|max:255',
+            'vehicleModel' => 'required|string|max:255',
+            'vehicleMake' => 'required|string|max:255',
+            'vehicleColor' => 'required|string|max:255',
+            'vehicleYear' => 'required|integer|min:1900|max:2099',
+            'vehicleFuelType' => 'required|string|in:diesel,gasoline,electric',
+            'vehicleCapacity' => 'required|integer|min:1|max:9999',
+            'vehicleImage' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'fuel_efficiency' => 'required|numeric|min:0.1',
+            'vehicleCost' => 'required|numeric|min:0',
+            'vehicleLifespan' => 'required|integer|min:1|max:9999',
+        ]);
+
+        // Store vehicle image
+        if ($request->hasFile('vehicleImage')) {
+            $file = $request->file('vehicleImage');
+            $path = $file->storeAs("vehicles/{$request->vehicleType}", $request->plateNumber . '.' . $file->getClientOriginalExtension(), 'public');
+
+            if ($vehicle->vehicleImage) {
+                Storage::disk('public')->delete($vehicle->vehicleImage);
+            }
+
+            $vehicle->vehicleImage = $path;
+        }
+
+        $vehicle->update([
+            'plateNumber' => $request->plateNumber,
+            'vehicleType' => $request->vehicleType,
+            'vehicleModel' => $request->vehicleModel,
+            'vehicleMake' => $request->vehicleMake,
+            'vehicleColor' => $request->vehicleColor,
+            'vehicleYear' => $request->vehicleYear,
+            'vehicleFuelType' => $request->vehicleFuelType,
+            'vehicleCapacity' => $request->vehicleCapacity,
+            'fuel_efficiency' => $request->fuel_efficiency,
+            'vehicleCost' => $request->vehicleCost,
+            'vehicleLifespan' => $request->vehicleLifespan
+        ]);
+
+        ActivityLogs::create([
+            'user_id' => Auth::id(),
+            'event' => "Updated Vehicle: {$vehicle->plateNumber} at time: " . now('Asia/Manila')->format('Y-m-d h:i A'),
+            'ip_address' => $request->ip(),
+        ]);
+
+        return redirect()->route('superadmin.fleet.vehicle.index')->with('success', 'Vehicle updated successfully.');
+    }
 }

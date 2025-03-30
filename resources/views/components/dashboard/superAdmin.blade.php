@@ -10,12 +10,23 @@
       </ol>
     </nav>
 
-    <div class="tw-max-w-9xl tw-mx-auto tw-mt-6 tw-mb-10 tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 | max-sm:tw-p-4 max-sm:tw-my-6"
+    <!-- Notice -->
+    @if (Auth::user()->two_factor_enabled === 0)
+    <div class="tw-bg-yellow-100 tw-border tw-border-yellow-400 tw-p-4 tw-rounded tw-my-4 | max-sm:tw-py-2">
+      <p class="tw-text-sm tw-text-yellow-700 tw-font-semibold | max-sm:tw-text-[12px]">
+        <i class="fa-solid fa-circle-info tw-mr-1"></i>
+        <span class="tw-font-bold">Notice:</span> You have not enabled Two-Factor Authentication yet. <a href="{{ route('settings.index') }}" class="tw-underline">Click here</a> to enable it now.
+      </p>
+    </div>
+    @endif
+
+    <!-- Announcement -->
+    <div class="tw-max-w-9xl tw-mx-auto tw-my-6 tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 | max-sm:tw-p-4"
       data-aos="fade">
       <div>
-        <h3 class="tw-text-xl tw-font-semibold tw-text-gray-700 tw-mb-4 | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Hello, {{ Auth::user()->firstName }}!</h3>
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-600 tw-mb-4  | max-sm:tw-mb-2 max-sm:tw-text-[16px]">Announcement:</h3>
         <p class="tw-text-sm tw-text-gray-500 tw-indent-14 max-sm:tw-text-[12px] max-sm:tw-text-justify max-sm:tw-indent-5">
-          Welcome to the Super Admin Dashboard! From here, you can manage vendor approvals, review orders, access vendor profiles, monitor audit trails, manage fleet maintenance, oversee vehicle reservations, track documents, and more. If you have any questions or need any assistance, please don't hesitate to reach out to us. We're here to help!
+          Welcome, {{ Auth::user()->firstName }}!, We're glad you're here! We're excited to announce that we've released a new feature to help you manage your orders more efficiently! You can now view your order statistics over the past 12 months and get insights on how to improve your business. Check it out and let us know what you think!
         </p>
       </div>
     </div>

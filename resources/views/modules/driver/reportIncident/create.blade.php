@@ -1,7 +1,7 @@
-<x-layout.portal.mainTemplate>
+<x-layout.mainTemplate>
   <nav class="tw-flex tw-justify-between | max-tw-hidden | max-md:" aria-label="Breadcrumb">
     <ol class="tw-inline-flex tw-items-center tw-space-x-1 | md:tw-space-x-2 rtl:tw-space-x-reverse max-sm:tw-text-sm">
-      <x-partials.breadcrumb class="tw-bg-white" href="{{ route('vendorPortal.dashboard') }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb class="tw-bg-white" href="{{ route(Auth::user()->hasRole('Super Admin') ? 'superadmin.dashboard' : (Auth::user()->hasRole('Admin') ? 'admin.dashboard' : (Auth::user()->hasRole('Driver') ? 'driver.dashboard' : 'staff.dashboard'))) }}" :active="false" :isLast="false">
         <div class="sb-nav-link-icon"><i class="fa-solid fa-table-columns"></i></div>
         Dashboard
       </x-partials.breadcrumb>
@@ -75,7 +75,7 @@
     </div>
 
     <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-      <a href="{{ route('vendorPortal.card.details', $tripTicket->id) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
+      <a href="{{ route('driver.trip.details', $tripTicket->id) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200  tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white  hover:tw-text-gray-600 | max-md:tw-p-3 ">
         <i class="fa-solid fa-arrow-left tw-mr-2 | max-md:tw-text-xs"></i>
         Back
       </a>
@@ -91,4 +91,4 @@
     </div>
   </div>
 
-</x-layout.portal.mainTemplate>
+</x-layout.mainTemplate>

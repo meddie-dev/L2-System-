@@ -78,4 +78,17 @@ class StaffPolicy
         }
         return true;
     }
+
+    public function viewVehicleReservationPDF(User $user, VehicleReservation $vehicleReservation): bool
+    {
+        if ($user->id !== $vehicleReservation->user_id) {
+            ActivityLogs::create([
+                'user_id' => $user->id,
+                'event' => "Tried to view Unassigned Task at  " . now('Asia/Manila')->format('Y-m-d h:i A'),
+                'ip_address' => request()->ip(),
+            ]);
+            return false;
+        }
+        return true;
+    }
 }

@@ -525,4 +525,17 @@ class VehicleReservationController extends Controller
             return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
         }
     }
+
+    // Super Admin
+
+    public function indexSA()
+    {
+        $vehicleReservations = VehicleReservation::all();
+        return view('modules.superAdmin.vehicleReservation.index', compact('vehicleReservations'));
+    }
+
+    public function showSA(VehicleReservation $vehicleReservation)
+    {
+        return view('modules.superAdmin.vehicleReservation.show', compact('vehicleReservation'));
+    }
 }

@@ -51,6 +51,65 @@ Route::middleware('role:Super Admin', 'active')->group(function () {
     Route::get('/superadmin/dashboard', [DashboardController::class, 'superAdminDashboard'])
         ->name('superadmin.dashboard');
 
+    // Vendor Management
+    Route::get('/superadmin/vendor/profiles', [OrderController::class, 'indexSA'])
+        ->name('superadmin.vendors.index');
+    Route::get('/superadmin/vendor/profiles/{user}', [OrderController::class, 'showSA'])
+        ->name('superadmin.vendors.show');
+
+    // Audit Management
+    Route::get('/superadmin/audit/security', [AuditController::class, 'indexSecuritySA'])
+        ->name('superadmin.audit.index');
+    Route::get('/superadmin/audit/security/{user}', [AuditController::class, 'showSecuritySA'])
+        ->name('superadmin.audit.show');
+    Route::patch('/superadmin/audit/security/{user}', [AuditController::class, 'penaltySecuritySA'])
+        ->name('superadmin.audit.penalty');
+
+    // Document Management
+    Route::get('/superadmin/document/track', [DocumentController::class, 'manageSA'])
+        ->name('superadmin.document.manage');
+
+    // Vehicle Reservation
+    Route::get('/superadmin/vehicle/reservation', [VehicleReservationController::class, 'indexSA'])
+        ->name('superadmin.vehicleReservation.index');
+    Route::get('/superadmin/vehicle/reservation/{vehicleReservation}', [VehicleReservationController::class, 'showSA'])
+        ->name('superadmin.vehicleReservation.show');
+
+    // Fleet Management -> Driver
+    Route::get('/superadmin/fleet/driver', [FleetController::class, 'driverIndexSA'])
+        ->name('superadmin.fleet.driver.index');
+    Route::get('/superadmin/fleet/driver/details/{user}', [FleetController::class, 'driverDetailsSA'])
+        ->name('superadmin.fleet.driver.details');
+
+    // Fleet Management -> Fuel
+    Route::get('/superadmin/fleet/fuel', [FleetController::class, 'fuelIndexSA'])
+        ->name('superadmin.fleet.fuel.index');
+    Route::get('/superadmin/fleet/fuel/details/{fuel}', [FleetController::class, 'fuelDetailsSA'])
+        ->name('superadmin.fleet.fuel.details');
+    Route::patch('/superadmin/dashboard/fleet/fuel/{fuel}', [FleetController::class, 'fuelUpdateSA'])
+        ->name('superadmin.fleet.fuel.update');
+
+    // Fleet Management -> Vehicle
+    Route::get('/superadmin/fleet/vehicle', [FleetController::class, 'vehicleIndexSA'])
+        ->name('superadmin.fleet.vehicle.index');
+    Route::get('/superadmin/dashboard/fleet/vehicle/new', [FleetController::class, 'createSA'])
+        ->name('superadmin.fleet.vehicle.new');
+    Route::post('/superadmin/dashboard/fleet/vehicle', [FleetController::class, 'storeSA'])
+        ->name('superadmin.fleet.store');
+    Route::get('/superadmin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'editSA'])
+        ->name('superadmin.fleet.edit');
+    Route::patch('/superadmin/dashboard/fleet/vehicle/{vehicle}', [FleetController::class, 'updateSA'])
+        ->name('superadmin.fleet.update');
+    Route::get('/superadmin/dashboard/fleet/vehicle/details/{vehicle }', [FleetController::class, 'details'])
+        ->name('superadmin.fleet.details');
+  
+    // Asset Management
+    Route::get('/superadmin/asset/manage', [AssetController::class, 'indexSA'])
+        ->name('superadmin.asset.index');
+    Route::get('/superadmin/asset/manage/details/{vehicle}', [AssetController::class, 'detailsSA'])
+        ->name('superadmin.asset.details');
+
+    // Fraud Detection
     Route::get('/superadmin/fraud/activity', [FraudDetectionController::class, 'showFraudResults'])
         ->name('superadmin.fraud-detection');
 
@@ -272,12 +331,10 @@ Route::middleware(['role:Vendor', 'active'])->group(function () {
 
     // Pdf 
     Route::get('/portal/vendor/dashboard/pdf/invoice/{order}', [PaymentController::class, 'paymentPdf'])
-        ->name('vendorPortal.payment.pdf')
-        ->can('viewPdfOrder','order');
+        ->name('vendorPortal.payment.pdf');
     // Pdf 
     Route::get('/portal/vendor/dashboard/pdf/booking/{vehicleReservation}', [PaymentController::class, 'paymentPdfVehicleReservation'])
-        ->name('vendorPortal.vehicleReservation.pdf')
-        ->can('viewPdfVehicleReservation','vehicleReservation');
+        ->name('vendorPortal.vehicleReservation.pdf');
 
     // Order Management
     Route::resource('vendors', OrderController::class);

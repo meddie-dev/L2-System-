@@ -283,4 +283,28 @@ class DocumentController extends Controller
     
         return $breadcrumbs;
     }
+
+    // Super Admin
+
+    public function manageSA( Request $request) {
+        $accessToken = $this->getAccessToken();
+        $folderId = $request->get('folder_id', config('filesystems.disks.google.folder_id'));
+       
+        // Get the parent folder ID
+        $parentFolderId = $this->getParentFolderId($folderId, $accessToken);
+
+        // Fetch files in the current folder
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$accessToken}"
+        ])->get("https://www.googleapis.com/drive/v3/files", [
+            'q' => "'{$folderId}' in parents and trashed=false",
+            'fields' => 'files(id, name, mimeType, webViewLink, webContentLink)',
+        ]);
+
+        $files = $response->json()['files'] ?? [];
+
+        $breadcrumbs = $this->getBreadcrumbs($folderId, $accessToken);
+     
+        return view('modules.superAdmin.document.manage', compact('files', 'folderId','parentFolderId', 'breadcrumbs'));
+    }
 }

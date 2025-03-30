@@ -7,11 +7,11 @@
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="false">
-        Document Tracking
+        Document Management
       </x-partials.breadcrumb>
 
       <x-partials.breadcrumb :active="true" :isLast="true">
-        Manage Documents
+        Document Tracking
       </x-partials.breadcrumb>
     </ol>
   </nav>
@@ -20,14 +20,14 @@
     <div class="tw-overflow-x-auto ">
       <!-- Breadcrumbs Navigation -->
       <div class="tw-flex tw-flex-wrap tw-items-center tw-bg-gray-500 tw-rounded-lg tw-px-4 tw-py-3 tw-my-6 tw-text-white | max-md:tw-p-4">
-        <a href="{{ route('admin.document.manage') }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
+        <a href="{{ route('superadmin.document.manage') }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
           Documents
         </a>
 
         @foreach($breadcrumbs as $index => $breadcrumb)
         <span class="tw-mx-1">/</span>
         @if($index !== count($breadcrumbs) - 1)
-        <a href="{{ route('admin.document.manage', ['folder_id' => $breadcrumb['id']]) }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
+        <a href="{{ route('superadmin.document.manage', ['folder_id' => $breadcrumb['id']]) }}" class="hover:tw-text-white hover:tw-underline tw-font-semibold">
           {{ $breadcrumb['name'] }}
         </a>
         @else
@@ -42,7 +42,7 @@
         <div class="tw-flex tw-flex-col tw-items-center tw-p-2 tw-bg-gray-100 tw-rounded-lg hover:tw-shadow-md">
           @if($file['mimeType'] === 'application/vnd.google-apps.folder')
           <!-- Folder Item -->
-          <a href="{{ route('admin.document.manage', ['folder_id' => $file['id']]) }}" class="tw-text-blue-600 tw-text-center">
+          <a href="{{ route('superadmin.document.manage', ['folder_id' => $file['id']]) }}" class="tw-text-blue-600 tw-text-center">
             <i class="fa-solid fa-folder tw-text-6xl tw-text-yellow-500" loading="lazy"></i>
             <p class="tw-mt-2 tw-text-sm">{{ ucfirst(str_replace('_', ' ', $file['name'])) }}</p>
           </a>
@@ -59,12 +59,15 @@
 
       @if($parentFolderId)
       <!-- Back Button -->
-      <div class="tw-flex tw-items-center tw-justify-start tw-my-6">
-        <a href="{{ route('admin.document.manage', ['folder_id' => $parentFolderId]) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200 tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white hover:tw-text-gray-600">
+      <div class="tw-flex tw-items-center tw-justify-between tw-my-6">
+        <a href="{{ route('superadmin.document.manage', ['folder_id' => $parentFolderId]) }}" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200 tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white hover:tw-text-gray-600">
           <i class="fa-solid fa-arrow-left"></i>
           <span>Back</span>
         </a>
-      
+        <a href="https://drive.google.com/drive/folders/17mp2A1McodVzGqwPI6E_UtuPNsq2sAT8" target="_blank" class="tw-flex tw-items-center tw-space-x-1 tw-text-sm tw-font-medium tw-text-gray-200 tw-bg-gray-600 tw-rounded-md tw-px-4 tw-py-2 hover:tw-border hover:tw-border-gray-600 hover:tw-bg-white hover:tw-text-gray-600">
+          <i class="fa-solid fa-external-link-alt"></i>
+          <span>Open in GDrive</span>
+        </a>
       </div>
       @endif
 
