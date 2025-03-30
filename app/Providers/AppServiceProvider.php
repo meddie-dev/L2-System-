@@ -13,12 +13,7 @@ use App\Policies\DriverPolicy;
 use App\Policies\StaffPolicy;
 use App\Policies\VendorPolicy;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use Google\Client as Google_Client;
-use League\Flysystem\Filesystem;
-use Masbug\Flysystem\GoogleDriveAdapter;
-use Google\Service\Drive as Google_Service_Drive;
 use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider

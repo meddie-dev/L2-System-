@@ -167,78 +167,78 @@
     });
 
 
-    // $(document).ready(function() {
-    //   $("#pickUpLocation").on("input", function() {
-    //     let query = $(this).val();
+    $(document).ready(function() {
+      $("#pickUpLocation").on("input", function() {
+        let query = $(this).val();
 
-    //     if (query.length > 2) { // Start searching after 2 characters
-    //       $.ajax({
-    //         url: "/geocode/autocomplete/" + query,
-    //         type: "GET",
-    //         success: function(data) {
-    //           let suggestionsBox = $("#suggestions");
-    //           suggestionsBox.empty().show();
+        if (query.length > 2) { // Start searching after 2 characters
+          $.ajax({
+            url: "/geocode/autocomplete/" + query,
+            type: "GET",
+            success: function(data) {
+              let suggestionsBox = $("#suggestions");
+              suggestionsBox.empty().show();
 
-    //           if (data.features) {
-    //             data.features.forEach(function(item) {
-    //               let placeName = item.properties.label;
-    //               suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
+              if (data.features) {
+                data.features.forEach(function(item) {
+                  let placeName = item.properties.label;
+                  suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
 
-    //               $(".suggestion-item").on("click", function() {
-    //                 $("#pickUpLocation").val($(this).text());
-    //                 suggestionsBox.hide();
-    //               });
-    //             });
-    //           }
-    //         }
-    //       });
-    //     } else {
-    //       $("#suggestions").hide();
-    //     }
-    //   });
+                  $(".suggestion-item").on("click", function() {
+                    $("#pickUpLocation").val($(this).text());
+                    suggestionsBox.hide();
+                  });
+                });
+              }
+            }
+          });
+        } else {
+          $("#suggestions").hide();
+        }
+      });
 
-    //   $(document).click(function(e) {
-    //     if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
-    //       $("#suggestions").hide();
-    //     }
-    //   });
-    // });
+      $(document).click(function(e) {
+        if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
+          $("#suggestions").hide();
+        }
+      });
+    });
 
-    // $(document).ready(function() {
-    //   $("#dropOffLocation").on("input", function() {
-    //     let query = $(this).val();
+    $(document).ready(function() {
+      $("#dropOffLocation").on("input", function() {
+        let query = $(this).val();
 
-    //     if (query.length > 2) { // Start searching after 2 characters
-    //       $.ajax({
-    //         url: "/geocode/autocomplete/" + query,
-    //         type: "GET",
-    //         success: function(data) {
-    //           let suggestionsBox = $("#suggestionsDrop");
-    //           suggestionsBox.empty().show();
+        if (query.length > 2) { // Start searching after 2 characters
+          $.ajax({
+            url: "/geocode/autocomplete/" + query,
+            type: "GET",
+            success: function(data) {
+              let suggestionsBox = $("#suggestionsDrop");
+              suggestionsBox.empty().show();
 
-    //           if (data.features) {
-    //             data.features.forEach(function(item) {
-    //               let placeName = item.properties.label;
-    //               suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
+              if (data.features) {
+                data.features.forEach(function(item) {
+                  let placeName = item.properties.label;
+                  suggestionsBox.append(`<div class="suggestion-item">${placeName}</div>`);
 
-    //               $(".suggestion-item").on("click", function() {
-    //                 $("#dropOffLocation").val($(this).text());
-    //                 suggestionsBox.hide();
-    //               });
-    //             });
-    //           }
-    //         }
-    //       });
-    //     } else {
-    //       $("#suggestions").hide();
-    //     }
-    //   });
+                  $(".suggestion-item").on("click", function() {
+                    $("#dropOffLocation").val($(this).text());
+                    suggestionsBox.hide();
+                  });
+                });
+              }
+            }
+          });
+        } else {
+          $("#suggestions").hide();
+        }
+      });
 
-    //   $(document).click(function(e) {
-    //     if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
-    //       $("#suggestions").hide();
-    //     }
-    //   });
-    // });
+      $(document).click(function(e) {
+        if (!$(e.target).closest("#suggestions, #deliveryAddress").length) {
+          $("#suggestions").hide();
+        }
+      });
+    });
   </script>
 </x-layout.portal.mainTemplate>

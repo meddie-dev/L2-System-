@@ -97,7 +97,8 @@ class DashboardController extends Controller
             ->where('event', 'NOT LIKE', 'Unauthorized access attempt at:%')
             ->where('event', 'NOT LIKE', 'Logged in at%')
             ->where('event', 'NOT LIKE', 'Logged out at%')
-            ->where('event', 'NOT LIKE', 'Tried to view Unassigned Task at:%') 
+            ->where('event', 'NOT LIKE', 'Tried to view Unassigned Task at%')
+            ->where('event', 'NOT LIKE', 'Tried to view Unowned File at%')
             ->get();
         $months = [];
         $reviewCounts = [];

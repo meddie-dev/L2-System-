@@ -250,8 +250,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/vendor/request', [OrderController::class, 'manage'])
         ->name('staff.vendors.manage');
     Route::get('/staff/dashboard/vendor/{order}', [OrderController::class, 'show'])
-        ->name('staff.vendors.show')
-        ->can('viewOrder','order');
+        ->name('staff.vendors.show');
     Route::patch('/staff/dashboard/vendor/approve/{order}', [OrderController::class, 'approve'])
         ->name('staff.vendors.approve');
     Route::patch('/staff/dashboard/vendor/reject/{order}', [OrderController::class, 'reject'])
@@ -261,8 +260,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/audit/report', [AuditController::class, 'indexStaff'])
         ->name('staff.audit.index');
     Route::get('/staff/dashboard/audit/report/details/{incidentReport}', [AuditController::class, 'detailsStaff'])
-        ->name('staff.audit.details')
-        ->can('viewIncident','incidentReport');
+        ->name('staff.audit.details');
     Route::patch('/staff/dashboard/audit/report/{incidentReport}/reviewed', [AuditController::class, 'reviewed'])
         ->name('staff.audit.report.reviewed');
     Route::patch('/staff/dashboard/audit/report/{incidentReport}/rejected', [AuditController::class, 'rejected'])
@@ -272,8 +270,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/document/submission', [DocumentController::class, 'manage'])
         ->name('staff.document.manage');
     Route::get('/staff/dashboard/document/submission/{document}', [DocumentController::class, 'show'])
-        ->name('staff.document.show')
-        ->can('viewDocument','document');
+        ->name('staff.document.show');
     Route::patch('/staff/dashboard/document/approve/{document}', [DocumentController::class, 'approve'])
         ->name('staff.document.approve');
     Route::patch('/staff/dashboard/document/reject/{document}', [DocumentController::class, 'reject'])
@@ -283,8 +280,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/document/payment', [PaymentController::class, 'manage'])
         ->name('staff.payment.manage');
     Route::get('/staff/dashboard/document/payment/{payment}', [PaymentController::class, 'show'])
-        ->name('staff.payment.show')
-        ->can('viewPayment','payment');
+        ->name('staff.payment.show');
     Route::patch('/staff/dashboard/payment/approve/{payment}', [PaymentController::class, 'approve'])
         ->name('staff.payment.approve');
     Route::patch('/staff/dashboard/payment/reject/{payment}', [PaymentController::class, 'reject'])
@@ -301,8 +297,7 @@ Route::middleware('role:Staff', 'active')->group(function () {
     Route::get('/staff/dashboard/vehicleReservation/vehicle', [VehicleReservationController::class, 'indexVehicle'])
         ->name('staff.vehicleReservation.indexVehicle');
     Route::get('/staff/dashboard/vehicleReservation/vehicle/details/{vehicleReservation}', [VehicleReservationController::class, 'detailsVehicle'])
-        ->name('staff.vehicleReservation.detailsVehicle')
-        ->can('viewVehicleReservation','vehicleReservation');
+        ->name('staff.vehicleReservation.detailsVehicle');
     Route::patch('/staff/dashboard/vehicleReservation/vehicle/approve/{vehicleReservation}', [VehicleReservationController::class, 'reviewVehicle'])
         ->name('staff.vehicleReservation.reviewVehicle');
     Route::patch('/staff/dashboard/vehicleReservation/vehicle/reject/{vehicleReservation}', [VehicleReservationController::class, 'rejectVehicle'])

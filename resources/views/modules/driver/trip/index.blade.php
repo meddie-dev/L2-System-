@@ -37,7 +37,7 @@
               </a></td>
             <td class="tw-px-4 tw-py-2">{{ $tripTickets->created_at->format('Y-m-d') }}</td>
             <td class="tw-px-4 tw-py-2">
-              <span class="tw-text-{{ $tripTickets->status === 'approved' ? 'green-500' : ($tripTickets->status === 'scheduled' ? 'yellow-500' : 'red-500') }}">
+              <span class="tw-text-{{ $tripTickets->status === 'delivered' ? 'green-500' : ($tripTickets->status === 'scheduled' ? 'yellow-500' : 'red-500') }}">
                 {{ ucfirst($tripTickets->status) }}
               </span>
             </td>

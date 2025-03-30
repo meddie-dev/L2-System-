@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Modules;
 
+use App\Events\VehicleReservationApproved as EventsVehicleReservationApproved;
 use App\Jobs\Admin\VehicleReservation\VehicleReservationApproved;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Jobs\Admin\VehicleReservation\SendApprovalNotification;
@@ -454,7 +456,7 @@ class VehicleReservationController extends Controller
         SendApprovalNotification::dispatch($vehicleReservation, $driver);
 
         // Dispatch event for vehicle reservation approval
-        event(new VehicleReservationApproved($vehicleReservation));
+        event(new EventsVehicleReservationApproved($vehicleReservation));
 
         return redirect()->route('admin.vehicleReservation.manage')->with('success', 'Reservation approved successfully.');
     }
