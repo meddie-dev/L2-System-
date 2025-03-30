@@ -194,9 +194,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      const performanceScore = {{
-          $user->performance_score
-        }};
+      const performanceScore = {{ $user->performance_score }};
       const scoreCategory = ['Good', 'Bad'];
 
       const ctx = document.getElementById('userChart');
@@ -227,48 +225,49 @@
         console.error("Canvas element not found!");
       }
 
-      // @if($latestTripTicket && $latestVehicleReservation)
-      // const pickUpLat = {{ $latestTripTicket->pickUpLat ?? 51.505 }};
-      // const pickUpLng = {{ $latestTripTicket->pickUpLng ?? -0.09 }};
-      // const dropOffLat = {{ $latestTripTicket->dropOffLat ?? 51.515 }};
-      // const dropOffLng = {{ $latestTripTicket->dropOffLng ?? -0.1 }};
+      @if($latestTripTicket && $latestVehicleReservation)
+      const pickUpLat = {{ $latestTripTicket->pickUpLat ?? 51.505 }};
+      const pickUpLng = {{ $latestTripTicket->pickUpLng ?? -0.09 }};
+      const dropOffLat = {{ $latestTripTicket->dropOffLat ?? 51.515 }};
+      const dropOffLng = {{ $latestTripTicket->dropOffLng ?? -0.1 }};
 
-      // // Pickup Marker
-      // const pickUpMarker = L.marker([pickUpLat, pickUpLng]).addTo(map);
-      // pickUpMarker.bindPopup("<b>Pick Up Location</b><br>{{ $latestVehicleReservation->pickUpLocation }}");
+      // Pickup Marker
+      const pickUpMarker = L.marker([pickUpLat, pickUpLng]).addTo(map);
+      pickUpMarker.bindPopup("<b>Pick Up Location</b><br>{{ $latestVehicleReservation->pickUpLocation }}");
 
-      // // Drop-off Marker
-      // const dropOffMarker = L.marker([dropOffLat, dropOffLng]).addTo(map);
-      // dropOffMarker.bindPopup("<b>Drop Off Location</b><br>{{ $latestVehicleReservation->dropOffLocation }}");
+      // Drop-off Marker
+      const dropOffMarker = L.marker([dropOffLat, dropOffLng]).addTo(map);
+      dropOffMarker.bindPopup("<b>Drop Off Location</b><br>{{ $latestVehicleReservation->dropOffLocation }}");
 
-      // // Adjust map to fit both markers
-      // const bounds = new L.LatLngBounds([
-      //   [pickUpLat, pickUpLng],
-      //   [dropOffLat, dropOffLng]
-      // ]);
-      // map.fitBounds(bounds);
+      // Adjust map to fit both markers
+      const bounds = new L.LatLngBounds([
+        [pickUpLat, pickUpLng],
+        [dropOffLat, dropOffLng]
+      ]);
+      map.fitBounds(bounds);
 
       // Fetch and display route
-      // const apiKey = "{{ env('OPENROUTESERVICE_API_KEY') }}";
-      // const request = new XMLHttpRequest();
-      // request.open('GET', `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${pickUpLng},${pickUpLat}&end=${dropOffLng},${dropOffLat}`, true);
-      // request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
+      const apiKey = "{{ env('OPENROUTESERVICE_API_KEY') }}";
+      const request = new XMLHttpRequest();
+      request.open('GET', `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${pickUpLng},${pickUpLat}&end=${dropOffLng},${dropOffLat}`, true);
+      request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
 
-      // request.onreadystatechange = function() {
-      //   if (this.readyState === 4 && this.status === 200) {
-      //     const routeCoordinates = JSON.parse(this.responseText).features[0].geometry.coordinates;
-      //     const routeLine = L.polyline(routeCoordinates.map(coord => [coord[1], coord[0]]), {
-      //       color: 'red',
-      //       weight: 5,
-      //       opacity: 0.7
-      //     }).addTo(map);
-      //     map.fitBounds(routeLine.getBounds());
-      //   } else if (this.readyState === 4 && this.status !== 200) {
-      //     console.error('Error fetching the route:', this.statusText);
-      //   }
-      // };
-      // request.send();
+      request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          const routeCoordinates = JSON.parse(this.responseText).features[0].geometry.coordinates;
+          const routeLine = L.polyline(routeCoordinates.map(coord => [coord[1], coord[0]]), {
+            color: 'red',
+            weight: 5,
+            opacity: 0.7
+          }).addTo(map);
+          map.fitBounds(routeLine.getBounds());
+        } else if (this.readyState === 4 && this.status !== 200) {
+          console.error('Error fetching the route:', this.statusText);
+        }
+      };
+      request.send();
       @endif
+      
     });
   </script>
 

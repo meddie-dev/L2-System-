@@ -6,7 +6,7 @@
         Dashboard
       </x-partials.breadcrumb>
 
-      <x-partials.breadcrumb href="{{ route('driver.audit.report') }}" :active="false" :isLast="false">
+      <x-partials.breadcrumb :active="true" :isLast="false">
         Report Management
       </x-partials.breadcrumb>
 

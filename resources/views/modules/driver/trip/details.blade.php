@@ -169,7 +169,7 @@
     </div>
   </div>
 
-  <!-- <script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       const map = L.map('map').setView([{{ $tripTicket->pickUpLat ?? 51.505 }}, {{ $tripTicket->pickUpLng ?? -0.09 }}], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -208,6 +208,6 @@
       };
       request.send();
     });
-  </script> -->
+  </script>
 
 </x-layout.mainTemplate>
